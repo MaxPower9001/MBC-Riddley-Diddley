@@ -1,0 +1,22 @@
+{
+  "name": "riddley-diddley",
+  "version": "1.0.0",
+  "description": "Riddley-Diddley-Your-Fiddley",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaxPower9001/MBC-Riddley-Diddley.git"
+  },
+  "keywords": [
+    "awesome"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaxPower9001/MBC-Riddley-Diddley/issues"
+  },
+  "homepage": "https://github.com/MaxPower9001/MBC-Riddley-Diddley#readme"
+}
