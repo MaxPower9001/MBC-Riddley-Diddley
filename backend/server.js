@@ -2,14 +2,21 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-server.listen(13337);
+const PORT=13337;
+
+server.listen(PORT, function(){
+    //Callback triggered when server is successfully listening. Hurray!
+    console.log("Server listening on: http://localhost:%s", PORT);
+});
 
 app.get('/riddley', function (req, res) {
-    res.sendfile(__dirname + '/public/riddley/client.html');
+    console.log("client.html served");
+    res.sendFile(__dirname + '/public/riddley/client.html');
 });
 
 app.get('/diddley', function (req, res) {
-    res.sendfile(__dirname + '/public/diddley/server.html');
+    console.log("server.html served");
+    res.sendFile(__dirname + '/public/diddley/server.html');
 });
 
 io.on('connection', function (socket) {
