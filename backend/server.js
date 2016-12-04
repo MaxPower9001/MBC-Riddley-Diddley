@@ -12,21 +12,20 @@ server.listen(PORT, function(){
 
 app.use(express.static('public'));
 
-app.get('/riddley', function (req, res) {
-    console.log("client.html served");
-    res.sendFile(__dirname + '/public/riddley/client.html');
+app.get('/smartphone', function (req, res) {
+    console.log("smartphone.html served");
+    res.sendFile(__dirname + '/public/smartphone/smartphone.html');
 });
 
-app.get('/diddley', function (req, res) {
-    console.log("server.html served");
-    res.sendFile(__dirname + '/public/diddley/server.html');
+app.get('/fernseher', function (req, res) {
+    console.log("fernseher.html served");
+    res.sendFile(__dirname + '/public/fernseher/fernseher.html');
 });
-
 
 
 io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
+    socket.emit('irgendwasVomServer', { nachricht: 'Servus vom Server' });
+    socket.on('irgendwasVonDenClients', function (data) {
         console.log(data);
     });
 });
