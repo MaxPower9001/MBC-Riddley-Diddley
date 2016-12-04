@@ -24,8 +24,8 @@ app.get('/fernseher', function (req, res) {
 
 
 io.on('connection', function (socket) {
-    socket.emit('irgendwasVomServer', { nachricht: 'Servus vom Server' });
+    socket.emit('irgendwasVomServer', { nachricht: 'Servus vom Server', timestamp: new Date().getTime() });
     socket.on('irgendwasVonDenClients', function (data) {
-        console.log(data);
+        console.log("Nachricht eingetroffen, Von: " + data.quelle + " Uhrzeit: " + data.timestamp)
     });
 });
