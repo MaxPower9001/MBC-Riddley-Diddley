@@ -1,9 +1,16 @@
+import Spieler from 'models/Spieler.js';
+import Spiel from 'models/Spiel.js';
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+
+// var Spieler = require('models/Spieler.js');
+// var Spiel = require('models/Spiel.js');
+
 const PORT=13337;
+spiel = new Spiel();
 
 server.listen(PORT, function(){
     //Callback triggered when server is successfully listening. Hurray!
@@ -24,11 +31,35 @@ app.get('/fernseher', function (req, res) {
 
 
 io.on('connection', function (socket) {
-    socket.emit('irgendwasVomServer', { nachricht: 'Servus vom Server', timestamp: new Date().getTime() });
-    socket.on('irgendwasVonDenClients', function (data) {
-        console.log("Nachricht eingetroffen, Von: " + data.quelle + " Uhrzeit: " + data.timestamp)
+    console.log(Spielmodus);
+    // socket.emit('irgendwasVomServer', { nachricht: 'Servus vom Server', timestamp: new Date().getTime() });
+    //
+    //
+    // socket.on('irgendwasVonDenClients', function (data) {
+    //     console.log("Nachricht eingetroffen, Von: " + data.quelle + " Uhrzeit: " + data.timestamp)
+    // });
+    // socket.on('syncTimeRequest', function() {
+    //     socket.emit('syncTimeResponse');
+    // });
+
+    // Ein neuer Spieler möchte dem Spiel beitreten
+    spieler = new Spieler();
+    spieler.name("Spatzl_"+spiel.spieler.length());
+    spiel.spieler(spieler);
+    // Sende Spieler seinen Spielernamen und alle möglichen Spielmodi
+    socket.emit('spielinfo', new Spielmodus(spieler.name, Spielmodus));
+
+    socket.on('spielinfo', function(spielinfo) {
+
     });
-    socket.on('syncTimeRequest', function() {
-        socket.emit('syncTimeResponse');
+
+    socket.on('spiel_beenden', function(data) {
+        //TODO
     });
+
+    socket.on('aktion', function(data) {
+        //TODO
+    });
+
+
 });
