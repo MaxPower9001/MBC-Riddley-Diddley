@@ -28,4 +28,7 @@ io.on('connection', function (socket) {
     socket.on('irgendwasVonDenClients', function (data) {
         console.log("Nachricht eingetroffen, Von: " + data.quelle + " Uhrzeit: " + data.timestamp)
     });
+    socket.on('syncTimeRequest', function() {
+        socket.emit('syncTimeResponse');
+    });
 });
