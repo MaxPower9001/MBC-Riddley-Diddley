@@ -2,10 +2,12 @@
   "name": "riddley-diddley",
   "version": "1.0.0",
   "description": "Riddley-Diddley-Your-Fiddley",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "run": "babel-node server.js",
+    "build": "babel . -d .dist/ --ignore=\"node_modules\""
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,12 @@
   "dependencies": {
     "socket.io" : "1.4.*",
     "express" : "4.14.*"
+  },
+  "devDependencies": {
+    "babel-cli": "*",
+    "babel-core": "*",
+    "babel-preset-es2015-node5": "*",
+    "babel-preset-stage-3": "*",
+    "babel-register": "*"
   }
 }

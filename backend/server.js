@@ -1,16 +1,18 @@
-import Spieler from 'models/Spieler.js';
-import Spiel from 'models/Spiel.js';
+// Ein Hoch auf Ecmascript 6 !!!!!!
+//import { Spieler } from './models/Spieler.js';
+//import { Spiel } from './models/Spiel.js';
+var _Spieler = require('./models/Spieler.js');
+var _Spiel = require('./models/Spiel.js');
+var _Spielmodus = require('./models/Spielmodus.js');
+var _Spielinfo = require('./models/nachrichtenTypen/Spielinfo.js');
+
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-
-// var Spieler = require('models/Spieler.js');
-// var Spiel = require('models/Spiel.js');
-
 const PORT=13337;
-spiel = new Spiel();
+var spiel = new _Spiel.Spiel();
 
 server.listen(PORT, function(){
     //Callback triggered when server is successfully listening. Hurray!
@@ -31,23 +33,12 @@ app.get('/fernseher', function (req, res) {
 
 
 io.on('connection', function (socket) {
-    console.log(Spielmodus);
-    // socket.emit('irgendwasVomServer', { nachricht: 'Servus vom Server', timestamp: new Date().getTime() });
-    //
-    //
-    // socket.on('irgendwasVonDenClients', function (data) {
-    //     console.log("Nachricht eingetroffen, Von: " + data.quelle + " Uhrzeit: " + data.timestamp)
-    // });
-    // socket.on('syncTimeRequest', function() {
-    //     socket.emit('syncTimeResponse');
-    // });
-
     // Ein neuer Spieler möchte dem Spiel beitreten
-    spieler = new Spieler();
-    spieler.name("Spatzl_"+spiel.spieler.length());
-    spiel.spieler(spieler);
+    var spieler = new _Spieler.Spieler();
+    spieler.name = "Spatzl_"+spiel.spieler.length;
+    spiel.spieler = spieler;
     // Sende Spieler seinen Spielernamen und alle möglichen Spielmodi
-    socket.emit('spielinfo', new Spielmodus(spieler.name, Spielmodus));
+    socket.emit('spielinfo', new _Spielinfo.Spielinfo(spieler.name, _Spielmodus.standard));
 
     socket.on('spielinfo', function(spielinfo) {
 

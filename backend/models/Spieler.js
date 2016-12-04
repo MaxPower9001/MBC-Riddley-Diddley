@@ -1,7 +1,10 @@
 /**
  * Created by kk on 04.12.16.
  */
-export default class {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+class Spieler{
 
     constructor() {
         this._name = null;
@@ -22,7 +25,7 @@ export default class {
     }
 
     set spielzuege(value) {
-        this._spielzuege.add(value);
+        this._spielzuege.push(value);
     }
 
     get verbleibendeLeben() {
@@ -33,3 +36,4 @@ export default class {
         this._verbleibendeLeben = value;
     }
 }
+exports.Spieler = Spieler;

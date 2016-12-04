@@ -1,8 +1,10 @@
 /**
  * Created by kk on 04.12.16.
  */
-
-export default class {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+class Spiel{
 
     constructor() {
         this._aktuelleAktion = null;
@@ -32,7 +34,7 @@ export default class {
     }
 
     set spieler(value) {
-        this._spieler.add(value);
+        this._spieler.push(value);
     }
 
     get spielmodus() {
@@ -43,3 +45,4 @@ export default class {
         this._spielmodus = value;
     }
 }
+exports.Spiel = Spiel;

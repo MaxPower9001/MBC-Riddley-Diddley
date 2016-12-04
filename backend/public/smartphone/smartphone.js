@@ -7,18 +7,10 @@ socket.on('connect', function(){
     sentTimeRequestOnTime = new Date().getTime();
     socket.emit("syncTimeRequest");
 });
-socket.on('irgendwasVomServer', function(data){
-    console.log("Nachricht eingetroffen, Inhalt: " + data.nachricht + " Uhrzeit: " + data.timestamp);
-    var timestamp = document.createElement("p");
-    diff = new Date().getTime() - data.timestamp;
-    timestamp.innerText = "Nachricht eingetroffen, Inhalt: " + data.nachricht + " Zeitdiff Nachricht erstellt/eingetroffen: " + diff;
-    document.body.appendChild(timestamp);
-});
 socket.on('disconnect', function(){ console.log("Verbindung unterbrochen") });
-socket.on('syncTimeResponse', function() {
-    receivedTimeResponse = new Date().getTime();
-    rtt = receivedTimeResponse - sentTimeRequestOnTime;
-    var rtt_elem = document.createElement("p");
-    rtt_elem.innerText = "Round Trip Time Client -> Server: " + rtt;
-    document.body.appendChild(rtt_elem);
+
+socket.on('spielinfo', function(data) {
+    var moin_elem = document.createElement("p");
+    moin_elem.innerText = data._username;
+    document.body.appendChild(moin_elem);
 });
