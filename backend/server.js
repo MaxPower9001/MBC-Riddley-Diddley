@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
@@ -9,6 +10,8 @@ server.listen(PORT, function(){
     console.log("Server listening on: http://localhost:%s", PORT);
 });
 
+app.use(express.static('public'));
+
 app.get('/riddley', function (req, res) {
     console.log("client.html served");
     res.sendFile(__dirname + '/public/riddley/client.html');
@@ -18,6 +21,8 @@ app.get('/diddley', function (req, res) {
     console.log("server.html served");
     res.sendFile(__dirname + '/public/diddley/server.html');
 });
+
+
 
 io.on('connection', function (socket) {
     socket.emit('news', { hello: 'world' });
