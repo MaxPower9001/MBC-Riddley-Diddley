@@ -41,15 +41,19 @@ io.on('connection', function (socket) {
     socket.emit('spielinfo', new _Spielinfo.Spielinfo(spieler.name, _Spielmodus.standard));
 
     socket.on('spielinfo', function(spielinfo) {
-
+        // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
+        // Spiel kann erstellt werden und der Spielmodus dort gesetzt werden
     });
 
     socket.on('spiel_beenden', function(data) {
-        //TODO
+        // Jemand möchte das Spiel beenden, also senden wir an alle die 'spiel beendet nachricht'
+        // Danach kann alles auf 0 zurück gesetzt werden -->
+        // Spiel muss um Spieler bereinigt werden alle Statistiken zurück gesetzt etc.
     });
 
     socket.on('aktion', function(data) {
-        //TODO
+        // Jemand hat eine Aktion gesendet
+        // Es muss geprüft werden ob es der richtige Absender war und die richtige Aktion
     });
 
 
