@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 class Spielinfo {
     constructor(username, spielmodi) {
-        this._username = username;
-        this._spielmodi = spielmodi;
+        this.username = username;
+        this.spielmodi = spielmodi;
     }
 }
 exports.Spielinfo = Spielinfo;

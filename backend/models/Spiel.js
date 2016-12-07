@@ -1,6 +1,10 @@
-/**
- * Created by kk on 04.12.16.
- */
+//var events = require('events');
+// class MyEmitter extends EventEmitter {}
+//var myEmitter = new events.EventEmitter();
+
+var myEmitter = require('./MyEmitter.js');
+
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -11,6 +15,8 @@ class Spiel{
         this._verstricheneZeit = null;
         this._spieler = [];
         this._spielmodus = null;
+        this._aktionInTimeAusgefuehrt = true;
+        this._myEmitter = null;
     }
 
     get aktuelleAktion() {
@@ -44,5 +50,26 @@ class Spiel{
     set spielmodus(value) {
         this._spielmodus = value;
     }
+
+    get myEmitter() {
+        return this._myEmitter;
+    }
+
+    set myEmitter(value) {
+        this._myEmitter = value;
+    }
+
+    starteSpiel() {
+        this._aktionInTimeAusgefuehrt = false;
+        setInterval(this._pruefeAktionen, this.spielmodus.zeitFuerAktion);
+    }
+
+    _pruefeAktionen() {
+        if (!(this._aktionInTimeAusgefuehrt)) {
+            console.log("los gehts");
+            myEmitter.emit('spiel_timeout');
+        }
+    }
+
 }
 exports.Spiel = Spiel;
