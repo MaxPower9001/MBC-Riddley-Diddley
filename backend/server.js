@@ -7,10 +7,8 @@ var _Spiel = require('./models/Spiel.js');
 var _Spielmodus = require('./models/Spielmodus.js');
 var _Spielinfo = require('./models/nachrichtenTypen/Spielinfo.js');
 var _SpielGestartet = require('./models/nachrichtenTypen/SpielGestartet.js');
-var myEmitter = require('./models/MyEmitter.js');
-//var events = require('events');
-//class MyEmitter extends EventEmitter {}
-//var myEmitter = new events.EventEmitter();
+var _SpielBeendet = require('./models/nachrichtenTypen/SpielBeendet.js');
+var spielTimer = require('./models/SpielTimer.js').spielTimer;
 
 
 var express = require('express');
@@ -20,7 +18,6 @@ var io = require('socket.io')(server);
 
 const PORT=13337;
 var spiel = new _Spiel.Spiel();
-spiel.myEmitter = myEmitter;
 
 console.log("We are great and our name is: " + os.hostname());
 
@@ -42,7 +39,8 @@ app.get('/fernseher', function (req, res) {
     res.sendFile(__dirname + '/public/fernseher/fernseher.html');
 });
 
-myEmitter.on('spiel_timeout', () => {
+spielTimer.on('spiel_timeout', function() {
+    io.emit('spiel_beendet', new _SpielBeendet.SpielBeendet("tolle statistik"));
     console.log('zu spät, das spiel ist aus');
 });
 

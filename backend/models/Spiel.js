@@ -1,8 +1,8 @@
 //var events = require('events');
 // class MyEmitter extends EventEmitter {}
-//var myEmitter = new events.EventEmitter();
+//var spielTimer = new events.EventEmitter();
 
-var myEmitter = require('./MyEmitter.js');
+var spielTimer = require('./SpielTimer.js').spielTimer;
 
 
 Object.defineProperty(exports, "__esModule", {
@@ -66,8 +66,7 @@ class Spiel{
 
     _pruefeAktionen() {
         if (!(this._aktionInTimeAusgefuehrt)) {
-            console.log("los gehts");
-            myEmitter.emit('spiel_timeout');
+            spielTimer.emit('spiel_timeout');
         }
     }
 
