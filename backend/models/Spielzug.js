@@ -4,10 +4,10 @@
 
 class Spielzug {
 
-    constructor() {
-        this._aktionAusgefuehrt = null;
-        this._aktionGewuenscht = null;
-        this._verstricheneZeit = null;
+    constructor(aktionAusgefuehrt, aktionGewuenscht, verstricheneZeit) {
+        this._aktionAusgefuehrt = aktionAusgefuehrt;
+        this._aktionGewuenscht = aktionGewuenscht;
+        this._verstricheneZeit = verstricheneZeit;
     }
 
     get aktionAusgefuehrt() {

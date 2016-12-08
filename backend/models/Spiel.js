@@ -3,6 +3,7 @@
 //var spielTimer = new events.EventEmitter();
 
 var spielTimer = require('./SpielTimer.js').spielTimer;
+var Aktion = require('./Aktion.js');
 
 
 Object.defineProperty(exports, "__esModule", {
@@ -16,7 +17,6 @@ class Spiel{
         this._spieler = [];
         this._spielmodus = null;
         this._aktionInTimeAusgefuehrt = true;
-        this._myEmitter = null;
     }
 
     get aktuelleAktion() {
@@ -61,14 +61,20 @@ class Spiel{
 
     starteSpiel() {
         this._aktionInTimeAusgefuehrt = false;
+        this._aktuelleAktion = Aktion.getZufallsAktion();
         setInterval(this._pruefeAktionen, this.spielmodus.zeitFuerAktion);
     }
 
     _pruefeAktionen() {
-        if (!(this._aktionInTimeAusgefuehrt)) {
+        // Falls gewünschte Aktion vom gewünschten Spieler in der gewünschten Zeit ausgeführt wurde
+        // setze neue Aktion für Spieler
+        if (this._aktionInTimeAusgefuehrt) {
+            this._aktuelleAktion = Aktion.getZufallsAktion();
+        } else {
             spielTimer.emit('spiel_timeout');
         }
     }
+
 
 }
 exports.Spiel = Spiel;

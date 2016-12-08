@@ -6,3 +6,8 @@ const Aktion = {
     RECHTSKNOPF: "RECHTSKNOPF",
     SCHUETTELN: "SCHUETTELN",
 };
+
+exports.getZufallsAktion = function () {
+    var keys = Object.keys(Aktion)
+    return Aktion[keys[ keys.length * Math.random() << 0]];
+};

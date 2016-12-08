@@ -4,12 +4,12 @@
 var os = require("os");
 var _Spieler = require('./models/Spieler.js');
 var _Spiel = require('./models/Spiel.js');
+var _Spielzug = require('./models/Spielzug.js');
 var _Spielmodus = require('./models/Spielmodus.js');
 var _Spielinfo = require('./models/nachrichtenTypen/Spielinfo.js');
 var _SpielGestartet = require('./models/nachrichtenTypen/SpielGestartet.js');
 var _SpielBeendet = require('./models/nachrichtenTypen/SpielBeendet.js');
 var spielTimer = require('./models/SpielTimer.js').spielTimer;
-
 
 var express = require('express');
 var app = express();
@@ -69,8 +69,7 @@ io.on('connection', function (socket) {
         // Spiel muss um Spieler bereinigt werden alle Statistiken zurück gesetzt etc.
     });
 
-    socket.on('aktion', function(data) {
-        spiel.setAktion = true;
+    socket.on('aktion', function(aktionNachricht) {
         // Jemand hat eine Aktion gesendet
         // Es muss geprüft werden ob es der richtige Absender war und die richtige Aktion
     });
