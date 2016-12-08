@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 
 import { TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
+import { HomeComponent } from './home';
 
 describe('Home Component', () => {
   const html = '<my-home></my-home>';
