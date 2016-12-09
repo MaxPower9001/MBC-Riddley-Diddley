@@ -16,13 +16,15 @@ import {  CADS_TAG_MENU_ENTRY_SITE }  from './tag.menu_entry_site';
 
 // Output
 import {  CADS_Welcome }              from './d.welcome';
-import {  CADS_About }                from './d.about';
-import {  CADS_Projects }             from './d.projects';
-import {  CADS_Publication }          from './d.publication';
-import {  CADS_ForStudents }          from './d.forstudents';
-import {  CADS_FindCads }             from './d.findcads';
 import {  CADS_Impressum }            from './d.impressum';
 
+import {  TV_Home }              from './tv-home';
+import {  TV_Play }              from './tv-play';
+import {  TV_End }              from './tv-end';
+
+import {  PHONE_Home }              from './phone-home';
+import {  PHONE_Play }              from './phone-play';
+import {  PHONE_End }              from './phone-end';
 // Declare NgModule
 @NgModule({
   imports: [ BrowserModule,
@@ -30,17 +32,18 @@ import {  CADS_Impressum }            from './d.impressum';
     RouterModule.forRoot([
       { path: '',                 component: CADS_Welcome },
       { path: 'home',             component: CADS_Welcome },
-      { path: 'about',            component: CADS_About },
-      { path: 'projects',         component: CADS_Projects },
-      { path: 'publication',      component: CADS_Publication },  
-      { path: 'forstudents',      component: CADS_ForStudents }, 
-      { path: 'findcads',         component: CADS_FindCads },
-      { path: 'impressum',        component: CADS_Impressum},
+      { path: 'tv-home',             component: TV_Home },
+      { path: 'tv-play',             component: TV_Play },
+      { path: 'tv-end',             component: TV_End },
+      { path: 'phone-home',             component: PHONE_Home },
+      { path: 'phone-play',             component: PHONE_Play },
+      { path: 'phone-end',             component: PHONE_End },
+      { path: 'impressum',        component: CADS_Impressum}
     ],{ useHash: true })
     ],
-  declarations: [ AppComponent, Header, Footer, CADS_Welcome, CADS_About, 
-                  CADS_Projects, CADS_Publication, CADS_ForStudents, 
-                  CADS_FindCads, CADS_Impressum, CADS_TAG_MENU_ENTRY_SITE ],
+  declarations: [ AppComponent, Header, Footer, CADS_Welcome, 
+              TV_Home, TV_Play, TV_End, PHONE_Home, PHONE_Play, PHONE_End,
+                  CADS_Impressum, CADS_TAG_MENU_ENTRY_SITE ],
   bootstrap:    [ AppComponent ]
 })
 
