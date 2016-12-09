@@ -11,7 +11,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 class Spiel{
 
+
     constructor() {
+        this._intervalid = null;
         this._aktuelleAktion = null;
         this._verstricheneZeit = null;
         this._spieler = [];
@@ -62,7 +64,11 @@ class Spiel{
     starteSpiel() {
         this._aktionInTimeAusgefuehrt = false;
         this._aktuelleAktion = Aktion.getZufallsAktion();
-        setInterval(this._pruefeAktionen, this.spielmodus.zeitFuerAktion);
+        this._intervalid = setInterval(this._pruefeAktionen, this.spielmodus.zeitFuerAktion);
+    }
+
+    _beendeSpiel() {
+        clearInterval(this._intervalid);
     }
 
     _pruefeAktionen() {
@@ -72,6 +78,7 @@ class Spiel{
             this._aktuelleAktion = Aktion.getZufallsAktion();
         } else {
             spielTimer.emit('spiel_timeout');
+            clearInterval(this._intervalid);
         }
     }
 

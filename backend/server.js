@@ -40,9 +40,20 @@ app.get('/fernseher', function (req, res) {
 });
 
 spielTimer.on('spiel_timeout', function() {
+    spielBeenden();
+});
+
+function spielBeenden(){
     io.emit('spiel_beendet', new _SpielBeendet.SpielBeendet("tolle statistik"));
     console.log('zu spät, das spiel ist aus');
-});
+    spiel = new _Spiel.Spiel();
+    // io.sockets.disconnect();
+    // var clients = io.sockets.sockets;
+    // for(var c in clients)
+    // {
+    //     c.disconnect(true);
+    // }
+}
 
 io.on('connection', function (socket) {
     // Ein neuer Spieler möchte dem Spiel beitreten
@@ -63,15 +74,12 @@ io.on('connection', function (socket) {
         io.emit('spiel_gestartet', new _SpielGestartet.SpielGestartet(spiel.spieler.length));
     });
 
-    socket.on('spiel_beenden', function(data) {
-        // Jemand möchte das Spiel beenden, also senden wir an alle die 'spiel beendet nachricht'
-        // Danach kann alles auf 0 zurück gesetzt werden -->
-        // Spiel muss um Spieler bereinigt werden alle Statistiken zurück gesetzt etc.
-    });
+    socket.on('spiel_beenden', spielBeenden);
 
     socket.on('aktion', function(aktionNachricht) {
         // Jemand hat eine Aktion gesendet
         // Es muss geprüft werden ob es der richtige Absender war und die richtige Aktion
     });
+
 
 });

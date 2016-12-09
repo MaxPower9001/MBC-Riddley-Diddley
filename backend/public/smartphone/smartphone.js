@@ -1,6 +1,6 @@
 console.log("This is smartphone.js speaking");
 const PORT=13337;
-var socket = io('http://192.168.178.136:'+PORT);
+var socket = io('http://141.22.71.171:'+PORT);
 
 socket.on('connect', function(){
     console.log("wir sind verbunden");
@@ -20,6 +20,7 @@ socket.on('spiel_beendet', function(data) {
     var spielinfo_gesamt = data.spielinfo_gesamt; // TODO
     document.dispatchEvent(new CustomEvent('spiel_beendet', { "detail": data }));
     console.log("Spiel beendet. Statistik: %s", spielinfo_gesamt)
+    socket.disconnect();
 });
 
 socket.on('aktion', function(data) {
