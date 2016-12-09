@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 const standard = {
         schwierigkeit: "standard",
-        zeitFuerAktion: 800,
+        zeitFuerAktion: 5000,
         auswahlverfahrenSpieler: "reium",
         anzahlLeben: 1
 };
 const schwierig = {
         schwierigkeit: "schwierig",
-        zeitFuerAktion: 600,
+        zeitFuerAktion: 500,
         auswahlverfahrenSpieler: "reium",
         anzahlLeben: 1
 };

@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 class Aktion {
-    constructor(spieler, typ) {
+    constructor(spieler, typ, absolute_uhrzeit) {
         this.spieler = spieler;
         this.typ = typ;
+        this.absolute_uhrzeit = absolute_uhrzeit;
     }
 }
 

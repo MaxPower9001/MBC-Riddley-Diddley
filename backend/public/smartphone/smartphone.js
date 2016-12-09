@@ -1,6 +1,6 @@
 console.log("This is smartphone.js speaking");
 const PORT=13337;
-var socket = io('http://141.22.71.171:'+PORT);
+var socket = io('http://localhost:'+PORT);
 
 socket.on('connect', function(){
     console.log("wir sind verbunden");

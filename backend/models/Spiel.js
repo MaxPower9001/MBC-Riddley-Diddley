@@ -4,6 +4,7 @@
 
 var spielTimer = require('./SpielTimer.js').spielTimer;
 var Aktion = require('./Aktion.js');
+var timerId;
 
 
 Object.defineProperty(exports, "__esModule", {
@@ -13,7 +14,6 @@ class Spiel{
 
 
     constructor() {
-        this._intervalid = null;
         this._aktuelleAktion = null;
         this._verstricheneZeit = null;
         this._spieler = [];
@@ -64,11 +64,8 @@ class Spiel{
     starteSpiel() {
         this._aktionInTimeAusgefuehrt = false;
         this._aktuelleAktion = Aktion.getZufallsAktion();
-        this._intervalid = setInterval(this._pruefeAktionen, this.spielmodus.zeitFuerAktion);
-    }
-
-    _beendeSpiel() {
-        clearInterval(this._intervalid);
+        timerId = setInterval(this._pruefeAktionen, this.spielmodus.zeitFuerAktion);
+        console.log("Created Timer with ID: " + timerId);
     }
 
     _pruefeAktionen() {
@@ -78,7 +75,8 @@ class Spiel{
             this._aktuelleAktion = Aktion.getZufallsAktion();
         } else {
             spielTimer.emit('spiel_timeout');
-            clearInterval(this._intervalid);
+            clearInterval(timerId);
+            console.log("Cleared Timer with ID: " + timerId);
         }
     }
 
