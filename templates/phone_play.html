@@ -2,3 +2,18 @@
 <button>Button1</button>
 <button>Button2</button>
 <button>Button3</button>
+<script src="../lib/shake.js"></script>
+<script>
+
+    var myShakeEvent = new Shake();
+    myShakeEvent.start();
+    window.addEventListener('shake', shakeEventDidOccur, false);
+
+    //function to call when shake occurs
+    function shakeEventDidOccur () {
+
+        //put your own code here etc.
+        alert('shake!');
+    }
+
+</script>
