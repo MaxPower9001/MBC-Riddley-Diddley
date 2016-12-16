@@ -956,7 +956,7 @@ Socket.prototype.ack = function(id){
   var self = this;
   var sent = false;
   return function(){
-    // prevent double callbacks
+    // prevent double webserver
     if (sent) return;
     sent = true;
     var args = toArray(arguments);
@@ -1191,7 +1191,7 @@ function after(count, callback, err_cb) {
         if (err) {
             bail = true
             callback(err)
-            // future error callbacks will go to error handler
+            // future error webserver will go to error handler
             callback = err_cb
         } else if (proxy.count === 0 && !bail) {
             callback(null, result)
@@ -1586,7 +1586,7 @@ Emitter.prototype.once = function(event, fn){
 
 /**
  * Remove the given callback for `event` or all
- * registered callbacks.
+ * registered webserver.
  *
  * @param {String} event
  * @param {Function} fn
@@ -1652,7 +1652,7 @@ Emitter.prototype.emit = function(event){
 };
 
 /**
- * Return array of callbacks for `event`.
+ * Return array of webserver for `event`.
  *
  * @param {String} event
  * @return {Array}
@@ -3039,7 +3039,7 @@ var rNewline = /\n/g;
 var rEscapedNewline = /\\n/g;
 
 /**
- * Global JSONP callbacks.
+ * Global JSONP webserver.
  */
 
 var callbacks;
@@ -3068,7 +3068,7 @@ function JSONPPolling (opts) {
 
   this.query = this.query || {};
 
-  // define global callbacks array if not present
+  // define global webserver array if not present
   // we do this here (lazily) to avoid unneeded global pollution
   if (!callbacks) {
     // we need to consider multiple engines in the same page
@@ -4328,7 +4328,7 @@ Emitter.prototype.once = function(event, fn){
 
 /**
  * Remove the given callback for `event` or all
- * registered callbacks.
+ * registered webserver.
  *
  * @param {String} event
  * @param {Function} fn
@@ -4394,7 +4394,7 @@ Emitter.prototype.emit = function(event){
 };
 
 /**
- * Return array of callbacks for `event`.
+ * Return array of webserver for `event`.
  *
  * @param {String} event
  * @return {Array}

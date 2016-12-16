@@ -16,8 +16,10 @@ module.exports = {
 
         // var express = require('express');
         // var app = express();
-        //var server = require('http').Server(app);
-        var io = require('socket.io')(require('http').Server(server));
+        // var httpserver = require('http').Server(server);
+        // httpserver.listen(8080);
+        var io = require('socket.io')(server);
+
 
         var d = new Date();
         var time;

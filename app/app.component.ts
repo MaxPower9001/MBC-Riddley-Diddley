@@ -7,7 +7,6 @@ import { Component, NgZone, EventEmitter, OnInit } from '@angular/core';
         <base href="/">
         <cads-header></cads-header>
         <router-outlet></router-outlet>
-        <cads-footer></cads-footer>
     `,
 })
 
@@ -28,7 +27,6 @@ export class AppComponent  implements OnInit  {
 
     /* global callTheTwitterFunction*/
      this.zone.runOutsideAngular(() => {
-           //  callTheTwitterFunction();
     });
     console.log("page loading completed");
   }

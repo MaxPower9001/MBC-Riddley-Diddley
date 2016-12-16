@@ -1,5 +1,4 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-declare var callTheTwitterFunction:any
 
 @Component({
   selector: 'tv-play',

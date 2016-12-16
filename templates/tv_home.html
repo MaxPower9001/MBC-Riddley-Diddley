@@ -1,17 +1,3 @@
 <h1>TV Screen - Home</h1>
 <div>Melde dich auf den folgen Server an</div>
-<script type="text/javascript" src="../lib/QRCode.js"></script>
 <div id="qrcode" style="width:200px; height:200px; margin-top:15px;"></div>
-<script type="text/javascript">
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
-        width : 200,
-        height : 200
-    });
-
-    function makeCode () {
-
-        qrcode.makeCode("http://141.22.74.13:8080/#/phone-play");
-    }
-
-    makeCode();
-</script>

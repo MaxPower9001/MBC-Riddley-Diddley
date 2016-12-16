@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-declare var callTheTwitterFunction:any
+
 
 @Component({
   selector: 'cads-welcome',
@@ -10,6 +10,5 @@ export class CADS_Welcome implements OnInit{
 
   ngOnInit() {
     console.log("= Welcome Page loaded... =");
-      callTheTwitterFunction();
   }
 }

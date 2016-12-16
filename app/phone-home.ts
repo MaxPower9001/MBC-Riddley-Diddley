@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-var smartphone = require('./js/smartphone.js');
-declare var callTheTwitterFunction:any
+import 'js/smartphone.js';
+
+declare var connectToGameserver : any;
 
 @Component({
   selector: 'phone-home',
@@ -14,6 +15,6 @@ export class PHONE_Home implements OnInit {
   }
 
   startGameClicked(event) {
-    smartphone.connectToGameserver();
+    connectToGameserver();
   }
 }

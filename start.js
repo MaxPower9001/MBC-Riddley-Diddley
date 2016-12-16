@@ -8,42 +8,16 @@ var TX_INFO_START     = "PLAYGROUND... "
 
 ///////////// Conf Service /////////////
 /* Lets start to create a new world*/
-var config      = require("./server_config.json");
-var helper      = require("./lib/CaDShelper");
-var callbacks   = require("./lib/APPcallbacks");
-var spdy        = require("./lib/Spdy");
+var config            = require("./server_config.json");
+var webserverModule   = require("./lib/setupWebserver");
+var gameserverModule  = require('./gameserver_backend/gameserver.js');
 
 var serverIP    = config.server.ip   || "0.0.0.0";
 var serverPort  = config.server.port || 8080;
-var isHTTPS     = config.https   || false;
-var useExpress  = config.express || false;
-var useWebSocket= config.ws      || false;
-var useHttp2    = config.http2   || false;
 
-/////////////// Modul App ///////////////
-/* Lets create the app server */
-console.info(TX_INFO_CADS + TX_INFO_START);
-var service; // lets see what we can do
-if(!useExpress){
-  // web-server with http
-  console.info(TX_INFO_CADS + TX_INFO_HTTP + TX_INFO_ACTIVATED);
-  service = helper.createHttpServer(isHTTPS);
-}
-else{
-  // application server with express
-  console.info(TX_INFO_CADS + TX_INFO_EXPRESS + TX_INFO_ACTIVATED);
-  service = callbacks.createApplicationServer(config);
-}
-///////////////  Modul Gameserver ///////////////
-console.info(TX_INFO_CADS + TX_INFO_WEBSOCKET + TX_INFO_ACTIVATED);
-var baseGameserver = require('./gameserver_backend/gameserver.js');
-var gameserver = baseGameserver.init(service);
+// Setup HTTP Webserver
+var webserver = webserverModule.createApplicationServer(config, serverIP, serverPort);
 
-/////////////// Start Magic ///////////////
-// Set Port - In the first step we use process.env.PORT or 8080
-if(!useHttp2){
-  service.listen(process.env.PORT || serverPort, process.env.IP || serverIP,null);
-}
-else{
-  spdy.runAsHTTP2(service,process.env.PORT || serverPort);
-}
+// Setup Gameserver
+var gameserver = gameserverModule.init(webserver);
+
