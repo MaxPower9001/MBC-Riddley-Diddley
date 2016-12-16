@@ -34,13 +34,10 @@ else{
   console.info(TX_INFO_CADS + TX_INFO_EXPRESS + TX_INFO_ACTIVATED);
   service = callbacks.createApplicationServer(config);
 }
-///////////////  Modul WS ///////////////
-/* Lets do some WebSockets*/
-if(useWebSocket){
-  console.info(TX_INFO_CADS + TX_INFO_WEBSOCKET + TX_INFO_ACTIVATED);
-  var baseWS = require('./websocket/websocket_base');
-  var ws = baseWS.initWS(service);
-}
+///////////////  Modul Gameserver ///////////////
+console.info(TX_INFO_CADS + TX_INFO_WEBSOCKET + TX_INFO_ACTIVATED);
+var baseGameserver = require('./gameserver_backend/gameserver.js');
+var gameserver = baseGameserver.init(service);
 
 /////////////// Start Magic ///////////////
 // Set Port - In the first step we use process.env.PORT or 8080

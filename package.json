@@ -1,7 +1,7 @@
 {
-  "name": "playground",
+  "name": "riddleydiddley",
   "version": "1.0.0",
-  "description": "Playground Project",
+  "description": "Riddley-Diddley MBC Project",
   "main": "start.js",
   "scripts": {
     "test": "tsc && concurrently \"tsc -w\" \"node start.js\" ",
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Transport-Protocol/CaDS-JS-Playground.git"
+    "url": "git+https://github.com/MaxPower9001/MBC-Riddley-Diddley.git"
   },
-  "author": "scimbe",
+  "author": "riddley-diddley-team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Transport-Protocol/CaDS-JS-Playground/issues"
+    "url": "https://github.com/MaxPower9001/MBC-Riddley-Diddley/issues"
   },
   "dependencies": {
     "@angular/common": "~2.1.1",
@@ -36,6 +36,7 @@
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.39",
     "zone.js": "^0.6.25",
+    "socket.io" : "1.4.*",
     "ngtweet": "0.6.1",
     
     "express": "latest",

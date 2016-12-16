@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
+var smartphone = require('./js/smartphone.js');
 declare var callTheTwitterFunction:any
 
 @Component({
@@ -10,5 +11,9 @@ export class PHONE_Home implements OnInit {
 
   ngOnInit() {
     console.log("= Find Cads Page loaded... =");
+  }
+
+  startGameClicked(event) {
+    smartphone.connectToGameserver();
   }
 }
