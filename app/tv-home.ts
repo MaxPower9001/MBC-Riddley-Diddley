@@ -40,7 +40,7 @@ export class TV_Home implements AfterViewInit {
   }
 
   getUrl(): string {
-    return "http://" + this.hostname + ":" + this.port + "/smartphone";
+    return "http://" + this.hostname + ":" + this.port + "/#/smartphone";
   }
 
   createQRCode(): void {
