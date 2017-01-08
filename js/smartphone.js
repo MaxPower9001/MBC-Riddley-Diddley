@@ -1,7 +1,7 @@
 console.log("This is smartphone.js speaking");
 
 function connectToGameserver() {
-    const PORT = 8080;
+    const PORT = 13337;
     var socket = io('http://localhost:' + PORT);
     console.log("smartphone.js loaded");
 
@@ -18,7 +18,7 @@ function connectToGameserver() {
 
     socket.on('spielinfo', function (spielinfo) {
         document.dispatchEvent(new CustomEvent('spielinfo', {"detail": spielinfo}));
-        sendeSpielinfo(spielinfo.spielmodi[0]);
+        //sendeSpielinfo(spielinfo.spielmodi[0]);
     });
 
     socket.on('spiel_beendet', function (data) {

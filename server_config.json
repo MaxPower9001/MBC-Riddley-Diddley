@@ -2,6 +2,6 @@
   "http2":    false,
   "server": {
     "ip":   "0.0.0.0",
-    "port": 8080
+    "port": 13337
   }
 }

@@ -1,28 +1,55 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
-import 'js/QRCode.js';
+import { Component, AfterViewInit } from '@angular/core';
+require('js/qrcode.js');
 
 declare var QRCode : any;
 
 @Component({
   selector: 'tv-home',
-  templateUrl: '../templates/tv_home.html'
-})
-
-export class TV_Home implements OnInit { 
-
-  ngOnInit() {
-    console.log("= Find Cads Page loaded... =");
-    console.log("oh mein goooooooood");
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
-      width : 200,
-      height : 200
-    });
-
-    function makeCode () {
-
-      qrcode.makeCode("http://141.22.74.13:8080/#/phone-play");
+  styles: [`
+    p {
+        font-size: 20px;
     }
+    h1, p, div {
+        text-align:center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+  `],
+  template: `
+    <h1>Öffne diesen Link</h1>
+        <p>{{ getUrl() }}</p>
+    <h1>Oder öffne folgenden QRCode um am Spiel teilzunehmen</h1>
+        <div id="qrcode-container"></div>
+  `
+})
+export class TV_Home implements AfterViewInit {
 
-    makeCode();
+  port : number;
+  hostname : string;
+  qrcode : any;
+
+
+
+  constructor() {
+    this.hostname = window.location.hostname;
+    this.port = 13337;
   }
+
+  ngAfterViewInit(): void {
+    //this.createQRCode();
+  }
+
+  getUrl(): string {
+    return "http://" + this.hostname + ":" + this.port + "/smartphone";
+  }
+
+  createQRCode(): void {
+    this.qrcode = new QRCode("qrcode-container", {
+      text : this.getUrl(),
+      width : 250,
+      height : 250
+    });
+    this.qrcode.makeCode();
+  }
+
 }

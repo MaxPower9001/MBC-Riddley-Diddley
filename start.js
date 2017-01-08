@@ -13,11 +13,10 @@ var webserverModule   = require("./lib/setupWebserver");
 var gameserverModule  = require('./gameserver_backend/gameserver.js');
 
 var serverIP    = config.server.ip   || "0.0.0.0";
-var serverPort  = config.server.port || 8080;
+var serverPort  = config.server.port || 13337;
 
 // Setup HTTP Webserver
 var webserver = webserverModule.createApplicationServer(config, serverIP, serverPort);
 
 // Setup Gameserver
 var gameserver = gameserverModule.init(webserver);
-

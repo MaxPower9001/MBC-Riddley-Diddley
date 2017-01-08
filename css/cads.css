@@ -313,7 +313,7 @@ a.nontext /* used to override default properties of 'a' tag */
 {
 	color: #FFFFFF;
 	font-size: 16px;
-	font-family: '__Roboto_5';	*/
+	font-family: '__Roboto_5';
 	text-align: center;
 	text-decoration: none;	
 }
