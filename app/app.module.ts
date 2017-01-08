@@ -17,6 +17,8 @@ import {  TV_End }              from './tv-end';
 import {  PHONE_Home }              from './phone-home';
 import {  PHONE_Play }              from './phone-play';
 import {  PHONE_End }              from './phone-end';
+
+import {KeysPipe} from "./keys.pipe";
 // Declare NgModule
 @NgModule({
   imports: [ BrowserModule,
@@ -31,7 +33,7 @@ import {  PHONE_End }              from './phone-end';
       { path: 'phone-end',             component: PHONE_End }
     ],{ useHash: true })
     ],
-  declarations: [ AppComponent, Header, TV_Home, TV_Play, TV_End, PHONE_Home, PHONE_Play, PHONE_End],
+  declarations: [ AppComponent, Header, TV_Home, TV_Play, TV_End, PHONE_Home, PHONE_Play, PHONE_End, KeysPipe],
   bootstrap:    [ AppComponent ]
 })
 
