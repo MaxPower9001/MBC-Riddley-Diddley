@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
-import * as io from 'socket.io-client';
+var io = require('../js/socket.io.js');
 import * as dtos from './dtos';
 
 @Injectable()
