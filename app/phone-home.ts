@@ -9,21 +9,20 @@ declare var connectToGameserver: any;
 	selector: 'phone-home',
 	styles: [`
 		.panel {
-			background-color: coral	;
+			background-color: yellowgreen	;
 		}
 
 		.panel:nth-child(odd) {
-			background-color: yellowgreen;
+			background-color: coral;
 		}
 		
 	`],
 	template: `
 		<div class="alert alert-success" role="alert">
-			<h1>Hi {{username}},</h1> 
+			<h2>Hi {{username}},</h2> 
 			<p>folgende Spielmodi stehen dir zur Auswahl:</p>
 		</div>
-		
-		<div class="alert alert-info">Clicke auf gewünschten Spielmodus um das spiel zu starten</div>
+
 		<div class="panel panel-default" *ngFor="let spielmodus of spielmodi">
 			<div class="panel-body">
 				<p class="hidden">{{printSpielmodus(spielmodus)}}</p>
