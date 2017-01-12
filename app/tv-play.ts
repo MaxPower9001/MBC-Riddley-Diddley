@@ -7,9 +7,7 @@ import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
   selector: 'tv-play',
   template: `
     <h1>TV Screen - PLAY</h1>
-    <div>Drücke xXx Taste</div>
-    in 
-    <div>Sekunden</div>`,
+  `
 })
 
 export class TV_Play implements OnInit {

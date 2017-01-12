@@ -1,4 +1,3 @@
-
 export class Spielinfo {
     spielmodi : Spielmodus[];
     username : string;
