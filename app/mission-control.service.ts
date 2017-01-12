@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 var io = require('../js/socket.io.js');
-import * as dtos from './dtos';
+import { Spielinfo, SpielGestartet, SpielBeendet } from './dtos';
 
 @Injectable()
 export class MissionControlService {
     private url = 'http://localhost:13337';
     private socket;
 
-    private spielinfoToGameserver = new Subject<dtos.Spielinfo>();
-    private spielinfoFromGameserver = new Subject<dtos.Spielinfo>();
-    private spielGestartet = new Subject<dtos.SpielGestartet>();
-    private spielBeendet = new Subject<dtos.SpielBeendet>();
+    private spielinfoToGameserver = new Subject<Spielinfo>();
+    private spielinfoFromGameserver = new Subject<Spielinfo>();
+    private spielGestartet = new Subject<SpielGestartet>();
+    private spielBeendet = new Subject<SpielBeendet>();
 
     spielinfotoGameserver$ = this.spielinfoToGameserver.asObservable();
     spielinfofromGameserver$ = this.spielinfoFromGameserver.asObservable();
     spielGestartet$ = this.spielGestartet.asObservable();
     spielBeendet$ = this.spielBeendet.asObservable();
 
-    announceSpielinfo(spielinfo: dtos.Spielinfo) {
+    announceSpielinfo(spielinfo: Spielinfo) {
         this.spielinfoFromGameserver.next(spielinfo);
     }
 
-    announceSpielGestarted(spielgestartet: dtos.SpielGestartet) {
+    announceSpielGestarted(spielgestartet: SpielGestartet) {
         this.spielGestartet.next(spielgestartet);
     }
 
-    announceSpielBeendet(spielbeendet: dtos.SpielBeendet) {
+    announceSpielBeendet(spielbeendet: SpielBeendet) {
         this.spielBeendet.next(spielbeendet);
     }
 
@@ -46,11 +46,11 @@ export class MissionControlService {
             console.log("Verbindung unterbrochen")
         });
 
-        this.socket.on('spielinfo', function (spielinfo : dtos.Spielinfo) {
+        this.socket.on('spielinfo', function (spielinfo : Spielinfo) {
             that.announceSpielinfo(spielinfo);
         });
 
-        this.socket.on('spiel_beendet', function (spielbeendet: dtos.SpielBeendet) {
+        this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
             that.announceSpielBeendet(spielbeendet);
             if(this.socket != null)
                 // wird vermutlich nicht benötigt, Server schließt den Socket
@@ -62,13 +62,13 @@ export class MissionControlService {
             var typ = data.typ;
         });
 
-        this.socket.on('spiel_gestartet', function (spielGestartet : dtos.SpielGestartet) {
+        this.socket.on('spiel_gestartet', function (spielGestartet : SpielGestartet) {
             that.announceSpielGestarted(spielGestartet);
         });
     }
 
     starteSpiel(spielmodus) {
-        this.socket.emit('spielinfo', new dtos.Spielinfo([spielmodus], ""));
+        this.socket.emit('spielinfo', new Spielinfo([spielmodus], ""));
     }
 
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MissionControlService }     from './mission-control.service';
-import * as dtos from './dtos'
-import {Spielmodus} from "./dtos";
-import {Spielinfo} from "./dtos";
+import { Spielinfo, SpielGestartet, Spielmodus } from "./dtos";
 
 declare var connectToGameserver : any;
 
@@ -33,7 +31,7 @@ declare var connectToGameserver : any;
 
 export class PHONE_Home implements OnInit {
 
-  spielmodi : dtos.Spielmodus[];
+  spielmodi : Spielmodus[];
   username : string;
 
   constructor(private missionControlService: MissionControlService) {}
@@ -48,18 +46,18 @@ export class PHONE_Home implements OnInit {
         });
     this.missionControlService.spielGestartet$.subscribe(
         spielGestartet => {
-          console.log("SpielGestartet vom Server erhalten: " + new dtos.SpielGestartet(spielGestartet.anzahlSpieler));
+          console.log("SpielGestartet vom Server erhalten: " + new SpielGestartet(spielGestartet.anzahlSpieler));
           // TODO Change View to phone-play
           document.getElementsByTagName("phone-home")[0].innerHTML = "<h1 style='font-size: 30px;'>SPIEL GESTARTET LOS GEHTS</h1>"
         });
     this.missionControlService.connectToGameserver();
   }
 
-  starteSpiel(spielmodus : dtos.Spielmodus) {
+  starteSpiel(spielmodus : Spielmodus) {
     this.missionControlService.starteSpiel(spielmodus);
   }
 
-  printSpielmodus(spielmodus : dtos.Spielmodus) {
+  printSpielmodus(spielmodus : Spielmodus) {
     return (new Spielmodus(spielmodus.schwierigkeit, spielmodus.zeitFuerAktion, spielmodus.auswahlverfahrenSpieler, spielmodus.anzahlLeben)).toString();
   }
 }
