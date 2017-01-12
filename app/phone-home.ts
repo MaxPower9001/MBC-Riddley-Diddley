@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 import { MissionControlService }     from './mission-control.service';
 import { Spielinfo, SpielGestartet, Spielmodus } from "./dtos";
 
@@ -34,7 +35,7 @@ export class PHONE_Home implements OnInit {
   spielmodi : Spielmodus[];
   username : string;
 
-  constructor(private missionControlService: MissionControlService) {}
+  constructor(private missionControlService: MissionControlService, private router: Router) {}
 
   ngOnInit() {
     let that = this;
@@ -45,8 +46,7 @@ export class PHONE_Home implements OnInit {
         });
     this.missionControlService.spielGestartet$.subscribe(function(spielGestartet: SpielGestartet) {
           console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
-          // TODO Change View to phone-play
-          document.getElementsByTagName("phone-home")[0].innerHTML = "<h1 style='font-size: 30px;'>SPIEL GESTARTET LOS GEHTS</h1>"
+          that.router.navigateByUrl("/phone-play");
         });
     this.missionControlService.connectToGameserver();
   }

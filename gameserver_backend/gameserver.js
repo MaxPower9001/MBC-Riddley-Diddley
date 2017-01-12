@@ -49,7 +49,6 @@ module.exports = {
             socket.emit('spielinfo', new _Spielinfo.Spielinfo(spieler.name, _Spielmodus.spielmodi));
 
             socket.on('spielinfo', function (spielinfo) {
-                //console.log("irgendwas ist passiert: " + spielinfo.spielmodi[0].schwierigkeit);
                 // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
                 // Spiel kann erstellt werden und der Spielmodus dort gesetzt werden
                 spiel.spielmodus = spielinfo.spielmodi[0];
