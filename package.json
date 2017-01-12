@@ -38,7 +38,8 @@
     "spdy": "latest",
     "systemjs": "0.19.40",
     "zone.js": "^0.7.4",
-    "socket.io": "^1.4.6"
+    "socket.io": "^1.4.6",
+    "angular2-qrcode": "1.0.5"
   },
   "devDependencies": {
     "tsd": "latest",
@@ -50,6 +51,5 @@
   },
   "ambientDependencies": {
     "es6-shim": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd"
-  },
-  "homepage": "https://github.com/Transport-Protocol/CaDS-JS-Playground#readme"
+  }
 }

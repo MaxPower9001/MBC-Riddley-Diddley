@@ -24,8 +24,9 @@
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      'socket.io-client': './js/socket.io.js'
-    },
+      'angular2-qrcode': 'npm:angular2-qrcode/angular2-qrcode.js',
+      'qrcode-generator': 'npm:qrcode-generator/qrcode.js'
+},
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
       app: {

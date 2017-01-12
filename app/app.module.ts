@@ -9,6 +9,8 @@ import { AppComponent }  from './app.component';
 // header 
 import { Header } from './d.header';
 
+import { QRCodeModule } from 'angular2-qrcode';
+
 // Output
 import {  TV_Home }              from './tv-home';
 import {  TV_Play }              from './tv-play';
@@ -21,7 +23,9 @@ import {  PHONE_End }              from './phone-end';
 import {KeysPipe} from "./keys.pipe";
 // Declare NgModule
 @NgModule({
-  imports: [ BrowserModule,
+  imports: [
+    QRCodeModule,
+    BrowserModule,
     FormsModule,
     RouterModule.forRoot([
       { path: '',                 component: TV_Home },
