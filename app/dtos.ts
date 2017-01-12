@@ -9,7 +9,7 @@ export class Spielinfo {
     };
 
     toString() : string {
-        return "Spielinfo[spielmodi='" + this.spielmodi + "',username='" + this.username + "']";
+        return `Spielinfo[spielmodi='${this.spielmodi}',username='${this.username}']`;
     }
 }
 
@@ -36,9 +36,9 @@ export class Spielmodus {
 }
 
 export class SpielGestartet {
-    anzahlSpieler : string;
+    anzahlSpieler : number;
 
-    constructor( anzahlSpieler : string) {
+    constructor( anzahlSpieler : number) {
         this.anzahlSpieler = anzahlSpieler;
     }
 

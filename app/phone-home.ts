@@ -36,17 +36,15 @@ export class PHONE_Home implements OnInit {
 
   constructor(private missionControlService: MissionControlService) {}
 
-
   ngOnInit() {
-    this.missionControlService.spielinfofromGameserver$.subscribe(
-        spielinfo => {
-          this.spielmodi = spielinfo.spielmodi;
-          this.username = spielinfo.username;
-          console.log("Spielinfo vom Server erhalten: " + (new Spielinfo(spielinfo.spielmodi, spielinfo.username)).toString());
+    let that = this;
+    this.missionControlService.spielinfofromGameserver$.subscribe(function(spielinfo : Spielinfo) {
+            that.spielmodi = spielinfo.spielmodi;
+            that.username = spielinfo.username;
+            console.log("Spielinfo vom Server erhalten: " + spielinfo);
         });
-    this.missionControlService.spielGestartet$.subscribe(
-        spielGestartet => {
-          console.log("SpielGestartet vom Server erhalten: " + new SpielGestartet(spielGestartet.anzahlSpieler));
+    this.missionControlService.spielGestartet$.subscribe(function(spielGestartet: SpielGestartet) {
+          console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
           // TODO Change View to phone-play
           document.getElementsByTagName("phone-home")[0].innerHTML = "<h1 style='font-size: 30px;'>SPIEL GESTARTET LOS GEHTS</h1>"
         });

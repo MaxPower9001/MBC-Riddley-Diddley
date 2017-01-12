@@ -46,8 +46,9 @@ export class MissionControlService {
             console.log("Verbindung unterbrochen")
         });
 
-        this.socket.on('spielinfo', function (spielinfo : Spielinfo) {
-            that.announceSpielinfo(spielinfo);
+        this.socket.on('spielinfo', function (spielinfo) {
+            let spielinfo_ : Spielinfo = new Spielinfo(spielinfo.spielmodi, spielinfo.username);
+            that.announceSpielinfo(spielinfo_);
         });
 
         this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
@@ -62,8 +63,9 @@ export class MissionControlService {
             var typ = data.typ;
         });
 
-        this.socket.on('spiel_gestartet', function (spielGestartet : SpielGestartet) {
-            that.announceSpielGestarted(spielGestartet);
+        this.socket.on('spiel_gestartet', function (spielGestartet) {
+            let spielGestartet_ : SpielGestartet = new SpielGestartet(spielGestartet.anzahlSpieler);
+            that.announceSpielGestarted(spielGestartet_);
         });
     }
 
