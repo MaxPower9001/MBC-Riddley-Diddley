@@ -5,7 +5,7 @@ import { Spielinfo, SpielGestartet, SpielBeendet, Aktion } from './dtos';
 
 @Injectable()
 export class MissionControlService {
-    private url = 'http://192.168.178.136:13337';
+    private url = 'http://localhost:13337';
     private socket;
 
     private spielinfoToGameserver = new Subject<Spielinfo>();
