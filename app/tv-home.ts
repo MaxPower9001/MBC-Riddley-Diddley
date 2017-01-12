@@ -23,7 +23,6 @@ import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
           <qr-code [data]="getUrl()" [size]="300"></qr-code>
     </div>
   `,
-  providers: [MissionControlService]
 })
 export class TV_Home implements OnInit{
 

@@ -26,8 +26,7 @@ declare var connectToGameserver : any;
         </ul>
       </li>
     </ol>
-    `,
-  providers: [MissionControlService]
+    `
 })
 
 export class PHONE_Home implements OnInit {

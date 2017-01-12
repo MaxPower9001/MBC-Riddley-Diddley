@@ -65,6 +65,7 @@ export class MissionControlService {
         });
 
         this.socket.on('aktion', function (aktion) {
+            console.log("aktion bekommen");
             let aktion_ : Aktion = new Aktion(aktion.spieler, aktion.typ, Date.now() / 1000);
             that.announceAktion(aktion_);
         });

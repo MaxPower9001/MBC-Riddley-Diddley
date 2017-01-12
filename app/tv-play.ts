@@ -10,7 +10,6 @@ import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
     <div>Drücke xXx Taste</div>
     in 
     <div>Sekunden</div>`,
-  providers: [MissionControlService]
 })
 
 export class TV_Play implements OnInit {
