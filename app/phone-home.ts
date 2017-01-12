@@ -19,10 +19,11 @@ declare var connectToGameserver: any;
 	`],
 	template: `
 		<div class="alert alert-success" role="alert">
-			<h3>Hi {{username}},</h3> 
-			<p>folgende Spielmodi stehen dir zur Auswahl (Clicke auf gewünschten Spielmodus um das spiel zu starten):</p>
+			<h1>Hi {{username}},</h1> 
+			<p>folgende Spielmodi stehen dir zur Auswahl:</p>
 		</div>
 		
+		<div class="alert alert-info">Clicke auf gewünschten Spielmodus um das spiel zu starten</div>
 		<div class="panel panel-default" *ngFor="let spielmodus of spielmodi">
 			<div class="panel-body">
 				<p class="hidden">{{printSpielmodus(spielmodus)}}</p>
@@ -31,7 +32,7 @@ declare var connectToGameserver: any;
 						{{keyval.key}}: {{keyval.value}}
 					</li>
 				</ul>
-				<button class="btn btn-default" (click)="starteSpiel(spielmodus)">Spiel starten</button>
+				<button class="btn btn-primary" (click)="starteSpiel(spielmodus)">Spiel starten</button>
 				
 			</div>
 		</div>
