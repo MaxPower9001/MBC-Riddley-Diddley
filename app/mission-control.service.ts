@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 var io = require('../js/socket.io.js');
-import { Spielinfo, SpielGestartet, SpielBeendet } from './dtos';
+import { Spielinfo, SpielGestartet, SpielBeendet, Aktion } from './dtos';
 
 @Injectable()
 export class MissionControlService {
@@ -12,11 +12,13 @@ export class MissionControlService {
     private spielinfoFromGameserver = new Subject<Spielinfo>();
     private spielGestartet = new Subject<SpielGestartet>();
     private spielBeendet = new Subject<SpielBeendet>();
+    private aktionFromGameserver = new Subject<Aktion>();
 
     spielinfotoGameserver$ = this.spielinfoToGameserver.asObservable();
     spielinfofromGameserver$ = this.spielinfoFromGameserver.asObservable();
     spielGestartet$ = this.spielGestartet.asObservable();
     spielBeendet$ = this.spielBeendet.asObservable();
+    aktionFromGameServer$ = this.aktionFromGameserver.asObservable();
 
     announceSpielinfo(spielinfo: Spielinfo) {
         this.spielinfoFromGameserver.next(spielinfo);
@@ -28,6 +30,10 @@ export class MissionControlService {
 
     announceSpielBeendet(spielbeendet: SpielBeendet) {
         this.spielBeendet.next(spielbeendet);
+    }
+
+    announceAktion(aktion : Aktion) {
+        this.aktionFromGameserver.next(aktion);
     }
 
     connectToGameserver() {
@@ -58,9 +64,9 @@ export class MissionControlService {
                 this.socket.disconnect();
         });
 
-        this.socket.on('aktion', function (data) {
-            var spieler = data.spieler; // TODO
-            var typ = data.typ;
+        this.socket.on('aktion', function (aktion) {
+            let aktion_ : Aktion = new Aktion(aktion.spieler, aktion.typ, Date.now() / 1000);
+            that.announceAktion(aktion_);
         });
 
         this.socket.on('spiel_gestartet', function (spielGestartet) {

@@ -59,3 +59,19 @@ export class SpielBeendet {
         return `SpielBeendet[spielinfo_gesamt='${this.spielinfo_gesamt}']`;
     }
 }
+
+export class Aktion {
+    spieler : string;
+    typ : string;
+    absolute_unixzeit : number
+
+    constructor(spieler : string, typ : string, absolute_unixzeit : number) {
+        this.spieler = spieler;
+        this.typ = typ;
+        this.absolute_unixzeit = absolute_unixzeit;
+    };
+
+    toString() : string {
+        return `Aktion[spieler='${this.spieler}', typ='${this.typ}', absolute_unixzeit='${this.absolute_unixzeit}']`;
+    }
+}

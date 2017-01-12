@@ -10,7 +10,7 @@ const standard = {
 const schwierig = {
         schwierigkeit: "schwierig",
         zeitFuerAktion: 500,
-        auswahlverfahrenSpieler: "reium",
+        auswahlverfahrenSpieler: "zufall",
         anzahlLeben: 1
 };
 exports.standard = standard;
