@@ -6,7 +6,7 @@ import {MissionControlService} from "./mission-control.service";
   template: `
     <div class="container">
         <base href="/">
-        <!--<header></header>-->
+        <header></header>
         <router-outlet></router-outlet>
     </div>
     `,
