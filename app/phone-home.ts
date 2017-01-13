@@ -23,8 +23,9 @@ declare var connectToGameserver: any;
 			<p>folgende Spielmodi stehen dir zur Auswahl:</p>
 		</div>
 
-		<div class="panel panel-default" *ngFor="let spielmodus of spielmodi">
+		<div class="panel panel-default" *ngFor="let spielmodus of spielmodi; let i = index">
 			<div class="panel-body">
+				<p class="">Spielmodi {{i+1}}<p>
 				<p class="hidden">{{printSpielmodus(spielmodus)}}</p>
 				<ul class="list-group">
 					<li class="list-group-item" *ngFor="let keyval of spielmodus | keys">
