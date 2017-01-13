@@ -61,10 +61,10 @@ export class SpielBeendet {
 
 export class Aktion {
     spieler : string;
-    typ : string;
+    typ : AktionsTyp;
     absolute_unixzeit : number
 
-    constructor(spieler : string, typ : string, absolute_unixzeit : number) {
+    constructor(spieler : string, typ : AktionsTyp, absolute_unixzeit : number) {
         this.spieler = spieler;
         this.typ = typ;
         this.absolute_unixzeit = absolute_unixzeit;
@@ -73,4 +73,10 @@ export class Aktion {
     toString() : string {
         return `Aktion[spieler='${this.spieler}', typ='${this.typ}', absolute_unixzeit='${this.absolute_unixzeit}']`;
     }
+}
+
+export enum AktionsTyp {
+    LINKSKNOPF = 1,
+    RECHTSKNOPF = 2,
+    SCHUETTELN = 3
 }

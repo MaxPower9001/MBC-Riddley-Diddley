@@ -1,7 +1,6 @@
 html,
 body,
-body .container,
-body .container phone-play .row {
+body .container {
     height:100%;
 }
 
@@ -11,7 +10,15 @@ header {
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
     background-color: #b84d45;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
+}
+
+.alert > h2,
+.alert > h1,
+.alert > h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
 }
 
 my-app > .container {

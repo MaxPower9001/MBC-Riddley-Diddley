@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 var io = require('../js/socket.io.js');
-import { Spielinfo, SpielGestartet, SpielBeendet, Aktion } from './dtos';
+import { Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp } from './dtos';
 
 @Injectable()
 export class MissionControlService {
@@ -13,6 +13,8 @@ export class MissionControlService {
     private spielGestartet = new Subject<SpielGestartet>();
     private spielBeendet = new Subject<SpielBeendet>();
     private aktionFromGameserver = new Subject<Aktion>();
+
+    private username: string = '';
 
     spielinfotoGameserver$ = this.spielinfoToGameserver.asObservable();
     spielinfofromGameserver$ = this.spielinfoFromGameserver.asObservable();
@@ -54,6 +56,7 @@ export class MissionControlService {
 
         this.socket.on('spielinfo', function (spielinfo) {
             let spielinfo_ : Spielinfo = new Spielinfo(spielinfo.spielmodi, spielinfo.username);
+            that.username = spielinfo.username;
             that.announceSpielinfo(spielinfo_);
         });
 
@@ -79,6 +82,11 @@ export class MissionControlService {
     starteSpiel(spielmodus) {
         this.socket.emit('spielinfo', new Spielinfo([spielmodus], ""));
     }
+
+    aktionDone(aktion: AktionsTyp) {
+        this.socket.emit('aktion', new Aktion(this.username, aktion, 1)); //TODO AKtionszeit
+    }
+
 
 
 }
