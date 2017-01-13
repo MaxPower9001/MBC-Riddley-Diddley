@@ -2,9 +2,9 @@
  * Created by kk on 04.12.16.
  */
 const Aktion = {
-    LINKSKNOPF: "LINKSKNOPF",
-    RECHTSKNOPF: "RECHTSKNOPF",
-    SCHUETTELN: "SCHUETTELN",
+    LINKSKNOPF: 1,
+    RECHTSKNOPF: 2,
+    SCHUETTELN: 3,
 };
 
 exports.getZufallsAktion = function () {

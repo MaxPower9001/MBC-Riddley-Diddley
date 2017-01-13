@@ -70,6 +70,7 @@ module.exports = {
             });
 
             socket.on('aktion', function (aktionNachricht) {
+                console.log("Aktion erhalten" + aktionNachricht);
                 // Spielzug erstellen und Spieler zuordnen
                 // var spielzug = new _Spielzug.constructor(aktionNachricht.typ,this.spiel.aktuelleAktion,);
                 // Jemand hat eine Aktion gesendet
