@@ -6,7 +6,9 @@ import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
 @Component({
   selector: 'tv-play',
   template: `
-    <h1>TV Screen - PLAY</h1>
+  	<div class="alert alert-success" role="alert">
+			<h2>TV Screen - PLAY</h2> 
+		</div>
   `
 })
 

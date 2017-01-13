@@ -42,8 +42,12 @@ phone-play .btn {
     height: 100%;
 }
 
+phone-play > .row {
+    height: 80%;
+}
+
 phone-play .row > div {
     padding-left: 0;
     padding-right: 0;
-    height:50%;
+    height: 100%;
 }

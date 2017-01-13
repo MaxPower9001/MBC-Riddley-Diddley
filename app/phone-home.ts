@@ -19,7 +19,7 @@ declare var connectToGameserver: any;
 	`],
 	template: `
 		<div class="alert alert-success" role="alert">
-			<h2>Hi {{username}},</h2> 
+			<h3>Hi {{username}},</h3> 
 			<p>folgende Spielmodi stehen dir zur Auswahl:</p>
 		</div>
 
@@ -65,6 +65,11 @@ export class PHONE_Home implements OnInit {
 	}
 
 	printSpielmodus(spielmodus: Spielmodus) {
-		return (new Spielmodus(spielmodus.schwierigkeit, spielmodus.zeitFuerAktion, spielmodus.auswahlverfahrenSpieler, spielmodus.anzahlLeben)).toString();
+		return ( new Spielmodus(
+			spielmodus.schwierigkeit, 
+			spielmodus.zeitFuerAktion, 
+			spielmodus.auswahlverfahrenSpieler, 
+			spielmodus.anzahlLeben
+		)).toString();
 	}
 }
