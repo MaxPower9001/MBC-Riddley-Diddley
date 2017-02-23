@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {MissionControlService} from "./mission-control.service";
 
 @Component({
   selector: 'my-app',
@@ -9,8 +8,7 @@ import {MissionControlService} from "./mission-control.service";
         <header></header>
         <router-outlet></router-outlet>
     </div>
-    `,
-  providers: [MissionControlService],
+    `
 })
 export class AppComponent  {
 }

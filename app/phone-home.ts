@@ -57,7 +57,7 @@ export class PHONE_Home implements OnInit {
 			console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
 			that.router.navigateByUrl("/phone-play");
 		});
-		this.missionControlService.connectToGameserver();
+		//this.missionControlService.connectToGameserver();
 	}
 
 	starteSpiel(spielmodus: Spielmodus) {

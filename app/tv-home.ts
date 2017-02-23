@@ -47,7 +47,7 @@ export class TV_Home implements OnInit{
       console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
       that.router.navigateByUrl("/tv-play");
     });
-    this.missionControlService.connectToGameserver();
+    //this.missionControlService.connectToGameserver();
   }
 
   getUrl(): string {

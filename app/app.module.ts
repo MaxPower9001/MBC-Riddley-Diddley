@@ -5,6 +5,8 @@ import { RouterModule }                   from '@angular/router';
 
 // My Modules
 import { AppComponent }  from './app.component';
+import { MissionControlService } from './mission-control.service';
+import { BackendConnectionWebsocketService } from './backend-connection.websocket.service';
 
 // header 
 import { Header } from './d.header';
@@ -21,6 +23,7 @@ import {  PHONE_Play }              from './phone-play';
 import {  PHONE_End }              from './phone-end';
 
 import {KeysPipe} from "./keys.pipe";
+
 // Declare NgModule
 @NgModule({
   imports: [
@@ -38,6 +41,7 @@ import {KeysPipe} from "./keys.pipe";
     ],{ useHash: true })
     ],
   declarations: [ AppComponent, Header, TV_Home, TV_Play, TV_End, PHONE_Home, PHONE_Play, PHONE_End, KeysPipe],
+  providers:   [MissionControlService, BackendConnectionWebsocketService],
   bootstrap:    [ AppComponent ]
 })
 
