@@ -12,12 +12,12 @@ import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
   `
 })
 
-export class TV_Play implements OnInit {
+export class TvPlayComponent implements OnInit {
 
   constructor(private missionControlService: MissionControlService, private router: Router) {}
 
   ngOnInit() {
-    console.log("TV_Play loaded...");
+    console.log("TvPlayComponent loaded...");
     this.missionControlService.aktionFromGameServer$.subscribe(function(aktion : Aktion){
       console.log("Aktion vom Server erhalten: " + aktion);
     })

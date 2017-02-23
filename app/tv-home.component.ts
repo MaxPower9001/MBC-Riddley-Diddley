@@ -24,7 +24,7 @@ import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
     </div>
   `,
 })
-export class TV_Home implements OnInit{
+export class TvHomeComponent implements OnInit{
 
   port : number;
   hostname : string;
@@ -47,7 +47,6 @@ export class TV_Home implements OnInit{
       console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
       that.router.navigateByUrl("/tv-play");
     });
-    //this.missionControlService.connectToGameserver();
   }
 
   getUrl(): string {

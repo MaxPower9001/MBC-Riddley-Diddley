@@ -6,7 +6,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
   template: ``
 })
 
-export class TV_End implements OnInit { 
+export class TvEndComponent implements OnInit {
 
   ngOnInit() {}
 }

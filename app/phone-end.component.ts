@@ -6,7 +6,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
   template: ``
 })
 
-export class PHONE_End implements OnInit { 
+export class PhoneEndComponent implements OnInit {
 
   ngOnInit() {}
 }

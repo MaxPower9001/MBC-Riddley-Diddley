@@ -21,7 +21,7 @@ var Shake = require('../js/shake.js');
 	`
 })
 
-export class PHONE_Play implements OnInit {
+export class PhonePlayComponent implements OnInit {
 
 	constructor(private missionControlService: MissionControlService) {
 

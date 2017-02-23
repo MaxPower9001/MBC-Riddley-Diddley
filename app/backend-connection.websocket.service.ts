@@ -5,7 +5,7 @@ import {MissionControlService} from "./mission-control.service";
 import {BackendConnectionServiceInterface} from './backend-connection.service.interface';
 
 @Injectable()
-export class BackendConnectionWebsocketService implements BackendConnectionServiceInterface{
+export class BackendConnectionWebsocketService implements BackendConnectionServiceInterface {
 
     private missionControlService : MissionControlService;
 
@@ -18,11 +18,11 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
         this.connectToGameserver();
     }
 
-    setMissionControlService(missionControlService : MissionControlService) : void{
+    setMissionControlService(missionControlService : MissionControlService) : void {
         this.missionControlService = missionControlService;
     }
 
-    connectToGameserver() : void{
+    connectToGameserver() : void {
         var that = this;
 
         this.socket = io(this.url);
@@ -60,7 +60,7 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
         });
     }
 
-    starteSpiel(spielmodus : Spielmodus) : void{
+    starteSpiel(spielmodus : Spielmodus) : void {
         this.socket.emit('spielinfo', new Spielinfo([spielmodus], ""));
     }
 

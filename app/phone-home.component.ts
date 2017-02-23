@@ -39,7 +39,7 @@ declare var connectToGameserver: any;
     `
 })
 
-export class PHONE_Home implements OnInit {
+export class PhoneHomeComponent implements OnInit {
 
 	spielmodi: Spielmodus[];
 	username: string;
@@ -57,7 +57,6 @@ export class PHONE_Home implements OnInit {
 			console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
 			that.router.navigateByUrl("/phone-play");
 		});
-		//this.missionControlService.connectToGameserver();
 	}
 
 	starteSpiel(spielmodus: Spielmodus) {
