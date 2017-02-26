@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MissionControlService }     from './mission-control.service';
-import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./dtos";
+import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
 
 @Component({
   selector: 'tv-home',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MissionControlService } from './mission-control.service';
-import { Spielinfo, SpielGestartet, Spielmodus } from "./dtos";
+import { Spielinfo, SpielGestartet, Spielmodus } from "./nachrichtentypen";
 
 declare var connectToGameserver: any;
 

@@ -1,18 +1,14 @@
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-const standard = {
+export const standard = {
         schwierigkeit: "standard",
         zeitFuerAktion: 5000,
         auswahlverfahrenSpieler: "reium",
         anzahlLeben: 1
 };
-const schwierig = {
+export const schwierig = {
         schwierigkeit: "schwierig",
         zeitFuerAktion: 500,
         auswahlverfahrenSpieler: "zufall",
         anzahlLeben: 1
 };
-exports.standard = standard;
-exports.schwierig = schwierig;
-exports.spielmodi = [standard, schwierig];
+
+export const spielmodi : any[] = [standard, schwierig];

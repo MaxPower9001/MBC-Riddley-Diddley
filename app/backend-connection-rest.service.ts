@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BackendConnectionServiceInterface} from './backend-connection.service.interface';
 import {MissionControlService} from "./mission-control.service";
-import {Spielmodus, AktionsTyp} from "./dtos";
+import {Spielmodus, AktionsTyp} from "./nachrichtentypen";
 
 @Injectable()
 export class BackendConnectionRestService implements BackendConnectionServiceInterface {

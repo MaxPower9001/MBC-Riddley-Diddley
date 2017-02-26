@@ -9,8 +9,10 @@ jspm_packages
 npm-debug.*
 link-checker-results.txt
 app/**/*.js
+gameserver_backend/**/*.js
 *.js.map
 e2e/**/*.js
 e2e/**/*.js.map
 _test-output
 _temp
+start.js

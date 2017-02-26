@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { MissionControlService } from './mission-control.service';
-import { Aktion, AktionsTyp } from "./dtos";
+import { Aktion, AktionsTyp } from "./nachrichtentypen";
 var Shake = require('../js/shake.js');
 
 @Component({

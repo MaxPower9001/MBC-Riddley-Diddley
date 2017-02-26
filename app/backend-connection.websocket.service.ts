@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 var io = require('../js/socket.io.js');
-import {Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp, Spielmodus} from './dtos';
+import {Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp, Spielmodus} from './nachrichtentypen';
 import {MissionControlService} from "./mission-control.service";
 import {BackendConnectionServiceInterface} from './backend-connection.service.interface';
 

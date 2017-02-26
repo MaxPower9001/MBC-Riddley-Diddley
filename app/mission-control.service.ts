@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
-import {Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp, Spielmodus} from './dtos';
+import {Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp, Spielmodus} from './nachrichtentypen';
 import {Observable} from "rxjs";
 import {BackendConnectionWebsocketService} from "./backend-connection.websocket.service";
 import {BackendConnectionServiceInterface} from "./backend-connection.service.interface";
