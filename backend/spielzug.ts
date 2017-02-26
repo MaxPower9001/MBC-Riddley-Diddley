@@ -1,4 +1,4 @@
-import {AktionsTyp} from "./nachrichtentypen";
+import {AktionsTyp} from "../api/nachrichtentypen.interface";
 export class Spielzug {
 
     aktionAusgefuehrt : AktionsTyp;

@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { MissionControlService } from './mission-control.service';
-import { Aktion, AktionsTyp } from "./nachrichtentypen";
+import { Aktion } from "./nachrichtentypen";
+import {AktionsTyp} from '../api/nachrichtentypen.interface.js';
 var Shake = require('./lib/shake.js');
 
 @Component({
@@ -35,8 +36,7 @@ export class PhonePlayComponent implements OnInit {
 		myShakeEvent.start();
 
 		this.missionControlService.aktionFromGameServer$.subscribe(function (aktion: Aktion) {
-			
-			console.log("Spielinfo vom Server erhalten: " + aktion);
+			console.log("Aktion vom Server erhalten: " + aktion + " Jetzt aber schnell!");
 		});
 	}
 

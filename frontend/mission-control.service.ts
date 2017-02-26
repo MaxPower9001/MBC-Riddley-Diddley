@@ -1,38 +1,43 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
-import {Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp, Spielmodus} from './nachrichtentypen';
+import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo} from './nachrichtentypen';
 import {Observable} from "rxjs";
 import {BackendConnectionWebsocketService} from "./backend-connection.websocket.service";
 import {BackendConnectionServiceInterface} from "./backend-connection.service.interface";
+import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 @Injectable()
 export class MissionControlService {
 
-    private spielinfoToGameserver = new Subject<Spielinfo>();
-    private spielinfoFromGameserver = new Subject<Spielinfo>();
+    private spielerInfoFromGameserver = new Subject<SpielerInfo>();
+    private spielmodusToGameserver = new Subject<Spielmodus>();
+    private spielmodusFromGameserver = new Subject<Spielmodus>();
     private spielGestartet = new Subject<SpielGestartet>();
     private spielBeendet = new Subject<SpielBeendet>();
     private aktionFromGameserver = new Subject<Aktion>();
 
     username: string = '';
 
-    spielinfotoGameserver$ : Observable<Spielinfo>;
-    spielinfofromGameserver$ : Observable<Spielinfo>;
+    spielerInfoFromGameserver$ : Observable<SpielerInfo>;
+    spielmodustoGameserver$ : Observable<Spielmodus>;
+    spielmodusfromGameserver$ : Observable<Spielmodus>;
     spielGestartet$ : Observable<SpielGestartet>;
     spielBeendet$ : Observable<SpielBeendet>;
     aktionFromGameServer$ : Observable<Aktion>;
 
     constructor(private websocketService : BackendConnectionWebsocketService ) {
-        this.spielinfotoGameserver$ = this.spielinfoToGameserver.asObservable();
-        this.spielinfofromGameserver$ = this.spielinfoFromGameserver.asObservable();
+        this.spielerInfoFromGameserver$ = this.spielerInfoFromGameserver.asObservable();
+        this.spielmodustoGameserver$ = this.spielmodusToGameserver.asObservable();
+        this.spielmodusfromGameserver$ = this.spielmodusFromGameserver.asObservable();
         this.spielGestartet$ = this.spielGestartet.asObservable();
         this.spielBeendet$ = this.spielBeendet.asObservable();
         this.aktionFromGameServer$ = this.aktionFromGameserver.asObservable();
         this.websocketService.setMissionControlService(this);
+        this.spielerInfoFromGameserver$.subscribe((spielerInfo : SpielerInfo) => this.username = spielerInfo.username);
     }
 
-    announceSpielinfo(spielinfo: Spielinfo) {
-        this.spielinfoFromGameserver.next(spielinfo);
+    announceSpielmodus(spielmodus: Spielmodus) {
+        this.spielmodusFromGameserver.next(spielmodus);
     }
 
     announceSpielGestarted(spielgestartet: SpielGestartet) {
@@ -41,6 +46,10 @@ export class MissionControlService {
 
     announceSpielBeendet(spielbeendet: SpielBeendet) {
         this.spielBeendet.next(spielbeendet);
+    }
+
+    announceSpielerinfo(spielerinfo : SpielerInfo) {
+        this.spielerInfoFromGameserver.next(spielerinfo);
     }
 
     announceAktion(aktion : Aktion) {

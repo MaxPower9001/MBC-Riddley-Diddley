@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 var io = require('./lib/socket.io.js');
-import {Spielinfo, SpielGestartet, SpielBeendet, Aktion, AktionsTyp, Spielmodus} from './nachrichtentypen';
+import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo} from './nachrichtentypen';
 import {MissionControlService} from "./mission-control.service";
 import {BackendConnectionServiceInterface} from './backend-connection.service.interface';
+import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 @Injectable()
 export class BackendConnectionWebsocketService implements BackendConnectionServiceInterface {
@@ -35,10 +36,8 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
             console.log("Verbindung unterbrochen")
         });
 
-        this.socket.on('spielinfo', function (spielinfo) {
-            let spielinfo_ : Spielinfo = new Spielinfo(spielinfo.spielmodi, spielinfo.username);
-            that.username = spielinfo.username;
-            that.missionControlService.announceSpielinfo(spielinfo_);
+        this.socket.on('spielmodus', function (spielmodus : Spielmodus) {
+            that.missionControlService.announceSpielmodus(spielmodus);
         });
 
         this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
@@ -48,24 +47,26 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
                 this.socket.disconnect();
         });
 
-        this.socket.on('aktion', function (aktion) {
+        this.socket.on('aktion', function (aktion : Aktion) {
             console.log("aktion bekommen");
-            let aktion_ : Aktion = new Aktion(aktion.spieler, aktion.typ, Date.now() / 1000);
-            that.missionControlService.announceAktion(aktion_);
+            that.missionControlService.announceAktion(aktion);
         });
 
-        this.socket.on('spiel_gestartet', function (spielGestartet) {
-            let spielGestartet_ : SpielGestartet = new SpielGestartet(spielGestartet.anzahlSpieler);
-            that.missionControlService.announceSpielGestarted(spielGestartet_);
+        this.socket.on('spiel_gestartet', function (spielGestartet : SpielGestartet) {
+            that.missionControlService.announceSpielGestarted(spielGestartet);
+        });
+
+        this.socket.on('spielerinfo', function (spielerinfo : SpielerInfo) {
+            that.missionControlService.announceSpielerinfo(new SpielerInfo(spielerinfo));
         });
     }
 
     starteSpiel(spielmodus : Spielmodus) : void {
-        this.socket.emit('spielinfo', new Spielinfo([spielmodus], ""));
+        this.socket.emit('spielmodus', spielmodus);
     }
 
     aktionDone(aktion: AktionsTyp) : void {
-        this.socket.emit('aktion', new Aktion(this.username, aktion, 1)); //TODO AKtionszeit
+        this.socket.emit('aktion', new Aktion(this.username, aktion)); //TODO AKtionszeit
     }
 
 }

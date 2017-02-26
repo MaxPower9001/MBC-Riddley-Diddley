@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MissionControlService }     from './mission-control.service';
-import {Spielinfo, SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
+import {Spielmodus, SpielGestartet, Aktion} from "./nachrichtentypen";
 
 @Component({
   selector: 'tv-home',
@@ -28,8 +28,7 @@ export class TvHomeComponent implements OnInit{
 
   port : number;
   hostname : string;
-  spielmodi : Spielmodus[];
-  username : string;
+  spielmodus : Spielmodus;
 
   constructor(private missionControlService: MissionControlService, private router: Router) {
     this.hostname = window.location.hostname;
@@ -38,10 +37,9 @@ export class TvHomeComponent implements OnInit{
 
   ngOnInit() {
     let that = this;
-    this.missionControlService.spielinfofromGameserver$.subscribe(function(spielinfo : Spielinfo) {
-      that.spielmodi = spielinfo.spielmodi;
-      that.username = spielinfo.username;
-      console.log("Spielinfo vom Server erhalten: " + spielinfo);
+    this.missionControlService.spielmodusfromGameserver$.subscribe(function(spielmodus : Spielmodus) {
+      that.spielmodus = spielmodus;
+      console.log("Spielmodus vom Server erhalten: " + spielmodus);
     });
     this.missionControlService.spielGestartet$.subscribe(function(spielGestartet: SpielGestartet) {
       console.log("SpielGestartet vom Server erhalten: " + spielGestartet);

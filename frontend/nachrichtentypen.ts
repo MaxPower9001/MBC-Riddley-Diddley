@@ -1,82 +1,72 @@
-export class Spielinfo {
-    spielmodi : Spielmodus[];
+import {ISpielerInfo} from "../api/nachrichtentypen.interface.js";
+import {ISpielmodus} from "../api/nachrichtentypen.interface.js";
+import {SpielerAuswahlVerfahren} from "../api/nachrichtentypen.interface.js";
+import {ISpielGestartet} from "../api/nachrichtentypen.interface.js";
+import {ISpielBeendet} from "../api/nachrichtentypen.interface.js";
+import {IAktion} from "../api/nachrichtentypen.interface.js";
+import {AktionsTyp} from "../api/nachrichtentypen.interface.js";
+
+export class SpielerInfo implements ISpielerInfo {
     username : string;
 
-    constructor(spielmodi : Spielmodus[], username : string) {
-        this.spielmodi = spielmodi;
-        this.username = username;
-    };
+    constructor(spielerInfo : SpielerInfo) {
+        this.username = spielerInfo.username;
+    }
 
     toString() : string {
-        return `Spielinfo[spielmodi='${this.spielmodi}',username='${this.username}']`;
+        return JSON.stringify(this);
     }
 }
 
-export class Spielmodus {
-    schwierigkeit: string;
+export class Spielmodus implements ISpielmodus {
     zeitFuerAktion: number;
-    auswahlverfahrenSpieler: number;
+    auswahlverfahrenSpieler: SpielerAuswahlVerfahren;
     anzahlLeben: number;
 
-    constructor( schwierigkeit : string,
-                 zeitFuerAktion : number,
+    constructor( zeitFuerAktion : number,
                  auswahlverfahrenSpieler : number,
                  anzahlLeben : number) {
-        this.schwierigkeit = schwierigkeit;
         this.zeitFuerAktion = zeitFuerAktion;
         this.auswahlverfahrenSpieler = auswahlverfahrenSpieler;
         this.anzahlLeben = anzahlLeben;
-    };
-
-    toString() : string {
-        return `Spielmodus[schwierigkeit='${this.schwierigkeit}',zeitFuerAktion='${this.zeitFuerAktion}',` +
-            `auswahlverfahrenSpieler='${this.auswahlverfahrenSpieler}',anzahlLeben='${this.anzahlLeben}']`;
-    }
-}
-
-export class SpielGestartet {
-    anzahlSpieler : number;
-
-    constructor( anzahlSpieler : number) {
-        this.anzahlSpieler = anzahlSpieler;
     }
 
     toString() : string {
-        return `SpielGestaret[anzahlSpieler='${this.anzahlSpieler}']`;
+        return JSON.stringify(this);
     }
 }
 
-// noch nicht final spezifiziert
-export class SpielBeendet {
-    spielinfo_gesamt : string;
+export class SpielGestartet implements ISpielGestartet{
+    spielmodus : ISpielmodus;
+    beteiligteSpieler : string[];
 
-    constructor( spielinfo_gesamt : string) {
-        this.spielinfo_gesamt = spielinfo_gesamt;
+    constructor( spielmodus : ISpielmodus, beteiligteSpieler : string[]) {
+        this.spielmodus = spielmodus;
+        this.beteiligteSpieler = beteiligteSpieler;
     }
 
     toString() : string {
-        return `SpielBeendet[spielinfo_gesamt='${this.spielinfo_gesamt}']`;
+        return JSON.stringify(this);
     }
 }
 
-export class Aktion {
+export class SpielBeendet implements ISpielBeendet {}
+
+export class Aktion implements IAktion {
     spieler : string;
     typ : AktionsTyp;
-    absolute_unixzeit : number
 
-    constructor(spieler : string, typ : AktionsTyp, absolute_unixzeit : number) {
+    constructor(spieler : string, typ : AktionsTyp) {
         this.spieler = spieler;
         this.typ = typ;
-        this.absolute_unixzeit = absolute_unixzeit;
     };
 
     toString() : string {
-        return `Aktion[spieler='${this.spieler}', typ='${this.typ}', absolute_unixzeit='${this.absolute_unixzeit}']`;
+        return JSON.stringify(this);
     }
-}
 
-export enum AktionsTyp {
-    LINKSKNOPF = 1,
-    RECHTSKNOPF = 2,
-    SCHUETTELN = 3
+    static getZufallsAktion () : number {
+        let keys = Object.keys(AktionsTyp);
+        return AktionsTyp[keys[ keys.length * Math.random() << 0]];
+    };
 }

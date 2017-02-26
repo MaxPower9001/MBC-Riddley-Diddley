@@ -3,7 +3,7 @@ import { Spieler } from './spieler';
 import { Spiel } from './spiel';
 import {Spielzug} from './spielzug';
 import {spielmodi, schwierig, standard} from './spielmodus';
-import {SpielGestartet, SpielBeendet, Spielinfo, Aktion} from './nachrichtentypen';
+import {SpielGestartet, SpielBeendet, Aktion, SpielerInfo, Spielmodus} from './nachrichtentypen';
 import {hostname} from 'os';
 import Socket = SocketIO.Socket;
 import * as sio from 'socket.io';
@@ -21,7 +21,7 @@ export class Gameserver{
     }
 
     spielBeenden() : void {
-        this.websocketServer.emit('spiel_beendet', new SpielBeendet("tolle statistik"));
+        this.websocketServer.emit('spiel_beendet', new SpielBeendet());
         console.log("Game Over");
     }
 
@@ -36,25 +36,24 @@ export class Gameserver{
 
         this.websocketServer.on('connection', function (socket : Socket) {
             console.log("Ein neuer Spieler ist im Haus");
+            console.log("ip " + socket.conn.remoteAddress);
+
             // Ein neuer Spieler möchte dem Spiel beitreten
-            let spieler : Spieler = new Spieler();
-            spieler.name = "Spatzl_" + gs.spiel.spieleranzahl();
-            gs.spiel.addSpieler(spieler);
+            let neuerSpieler : Spieler = gs.spiel.addSpieler();
 
-            // Sende Spieler seinen Spielernamen und alle möglichen Spielmodi
-            socket.emit('spielinfo', new Spielinfo(spielmodi, spieler.name));
+            // Sende Spieler seinen Spielernamen
+            socket.emit('spielerinfo', new SpielerInfo(neuerSpieler.name));
 
-            socket.on('spielinfo', function (spielinfo) {
+            socket.on('spielmodus', function (spielmodus: Spielmodus) {
                 // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
-                // Spiel kann erstellt werden und der Spielmodus dort gesetzt werden
-                gs.spiel.spielmodus = spielinfo.spielmodi[0];
-                // TODO setup game, start timer etc...
+                // Spiel kann erstellt und der Spielmodus entsprechend gesetzt werden
+                gs.spiel.spielmodus = spielmodus;
                 gs.spiel.starteSpiel();
                 gs.spiel.spielTimer.timer.on('spiel_timeout', () => gs.spielBeenden());
-                gs.websocketServer.emit('spiel_gestartet', new SpielGestartet(gs.spiel.spieleranzahl()));
+                gs.websocketServer.emit('spiel_gestartet', new SpielGestartet(gs.spiel.spielmodus, gs.spiel.getSpielernamen()));
 
                 // TODO Nicht nur an einen Socket emiten sondern entsprechend dem Spielmodus
-                gs.websocketServer.emit('aktion', new Aktion(gs.spiel.spieler[Math.floor(Math.random() * gs.spiel.spieler.length)].name,Aktion.getZufallsAktion(),0));
+                gs.websocketServer.emit('aktion', new Aktion(gs.spiel.spieler[Math.floor(Math.random() * gs.spiel.spieler.length)].name,Aktion.getZufallsAktion()));
 
                 console.log("Interval started at: " + (new Date()).getTime());
 
@@ -62,8 +61,8 @@ export class Gameserver{
 
             socket.on('spiel_beenden', gs.spielBeenden);
 
-            socket.on('aktion', function (aktionNachricht) {
-                console.log("Aktion erhalten" + aktionNachricht);
+            socket.on('aktion', function (aktion : Aktion) {
+                console.log("Aktion erhalten" + aktion);
                 // Spielzug erstellen und Spieler zuordnen
                 // var spielzug = new _Spielzug.constructor(aktionNachricht.typ,this.spiel.aktuelleAktion,);
                 // Jemand hat eine Aktion gesendet

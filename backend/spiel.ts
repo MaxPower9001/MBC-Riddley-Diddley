@@ -1,9 +1,12 @@
 import {SpielTimer} from './spieltimer';
-import {Aktion, AktionsTyp, Spielmodus} from './nachrichtentypen';
+import {Aktion, Spielmodus} from './nachrichtentypen';
 import {Spieler} from "./spieler";
 import Timer = NodeJS.Timer;
+import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 export class Spiel {
+
+    private static spielername_prefix : string = "Spatzl_";
 
     spielTimer : SpielTimer;
     private timerId : Timer;
@@ -38,12 +41,19 @@ export class Spiel {
         }
     }
 
-    addSpieler(spieler : Spieler) : void {
+    addSpieler() : Spieler {
+        let spieler : Spieler = new Spieler();
+        spieler.name = Spiel.spielername_prefix + (this.spieleranzahl() + 1);
         this.spieler.push(spieler);
+        return spieler;
     }
 
     spieleranzahl() : number {
         return this.spieler.length + 1;
+    }
+
+    getSpielernamen() : string[] {
+        return this.spieler.map((s : Spieler) => s.name);
     }
 
 

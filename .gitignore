@@ -12,6 +12,7 @@ frontend/**/*.js
 frontend/*.js
 backend/**/*.js
 backend/*.js
+api/*.js
 *.js.map
 e2e/**/*.js
 e2e/**/*.js.map

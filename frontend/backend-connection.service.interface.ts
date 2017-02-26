@@ -1,5 +1,6 @@
 import {MissionControlService} from "./mission-control.service";
-import {Spielmodus, AktionsTyp} from "./nachrichtentypen";
+import {Spielmodus} from "./nachrichtentypen";
+import {AktionsTyp} from "../api/nachrichtentypen.interface";
 export interface BackendConnectionServiceInterface {
 
     setMissionControlService(missionControlService : MissionControlService) : void;
