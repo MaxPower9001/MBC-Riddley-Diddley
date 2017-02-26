@@ -1,6 +1,6 @@
-import {SpielTimer} from './SpielTimer';
+import {SpielTimer} from './spieltimer';
 import {Aktion, AktionsTyp, Spielmodus} from './nachrichtentypen';
-import {Spieler} from "./Spieler";
+import {Spieler} from "./spieler";
 import Timer = NodeJS.Timer;
 
 export class Spiel {

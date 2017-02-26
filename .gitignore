@@ -8,8 +8,10 @@ node_modules
 jspm_packages
 npm-debug.*
 link-checker-results.txt
-app/**/*.js
-gameserver_backend/**/*.js
+frontend/**/*.js
+frontend/*.js
+backend/**/*.js
+backend/*.js
 *.js.map
 e2e/**/*.js
 e2e/**/*.js.map

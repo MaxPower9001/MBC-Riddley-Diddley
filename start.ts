@@ -1,4 +1,4 @@
-import {Gameserver} from './gameserver_backend/gameserver';
+import {Gameserver} from './backend/gameserver';
 // JavaScript File
 var TX_INFO_CADS      = "[INFO CaDS][START] "
 var TX_INFO_EXPRESS   = "Modul EXPESS "
@@ -10,7 +10,7 @@ var TX_INFO_START     = "PLAYGROUND... "
 ///////////// Conf Service /////////////
 /* Lets start to create a new world*/
 var config            = require("./server_config.json");
-var webserverModule   = require("./lib/setupWebserver");
+var webserverModule   = require("./backend/lib/setupWebserver");
 //var gameserverModule  = require('./gameserver_backend/gameserver.js');
 
 var serverIP    = config.server.ip   || "0.0.0.0";

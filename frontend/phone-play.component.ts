@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { MissionControlService } from './mission-control.service';
 import { Aktion, AktionsTyp } from "./nachrichtentypen";
-var Shake = require('../js/shake.js');
+var Shake = require('./lib/shake.js');
 
 @Component({
 	selector: 'phone-play',

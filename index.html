@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=no">
 
 <!-- Bootstrap --> 
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="frontend/lib/jquery-3.1.1.min.js"></script>
+    <script src="frontend/lib/bootstrap.min.js"></script>
 <!-- Angular -->
     <script src="node_modules/core-js/client/shim.min.js"></script>
     <script src="node_modules/zone.js/dist/zone.js"></script>
@@ -18,7 +18,7 @@
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="systemjs.config.js"></script>
     <script>
-      System.import('app').catch(function(err){ console.error(err); });
+      System.import('frontend').catch(function(err){ console.error(err); });
     </script>
     
 <!-- Latest compiled and minified CSS -->
@@ -26,7 +26,7 @@
 <!-- CaDS Style -->
     <link rel="stylesheet" href="css/riddley.css">
 <!-- Socket helper -->
-    <script src="js/socket.io.js"></script>
+    <script src="frontend/lib/socket.io.js"></script>
 
 </head>
 <body>

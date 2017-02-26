@@ -1,9 +1,9 @@
 // Ein Hoch auf Ecmascript 6 !!!!!!
-import { Spieler } from './models/Spieler';
-import { Spiel } from './models/Spiel';
-import {Spielzug} from './models/Spielzug';
-import {spielmodi, schwierig, standard} from './models/Spielmodus';
-import {SpielGestartet, SpielBeendet, Spielinfo, Aktion} from './models/nachrichtentypen';
+import { Spieler } from './spieler';
+import { Spiel } from './spiel';
+import {Spielzug} from './spielzug';
+import {spielmodi, schwierig, standard} from './spielmodus';
+import {SpielGestartet, SpielBeendet, Spielinfo, Aktion} from './nachrichtentypen';
 import {hostname} from 'os';
 import Socket = SocketIO.Socket;
 import * as sio from 'socket.io';
