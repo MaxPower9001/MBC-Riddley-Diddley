@@ -19,14 +19,15 @@ export class Spiel {
     aktionInTimeAusgefuehrt : boolean;
 
     constructor() {
-        this.spieler = [];
+        this.spieler = new Array<Spieler>();
+        this.lastSpielerIndex = 0;
     }
 
     starteSpiel() : void {
         this.aktionInTimeAusgefuehrt = false;
         this.aktuelleAktion = Aktion.getZufallsAktion();
         this.spielTimer = new SpielTimer();
-        this.timerId =  setInterval(() => this.pruefeAktionen(this), this.spielmodus.zeitFuerAktion);
+        this.timerId =  setInterval(() => this.pruefeAktionen(this), this.spielmodus.zeitFuerAktion * 1000);
         console.log("Created Timer with ID: " + this.timerId);
     }
 
@@ -63,7 +64,7 @@ export class Spiel {
             nextSpielerIndex = Math.floor(Math.random() * this.spieler.length);
             this.lastSpielerIndex = nextSpielerIndex;
         } else if (this.spielmodus.auswahlverfahrenSpieler == SpielerAuswahlVerfahren.REIUM) {
-            if(this.lastSpielerIndex + 1 > this.spieler.length) {
+            if(this.lastSpielerIndex + 1 >= this.spieler.length) {
                 nextSpielerIndex = 0;
             } else {
                 nextSpielerIndex = this.lastSpielerIndex + 1;

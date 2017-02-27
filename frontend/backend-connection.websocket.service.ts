@@ -40,15 +40,11 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
             that.missionControlService.announceSpielmodus(spielmodus);
         });
 
+        this.socket.on('reconnect', () => console.log("muthafuca tryin to reconnect"));
+
         this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
             console.log("Spiel beendet erhalten");
-            console.log("socket state " + this.socket.readyState);
             that.missionControlService.announceSpielBeendet(spielbeendet);
-            if(!this.socket) {
-                // wird vermutlich nicht benötigt, Server schließt den Socket
-                this.socket.disconnect();
-            }
-            console.log("socket disconnected");
         });
 
         this.socket.on('aktion', function (aktion : Aktion) {

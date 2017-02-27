@@ -2,7 +2,6 @@
 import { Spieler } from './spieler';
 import { Spiel } from './spiel';
 import {Spielzug} from './spielzug';
-import {spielmodi, schwierig, standard} from './spielmodus';
 import {SpielGestartet, SpielBeendet, Aktion, SpielerInfo, Spielmodus} from './nachrichtentypen';
 import {hostname} from 'os';
 import Socket = SocketIO.Socket;
@@ -17,9 +16,11 @@ export class Gameserver {
     private websocketFernseher: Socket;
     // { SpielerName1 => Socket1, SpielerName2 => Socket2 }
     private spielerToSocketMap;
+    private httpServer: any;
 
     constructor(httpserver) {
-        this.websocketServer = sio(httpserver);
+        this.httpServer = httpserver;
+        this.websocketServer = sio(this.httpServer);
         this.spiel = new Spiel();
         this.spielerToSocketMap = {};
         this.websocketServer.on('connection', (socket : Socket) => this.onConnection(socket));
@@ -66,6 +67,8 @@ export class Gameserver {
             socket.on('spielmodus', (spielmodus : Spielmodus) => this.onSpielmodus(spielmodus));
             socket.on('spiel_beendet', (spielBeendet : SpielBeendet) => this.onSpielBeendet(spielBeendet));
             socket.on('aktion', (aktion : Aktion) => this.onAktion(aktion));
+            socket.on('disconnect',() => console.log("Player disconnected"));
+            socket.on('reconnect', () => console.log("muthafuca tryin to reconnect"));
         }
     }
 
@@ -103,5 +106,7 @@ export class Gameserver {
         // Sende Aktion zusätzlich an den Fernseher
         this.websocketFernseher.emit('aktion', nextAktion);
     }
+
+
 
 }
