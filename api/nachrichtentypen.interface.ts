@@ -73,7 +73,8 @@ export interface IAktion {
 export enum AktionsTyp {
     LINKSKNOPF = 1,
     RECHTSKNOPF = 2,
-    SCHUETTELN = 3
+    SCHUETTELN = 3,
+    KNOPFUNTEN = 4
 }
 
 export enum SpielerAuswahlVerfahren {

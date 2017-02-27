@@ -5,9 +5,16 @@ import {SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
 
 @Component({
   selector: 'tv-play',
+  styles: [`
+.viewport{
+    height:80%;
+    width:100%;
+}
+		
+	`],
   template: `
-  	<div class="alert alert-success" role="alert">
-			<h2>TV Screen - PLAY</h2> 
+		<div class="viewport">
+		<tv-header></tv-header>
 		</div>
   `
 })

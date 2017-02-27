@@ -12,43 +12,36 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
 		}
 
 		.panel:nth-child(odd) {
-			background-color: coral;
+			background-color: chocolate;
 		}
+		.viewport{
+    height:80%;
+    width:100%;
+}
 		
 	`],
 	template: `
-		<div class="alert alert-success" role="alert">
-			<h3>Hi {{username}},</h3> 
-		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<ul class="list-group">
+		<phone-header></phone-header>
+		&nbsp;
+		<div class="viewport">
+				<ul>
 					<li class="list-group-item" *ngFor="let keyval of auswahlVerfahrenSpielerMoeglichkeiten | keys"
 					 (click)="setAuswahlVerfahrenSpieler(keyval.value)">
 						<!-- Beschreibung des Auswahlverfahrens -->
 						{{keyval.key}}
 					</li>
 				</ul>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<ul class="list-group">
+				<ul>
 					<li class="list-group-item zeitFuerAktion" *ngFor="let zeitFuerAktion of zeitFuerAktionMoeglichkeiten"
 					    (click)="setZeitFuerAktion(zeitFuerAktion)">{{zeitFuerAktion}}</li>
 				</ul>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<ul class="list-group">
+				<ul>
 					<li class="list-group-item glyphicon glyphicon-heart-empty" *ngFor="let anzahlLeben of anzahlLebenMoeglichkeiten"
 					    (click)="setAnzahlLeben(anzahlLeben)"></li>
 				</ul>
-			</div>
-		</div>
 		<button class="btn btn-primary" (click)="starteSpiel()">Spiel starten</button>
+		</div>
     `
 })
 
@@ -71,10 +64,6 @@ export class PhoneHomeComponent implements OnInit {
 		this.missionControlService.spielGestartet$.subscribe(function (spielGestartet: SpielGestartet) {
 			console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
 			that.router.navigateByUrl("/phone-play");
-		});
-		this.missionControlService.spielerInfoFromGameserver$.subscribe(function (spielerInfo: SpielerInfo) {
-			console.log("Spielerinfo vom Server erhalten: " + spielerInfo.toString());
-			that.username = spielerInfo.username;
 		});
 		// set default values
 		this.spielmodus = new Spielmodus(1, SpielerAuswahlVerfahren.ZUFALL, 1);
