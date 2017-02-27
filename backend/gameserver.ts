@@ -26,7 +26,13 @@ export class Gameserver{
     spielBeenden() : void {
         console.log("Game Over");
         this.websocketServer.emit('spiel_beendet', new SpielBeendet());
-        this.websocketServer.close();
+
+        // while(Object.keys(this.websocketServer.sockets.connected).length > 0)
+        // {
+        //     console.log("Waiting for players to disconnect...");
+        //     console.log(Object.keys(this.websocketServer.sockets.connected).length);
+        // }
+
         this.websocketFernseher = null;
         this.websocketServer = sio(this.httpServer);
         this.spiel = new Spiel();
@@ -72,6 +78,10 @@ export class Gameserver{
                     gs.websocketFernseher.emit('aktion', nextAktion);
 
                 });
+
+                socket.on('disconnect',() => console.log("Player disconnected"));
+
+                socket.on('reconnect', () => console.log("muthafuca tryin to reconnect"));
 
                 socket.on('spiel_beenden', gs.spielBeenden);
 

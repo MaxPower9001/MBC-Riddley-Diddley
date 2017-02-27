@@ -66,7 +66,7 @@ export class PhoneHomeComponent implements OnInit {
 			that.router.navigateByUrl("/phone-play");
 		});
 		// set default values
-		this.spielmodus = new Spielmodus(1, SpielerAuswahlVerfahren.ZUFALL, 1);
+		this.spielmodus = new Spielmodus(1, SpielerAuswahlVerfahren.ZUFALL, 5);
 	}
 
 	starteSpiel() {
