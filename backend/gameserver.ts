@@ -14,16 +14,23 @@ export class Gameserver{
     spiel : Spiel;
     websocketServer : Server;
     websocketFernseher: Socket;
+    httpServer: any;
 
     constructor(httpserver) {
-        this.websocketServer = sio(httpserver);
+        this.httpServer = httpserver;
+        this.websocketServer = sio(this.httpServer);
         this.spiel = new Spiel();
         this.init();
     }
 
     spielBeenden() : void {
-        this.websocketServer.emit('spiel_beendet', new SpielBeendet());
         console.log("Game Over");
+        this.websocketServer.emit('spiel_beendet', new SpielBeendet());
+        this.websocketServer.close();
+        this.websocketFernseher = null;
+        this.websocketServer = sio(this.httpServer);
+        this.spiel = new Spiel();
+        this.init();
     }
 
     init() : void {

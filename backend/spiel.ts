@@ -20,6 +20,7 @@ export class Spiel {
 
     constructor() {
         this.spieler = [];
+        this.lastSpielerIndex = 0;
     }
 
     starteSpiel() : void {

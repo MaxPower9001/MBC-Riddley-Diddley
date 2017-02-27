@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
+import { ReplaySubject }    from 'rxjs/ReplaySubject';
 import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo} from './nachrichtentypen';
 import {Observable} from "rxjs";
 import {BackendConnectionWebsocketService} from "./backend-connection.websocket.service";
@@ -9,7 +10,7 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 @Injectable()
 export class MissionControlService {
 
-    private spielerInfoFromGameserver = new Subject<SpielerInfo>();
+    private spielerInfoFromGameserver = new ReplaySubject<SpielerInfo>();
     private spielmodusToGameserver = new Subject<Spielmodus>();
     private spielmodusFromGameserver = new Subject<Spielmodus>();
     private spielGestartet = new Subject<SpielGestartet>();
