@@ -42,6 +42,7 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
 
         this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
             console.log("Spiel beendet erhalten");
+            console.log("socket state " + this.socket.readyState);
             that.missionControlService.announceSpielBeendet(spielbeendet);
             if(!this.socket) {
                 // wird vermutlich nicht benötigt, Server schließt den Socket
