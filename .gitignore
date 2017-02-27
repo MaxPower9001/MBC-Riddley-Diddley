@@ -8,9 +8,7 @@ node_modules
 jspm_packages
 npm-debug.*
 link-checker-results.txt
-frontend/**/*.js
 frontend/*.js
-backend/**/*.js
 backend/*.js
 api/*.js
 *.js.map
