@@ -13,6 +13,7 @@ export class Gameserver{
 
     spiel : Spiel;
     websocketServer : Server;
+    websocketFernseher: Socket;
 
     constructor(httpserver) {
         this.websocketServer = sio(httpserver);
@@ -35,40 +36,47 @@ export class Gameserver{
         let gs = this;
 
         this.websocketServer.on('connection', function (socket : Socket) {
-            console.log("Ein neuer Spieler ist im Haus");
-            console.log("ip " + socket.conn.remoteAddress);
+            // Gameserver und Fernseher View werden auf dem gleichen Host betrieben, daher haben diese die gleiche IP Adresse
+            // Der erste Client der von localhost der einen Socket öffnet wird daher als Fernseher angesehen
+            if(gs.spiel.spieleranzahl() == 0
+                && (socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost")
+                && !gs.websocketFernseher) {
+                console.log("Hallo Fernseher! ip: " + socket.conn.remoteAddress);
+                gs.websocketFernseher = socket;
 
-            // Ein neuer Spieler möchte dem Spiel beitreten
-            let neuerSpieler : Spieler = gs.spiel.addSpieler();
+            } else {
+                console.log("Hallo Spieler! ip: " + socket.conn.remoteAddress);
+                // Ein neuer Spieler möchte dem Spiel beitreten
+                let neuerSpieler : Spieler = gs.spiel.addSpieler();
 
-            // Sende Spieler seinen Spielernamen
-            socket.emit('spielerinfo', new SpielerInfo(neuerSpieler.name));
+                // Sende Spieler seinen Spielernamen
+                socket.emit('spielerinfo', new SpielerInfo(neuerSpieler.name));
 
-            socket.on('spielmodus', function (spielmodus: Spielmodus) {
-                // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
-                // Spiel kann erstellt und der Spielmodus entsprechend gesetzt werden
-                gs.spiel.spielmodus = spielmodus;
-                gs.spiel.starteSpiel();
-                gs.spiel.spielTimer.timer.on('spiel_timeout', () => gs.spielBeenden());
-                gs.websocketServer.emit('spiel_gestartet', new SpielGestartet(gs.spiel.spielmodus, gs.spiel.getSpielernamen()));
+                socket.on('spielmodus', function (spielmodus: Spielmodus) {
+                    // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
+                    // Spiel kann erstellt und der Spielmodus entsprechend gesetzt werden
+                    gs.spiel.spielmodus = spielmodus;
+                    gs.spiel.starteSpiel();
+                    gs.spiel.spielTimer.timer.on('spiel_timeout', () => gs.spielBeenden());
+                    gs.websocketServer.emit('spiel_gestartet', new SpielGestartet(gs.spiel.spielmodus, gs.spiel.getSpielernamen()));
 
-                // TODO Nicht nur an einen Socket emiten sondern entsprechend dem Spielmodus
-                gs.websocketServer.emit('aktion', new Aktion(gs.spiel.spieler[Math.floor(Math.random() * gs.spiel.spieler.length)].name,Aktion.getZufallsAktion()));
+                    let nextAktion : Aktion = new Aktion(gs.spiel.getNextSpieler().name,Aktion.getZufallsAktion());
+                    gs.websocketServer.emit('aktion', nextAktion);
+                    gs.websocketFernseher.emit('aktion', nextAktion);
 
-                console.log("Interval started at: " + (new Date()).getTime());
+                });
 
-            });
+                socket.on('spiel_beenden', gs.spielBeenden);
 
-            socket.on('spiel_beenden', gs.spielBeenden);
+                socket.on('aktion', function (aktion : Aktion) {
+                    console.log("Aktion erhalten" + aktion);
+                    // Spielzug erstellen und Spieler zuordnen
+                    // var spielzug = new _Spielzug.constructor(aktionNachricht.typ,this.spiel.aktuelleAktion,);
+                    // Jemand hat eine Aktion gesendet
+                    // Es muss geprüft werden ob es der richtige Absender war und die richtige Aktion
+                });
 
-            socket.on('aktion', function (aktion : Aktion) {
-                console.log("Aktion erhalten" + aktion);
-                // Spielzug erstellen und Spieler zuordnen
-                // var spielzug = new _Spielzug.constructor(aktionNachricht.typ,this.spiel.aktuelleAktion,);
-                // Jemand hat eine Aktion gesendet
-                // Es muss geprüft werden ob es der richtige Absender war und die richtige Aktion
-            });
-
+            }
 
         });
     }

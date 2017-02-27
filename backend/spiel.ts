@@ -2,7 +2,7 @@ import {SpielTimer} from './spieltimer';
 import {Aktion, Spielmodus} from './nachrichtentypen';
 import {Spieler} from "./spieler";
 import Timer = NodeJS.Timer;
-import {AktionsTyp} from "../api/nachrichtentypen.interface";
+import {AktionsTyp, SpielerAuswahlVerfahren} from "../api/nachrichtentypen.interface";
 
 export class Spiel {
 
@@ -14,6 +14,7 @@ export class Spiel {
     aktuelleAktion : AktionsTyp;
     verstricheneZeit : number;
     spieler : Spieler[];
+    lastSpielerIndex : number;
     spielmodus : Spielmodus;
     aktionInTimeAusgefuehrt : boolean;
 
@@ -49,11 +50,26 @@ export class Spiel {
     }
 
     spieleranzahl() : number {
-        return this.spieler.length + 1;
+        return this.spieler.length;
     }
 
     getSpielernamen() : string[] {
         return this.spieler.map((s : Spieler) => s.name);
+    }
+
+    getNextSpieler() : Spieler {
+        let nextSpielerIndex : number;
+        if(this.spielmodus.auswahlverfahrenSpieler == SpielerAuswahlVerfahren.ZUFALL) {
+            nextSpielerIndex = Math.floor(Math.random() * this.spieler.length);
+            this.lastSpielerIndex = nextSpielerIndex;
+        } else if (this.spielmodus.auswahlverfahrenSpieler == SpielerAuswahlVerfahren.REIUM) {
+            if(this.lastSpielerIndex + 1 > this.spieler.length) {
+                nextSpielerIndex = 0;
+            } else {
+                nextSpielerIndex = this.lastSpielerIndex + 1;
+            }
+        }
+        return this.spieler[nextSpielerIndex];
     }
 
 
