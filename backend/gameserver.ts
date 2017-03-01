@@ -1,7 +1,6 @@
 // Ein Hoch auf Ecmascript 6 !!!!!!
 import { Spieler } from './spieler';
 import { Spiel } from './spiel';
-import {Spielzug} from './spielzug';
 import {SpielGestartet, SpielBeendet, Aktion, SpielerInfo, Spielmodus} from './nachrichtentypen';
 import {hostname} from 'os';
 import Socket = SocketIO.Socket;
@@ -11,12 +10,13 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 export class Gameserver {
 
-    private spiel : Spiel;
     private websocketServer : Server;
-    private websocketFernseher: Socket;
-    // { SpielerName1 => Socket1, SpielerName2 => Socket2 }
-    private spielerToSocketMap;
     private httpServer: any;
+    private websocketFernseher: Socket;
+    // { SpielerName1 => Socket1, SpielerName2 => Socket2, Socket1 => SpielerName1, Socket2 => SpielerName2 }
+    private spielerToSocketMap;
+    private spiel : Spiel;
+
 
     constructor(httpserver) {
         this.httpServer = httpserver;
@@ -24,6 +24,8 @@ export class Gameserver {
         this.spiel = new Spiel();
         this.spielerToSocketMap = {};
         this.websocketServer.on('connection', (socket : Socket) => this.onConnection(socket));
+        this.spiel.spielBeendet$.subscribe(() => this.spielBeenden());
+        this.spiel.neueSpielrunde$.subscribe(() => this.sendeNeueAktion());
         console.log("Gameserver started, We are: " + hostname());
     }
 
@@ -31,9 +33,14 @@ export class Gameserver {
         return this.spielerToSocketMap[spieler.name];
     }
 
+    private getSpieler(socket : Socket) {
+        return this.spielerToSocketMap[socket.conn.id];
+    }
+
     private addSpieler(socket : Socket) : Spieler {
         let neuerSpieler : Spieler = this.spiel.addSpieler();
         this.spielerToSocketMap[neuerSpieler.name] = socket;
+        this.spielerToSocketMap[socket.conn.id] = neuerSpieler;
         return neuerSpieler;
     }
 
@@ -66,30 +73,27 @@ export class Gameserver {
             // Setup socket event handler
             socket.on('spielmodus', (spielmodus : Spielmodus) => this.onSpielmodus(spielmodus));
             socket.on('spiel_beendet', (spielBeendet : SpielBeendet) => this.onSpielBeendet(spielBeendet));
-            socket.on('aktion', (aktion : Aktion) => this.onAktion(aktion));
+            socket.on('aktion', (aktion : Aktion) => this.onAktion(aktion, this.getSpieler(socket)));
             socket.on('disconnect',() => console.log("Player disconnected"));
-            socket.on('reconnect', () => console.log("muthafuca tryin to reconnect"));
+            socket.on('reconnect', () => console.log("Player reconnected"));
         }
     }
 
     onSpielBeendet(spielBeendet : SpielBeendet) : void {
-        this.spielBeenden();
+        this.spiel.beendeSpiel();
     }
 
-    onAktion(aktion : Aktion) : void {
+    onAktion(aktion : Aktion, spieler : Spieler) : void {
         console.log("Aktion erhalten" + aktion);
-        // Spielzug erstellen und Spieler zuordnen
-        // var spielzug = new _Spielzug.constructor(aktionNachricht.typ,this.spiel.aktuelleAktion,);
         // Jemand hat eine Aktion gesendet
         // Es muss geprüft werden ob es der richtige Absender war und die richtige Aktion
+        this.spiel.pruefeErhalteneAktion(aktion.typ,spieler);
     }
 
     onSpielmodus(spielmodus : Spielmodus) : void {
         // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
         // Spiel kann erstellt und der Spielmodus entsprechend gesetzt werden
-        this.spiel.spielmodus = spielmodus;
-        this.spiel.starteSpiel();
-        this.spiel.spielTimer.timer.on('spiel_timeout', () => this.spielBeenden());
+        this.spiel.starteSpiel(spielmodus);
         this.websocketServer.emit('spiel_gestartet', new SpielGestartet(this.spiel.spielmodus, this.spiel.getSpielernamen()));
 
         // Sende erste Aktion des Spiels, nachfolgende Aktionen werden durch onAktion ausgelöst
@@ -98,7 +102,7 @@ export class Gameserver {
 
     sendeNeueAktion() : void {
         let nextSpieler : Spieler = this.spiel.getNextSpieler();
-        let nextAktionsTyp : AktionsTyp = Aktion.getZufallsAktion();
+        let nextAktionsTyp : AktionsTyp = this.spiel.getNextAktionsTyp();
         console.log("als nächstes ist an der Reihe: "+ nextSpieler + " mit der Aktion " + nextAktionsTyp);
         let nextAktion : Aktion = new Aktion(nextSpieler.name,nextAktionsTyp);
         // Sende Aktion an den Spieler der an der Reihe ist
@@ -106,6 +110,7 @@ export class Gameserver {
         // Sende Aktion zusätzlich an den Fernseher
         this.websocketFernseher.emit('aktion', nextAktion);
     }
+
 
 
 

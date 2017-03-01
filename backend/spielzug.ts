@@ -11,4 +11,8 @@ export class Spielzug {
         this.verstricheneZeit = verstricheneZeit;
     }
 
+    toString() : string {
+        return JSON.stringify(this);
+    }
+
 }

@@ -65,8 +65,4 @@ export class Aktion implements IAktion {
         return JSON.stringify(this);
     }
 
-    static getZufallsAktion () : number {
-        let keys = Object.keys(AktionsTyp);
-        return AktionsTyp[keys[ keys.length * Math.random() << 0]];
-    };
 }

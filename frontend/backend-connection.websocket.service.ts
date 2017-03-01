@@ -43,17 +43,15 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
         this.socket.on('reconnect', () => console.log("muthafuca tryin to reconnect"));
 
         this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
-            console.log("Spiel beendet erhalten");
-            that.missionControlService.announceSpielBeendet(spielbeendet);
+            that.missionControlService.announceSpielBeendet(new SpielBeendet());
         });
 
         this.socket.on('aktion', function (aktion : Aktion) {
-            console.log("aktion bekommen");
-            that.missionControlService.announceAktion(aktion);
+            that.missionControlService.announceAktion(new Aktion(aktion.spieler, aktion.typ));
         });
 
         this.socket.on('spiel_gestartet', function (spielGestartet : SpielGestartet) {
-            that.missionControlService.announceSpielGestarted(spielGestartet);
+            that.missionControlService.announceSpielGestarted(new SpielGestartet(spielGestartet.spielmodus, spielGestartet.beteiligteSpieler));
         });
 
         this.socket.on('spielerinfo', function (spielerinfo : SpielerInfo) {

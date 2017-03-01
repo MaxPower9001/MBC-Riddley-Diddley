@@ -9,4 +9,8 @@ export class Spieler {
         this.spielzuege = [];
         this.verbleibendeLeben = null;
     }
+
+    toString() : string {
+        return JSON.stringify(this);
+    }
 }
