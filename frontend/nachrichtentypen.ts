@@ -5,6 +5,7 @@ import {ISpielGestartet} from "../api/nachrichtentypen.interface.js";
 import {ISpielBeendet} from "../api/nachrichtentypen.interface.js";
 import {IAktion} from "../api/nachrichtentypen.interface.js";
 import {AktionsTyp} from "../api/nachrichtentypen.interface.js";
+import {IUngueltigeAktionOderTimeout, ISpielVerloren} from "../api/nachrichtentypen.interface";
 
 export class SpielerInfo implements ISpielerInfo {
     username : string;
@@ -69,4 +70,30 @@ export class Aktion implements IAktion {
         let keys = Object.keys(AktionsTyp);
         return AktionsTyp[keys[ keys.length * Math.random() << 0]];
     };
+}
+
+export class SpielVerloren implements ISpielVerloren {
+    spieler : string;
+
+    constructor(spieler : string) {
+        this.spieler = spieler;
+    };
+
+    toString() : string {
+        return JSON.stringify(this);
+    }
+
+}
+
+export class UngueltigeAktionOderTimeout implements IUngueltigeAktionOderTimeout {
+    spieler : string;
+
+    constructor(spieler : string) {
+        this.spieler = spieler;
+    };
+
+    toString() : string {
+        return JSON.stringify(this);
+    }
+
 }

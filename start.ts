@@ -1,4 +1,4 @@
-import {Gameserver} from './backend/gameserver';
+import {GameserverWebsocketFacade} from './backend/gameserver-websocket.facade';
 // JavaScript File
 var TX_INFO_CADS      = "[INFO CaDS][START] "
 var TX_INFO_EXPRESS   = "Modul EXPESS "
@@ -18,6 +18,6 @@ var serverPort  = config.server.port || 13337;
 
 // Setup HTTP Webserver
 var webserver = webserverModule.createApplicationServer(config, serverIP, serverPort);
-// Setup Gameserver
-var gameserver = new Gameserver(webserver);
+// Setup GameserverRestFacade
+var gameserver = new GameserverWebsocketFacade(webserver);
 

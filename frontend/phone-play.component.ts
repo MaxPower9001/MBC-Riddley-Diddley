@@ -45,7 +45,6 @@ var Shake = require('./lib/shake.js');
 export class PhonePlayComponent implements OnInit {
 
     constructor(private missionControlService: MissionControlService) {
-
     }
 
     ngOnInit() {

@@ -1,4 +1,4 @@
-import {ISpielerInfo} from "../api/nachrichtentypen.interface";
+import {ISpielerInfo, ISpielVerloren, IUngueltigeAktionOderTimeout} from "../api/nachrichtentypen.interface";
 import {ISpielmodus} from "../api/nachrichtentypen.interface";
 import {SpielerAuswahlVerfahren} from "../api/nachrichtentypen.interface";
 import {ISpielGestartet} from "../api/nachrichtentypen.interface";
@@ -59,6 +59,32 @@ export class Aktion implements IAktion {
     constructor(spieler : string, typ : AktionsTyp) {
         this.spieler = spieler;
         this.typ = typ;
+    };
+
+    toString() : string {
+        return JSON.stringify(this);
+    }
+
+}
+
+export class SpielVerloren implements ISpielVerloren {
+    spieler : string;
+
+    constructor(spieler : string) {
+        this.spieler = spieler;
+    };
+
+    toString() : string {
+        return JSON.stringify(this);
+    }
+
+}
+
+export class UngueltigeAktionOderTimeout implements IUngueltigeAktionOderTimeout {
+    spieler : string;
+
+    constructor(spieler : string) {
+        this.spieler = spieler;
     };
 
     toString() : string {
