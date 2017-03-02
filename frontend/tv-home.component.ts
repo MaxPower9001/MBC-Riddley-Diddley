@@ -37,10 +37,6 @@ export class TvHomeComponent implements OnInit{
 
   ngOnInit() {
     let that = this;
-    this.missionControlService.spielmodusfromGameserver$.subscribe(function(spielmodus : Spielmodus) {
-      that.spielmodus = spielmodus;
-      console.log("Spielmodus vom Server erhalten: " + spielmodus);
-    });
     this.missionControlService.spielGestartet$.subscribe(function(spielGestartet: SpielGestartet) {
       console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
       that.router.navigateByUrl("/tv-play");

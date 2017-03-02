@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MissionControlService }     from './mission-control.service';
 import {SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
+import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 @Component({
   selector: 'tv-play',
@@ -28,7 +29,8 @@ import {SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
 		<div class="viewport">
 		<tv-header></tv-header>	
         <!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
-        <h1>Timer Bar:</h1>        
+        <h1>Timer Bar:</h1>
+        <h1>Schnell {{username}}, {{aktion}}!</h1>
         
         <div id="myProgress">
          <div id="myBar">{{timerMax}}</div>
@@ -43,15 +45,11 @@ import {SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
 
 export class TvPlayComponent implements OnInit {
   timerMax : number;
+  username : string;
+  aktion : AktionsTyp;
 
   move() {
-
-    // TODO: Please remove after controlling timer bar by proper event
-    // Speicified in seconds
-    this.timerMax = 10;
-
-
-    let timerMax = this.timerMax * 1000;
+  let timerMax = this.timerMax * 1000;
 
   var elem = document.getElementById("myBar");
   var width = timerMax;
@@ -70,9 +68,18 @@ export class TvPlayComponent implements OnInit {
   constructor(private missionControlService: MissionControlService, private router: Router) {}
 
   ngOnInit() {
+    let that = this;
     console.log("TvPlayComponent loaded...");
     this.missionControlService.aktionFromGameServer$.subscribe(function(aktion : Aktion){
       console.log("Aktion vom Server erhalten: " + aktion);
-    })
+      that.username = aktion.spieler;
+      that.aktion = aktion.typ;
+      that.move();
+    });
+    this.missionControlService.spielGestartet$.subscribe(function(spielGestartet : SpielGestartet) {
+      that.timerMax = spielGestartet.spielmodus.zeitFuerAktion;
+      console.log("Spielmodus vom Server erhalten: " + spielGestartet);
+    });
+
   }
 }
