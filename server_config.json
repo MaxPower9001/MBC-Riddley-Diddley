@@ -3,5 +3,5 @@
     "ip":   "0.0.0.0",
     "port": 13337
   },
-  "useWebsockets" : false
+  "useWebsockets" : true
 }
