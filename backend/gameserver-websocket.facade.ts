@@ -6,6 +6,7 @@ import {hostname} from 'os';
 import Socket = SocketIO.Socket;
 import * as sio from 'socket.io';
 import Server = SocketIO.Server;
+import {createServer} from 'http';
 import {
     AktionsTyp, ISpielmodus, IAktion, ISpielGestartet, ISpielBeendet,
     ISpielerInfo, ISpielVerloren, IUngueltigeAktionOderTimeout
@@ -22,15 +23,17 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private spielerSockets;
     private spiel : Spiel;
 
-
-    constructor(httpserver) {
+    constructor(expressApp, config) {
+        var httpserver = createServer(expressApp);
+        httpserver.listen(config.server.port, config.server.ip);
+        console.log(`Server is listening on ${config.server.ip}:${config.server.port}`);
         this.httpServer = httpserver;
         this.websocketServer = sio(this.httpServer);
         this.spiel = new Spiel();
         this.spielerSockets = {};
         this.websocketServer.on('connection', (socket : Socket) => this.onConnection(socket));
         this.spiel.spielrundeAusgelaufen$.subscribe((spieler : Spieler) => this.onSpielrundeAusgelaufen(spieler));
-        console.log("GameserverRestFacade started, We are: " + hostname());
+        console.log("GameserverWebsocketFacade started, We are: " + hostname());
     }
 
     private getSocketBySpieler(spieler : Spieler) : Socket{
@@ -92,7 +95,6 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
             this.spiel.removeSpieler(spieler);
             this.sendSpielVerloren(new SpielVerloren(spieler.name));
         }
-
     }
 
     onConnection(socket : Socket) {

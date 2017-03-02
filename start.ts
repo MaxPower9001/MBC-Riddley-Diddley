@@ -1,13 +1,18 @@
 import {GameserverWebsocketFacade} from './backend/gameserver-websocket.facade';
+import {GameserverRestFacade} from "./backend/gameserver-rest.facade";
+import * as express from "express";
 
-var config            = require("./server_config.json");
-var webserverModule   = require("./backend/lib/setupWebserver");
+let config  = require("./server_config.json");
 
-var serverIP    = config.server.ip   || "0.0.0.0";
-var serverPort  = config.server.port || 13337;
 
-// Setup HTTP Webserver
-var webserver = webserverModule.createApplicationServer(config, serverIP, serverPort);
-// Setup GameserverRestFacade
-var gameserver = new GameserverWebsocketFacade(webserver);
 
+// Setup ExpressJS
+let expressApp = express();
+expressApp.use(express.static('.'));
+
+// Setup Gameserver Facade
+if(config.useWebsockets) {
+    new GameserverWebsocketFacade(expressApp,config);
+} else {
+    new GameserverRestFacade(expressApp,config);
+}
