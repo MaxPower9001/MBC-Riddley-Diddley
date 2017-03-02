@@ -161,8 +161,9 @@ export class Spiel {
     }
 
     getNextAktionsTyp() : AktionsTyp {
-        let keys = Object.keys(AktionsTyp);
-        return AktionsTyp[keys[Math.floor(Math.random() * keys.length)]];
+        let keys = Object.keys(AktionsTyp).filter((key : any) => isNaN(key));
+        let randomAktionsTypAsName : number = Math.floor(Math.random() * keys.length);
+        return AktionsTyp[keys[randomAktionsTypAsName]];
     }
 
     /*
