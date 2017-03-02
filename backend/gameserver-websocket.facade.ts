@@ -48,7 +48,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private addSpieler(socket : Socket) : ISpielerInfo {
         let neuerSpieler : Spieler = this.spiel.addSpieler();
         this.spielerSockets[neuerSpieler.name] = socket;
-        this.spielerSockets[socket.conn.id] = neuerSpieler;
+        this.spielerSockets[socket.conn.id] = neuerSpieler.name;
         return new SpielerInfo(neuerSpieler.name);
     }
 
@@ -59,7 +59,9 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private setupSpielerSocket(socket : Socket) {
         socket.on('spielmodus', (spielmodus : Spielmodus) => this.onSpielmodus(spielmodus));
         socket.on('spiel_beendet', (spielBeendet : SpielBeendet) => this.onSpielBeendet(spielBeendet));
-        socket.on('aktion', (aktion : Aktion) => this.onAktion(aktion));
+        socket.on('aktion', (aktion : Aktion) => {
+            this.onAktion(new Aktion(this.getSpielername(socket),aktion.typ));
+        });
         socket.on('disconnect',() => console.log("Player disconnected"));
         socket.on('reconnect', () => console.log("Player reconnected"));
     }
@@ -121,6 +123,11 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     onAktion(aktion: IAktion): void {
+        console.log("Aktion erhalten: " + aktion);
+        if(!this.spiel.istAktionImAktuellenSpielstatusVerwertbar(aktion)) {
+            console.log("Aktion wird verworfen");
+            return;
+        }
         let istGueltig =  this.spiel.pruefeErhalteneAktion(aktion);
         if(istGueltig) {
             this.starteNeueSpielrunde();

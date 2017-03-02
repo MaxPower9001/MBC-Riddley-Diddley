@@ -165,5 +165,16 @@ export class Spiel {
         return AktionsTyp[keys[Math.floor(Math.random() * keys.length)]];
     }
 
+    /*
+     * Prueft ob die gegebene Aktion zum aktuellen Spielzeitpunkt sinnvoll verwertbar ist. Die Aktion sollte verworfen
+     * werden, falls diese Funktion false zurückgibt
+     * @return {boolean}
+     *         False, wenn Spielrunde nicht gestartet oder wenn der in der Aktion genannte Spieler nicht (mehr) im Spiel ist
+     */
+    istAktionImAktuellenSpielstatusVerwertbar(aktion : IAktion) {
+        let spielerIdx : number = this.spieler.findIndex((elem : Spieler) => this.aktuelleSpielrunde.getGewuenschterSpieler().name === elem.name);
+        return this.spielrundenUhr != null && spielerIdx > 0;
+    }
+
 
 }
