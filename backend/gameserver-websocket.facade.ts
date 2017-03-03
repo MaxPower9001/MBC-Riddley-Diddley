@@ -1,7 +1,10 @@
 // Ein Hoch auf Ecmascript 6 !!!!!!
 import { Spieler } from './spieler';
 import { Spiel } from './spiel';
-import {SpielGestartet, SpielBeendet, Aktion, SpielerInfo, Spielmodus, SpielVerloren} from './nachrichtentypen';
+import {
+    SpielGestartet, SpielBeendet, Aktion, SpielerInfo, Spielmodus, SpielVerloren,
+    UngueltigeAktionOderTimeout
+} from './nachrichtentypen';
 import {hostname} from 'os';
 import Socket = SocketIO.Socket;
 import * as sio from 'socket.io';
@@ -70,7 +73,6 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     private starteNeueSpielrunde() : void {
-        console.log("starte neue Spielrunde");
         let nextAktion : IAktion = this.spiel.erstelleSpielrunde();
         if(nextAktion) {
             this.sendAktion(nextAktion);
@@ -88,13 +90,13 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
      */
     onSpielrundeAusgelaufen(spieler : Spieler ) {
         console.log("Die aktuelle Spielrunde ist ausgelaufen, keine gültige Aktion erhalten, Spieler " + spieler.name + "hat es verbockt");
+        this.sendUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(spieler.name));
         let darfWeiterspielen : boolean = this.spiel.verringereLeben(spieler.name);
-        if(darfWeiterspielen) {
-            this.starteNeueSpielrunde();
-        } else {
+        if(!darfWeiterspielen) {
             this.spiel.removeSpieler(spieler);
             this.sendSpielVerloren(new SpielVerloren(spieler.name));
         }
+        this.starteNeueSpielrunde();
     }
 
     onConnection(socket : Socket) {
@@ -134,6 +136,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
         if(istGueltig) {
             this.starteNeueSpielrunde();
         } else {
+            this.sendUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(aktion.spieler));
             let darfWeiterspielen : boolean = this.spiel.verringereLeben(aktion.spieler);
             if(!darfWeiterspielen) {
                 this.sendSpielVerloren(new SpielVerloren(aktion.spieler));
@@ -154,30 +157,35 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     sendAktion(aktion: IAktion): void {
-        console.log("Aktionstyp" + aktion.typ + " geht raus an Spieler " + aktion.spieler);
+        console.log(`WEBSOCKET: Aktion geht raus für Spieler ${aktion.spieler}, Aktionstyp: ${aktion.typ}`);
         this.fernseherSocket.emit('aktion', aktion);
     }
 
     sendSpielGestartet(spielGestartet: ISpielGestartet): void {
+        console.log("WEBSOCKET: SpielGestartet geht raus");
         this.websocketServer.emit('spiel_gestartet', spielGestartet);
     }
 
     sendSpielBeendet(spielBeendet: ISpielBeendet): void {
+        console.log("WEBSOCKET: SpielBeendet geht raus");
         this.websocketServer.emit('spiel_beendet', spielBeendet);
     }
 
     sendSpielerInfo(spielerInfo: ISpielerInfo): void {
+        console.log("WEBSOCKET: SpielerInfo geht raus für " + spielerInfo.username);
         let socket : Socket = this.getSocketBySpielername(spielerInfo.username);
         socket.emit('spielerinfo', spielerInfo);
     }
 
     sendSpielVerloren(spielVerloren: ISpielVerloren): void {
+        console.log("WEBSOCKET: SpielVerloren geht raus für " + spielVerloren.spieler);
         let socket : Socket = this.getSocketBySpielername(spielVerloren.spieler);
         this.fernseherSocket.emit('spiel_verloren', spielVerloren);
         socket.emit('spiel_verloren', spielVerloren);
     }
 
     sendUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout: IUngueltigeAktionOderTimeout): void {
+        console.log("WEBSOCKET: UngueltigeAktionOderTimeout geht raus für" + ungueltigeAktionOderTimeout.spieler);
         this.fernseherSocket.emit('ungueltige_aktion_oder_timeout', ungueltigeAktionOderTimeout);
     }
 

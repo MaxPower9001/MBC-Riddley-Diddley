@@ -50,6 +50,9 @@ export class Spiel {
      *         gibt null zurück, wenn kein Spieler mehr im Spiel ist
      */
     erstelleSpielrunde() : IAktion {
+        if(this.spieler.length < 1) {
+            return null;
+        }
         // Neue Runde erstellen
         let nextAktionsTyp : AktionsTyp = this.getNextAktionsTyp();
         let nextSpieler : Spieler = this.getNextSpieler();
@@ -69,7 +72,7 @@ export class Spiel {
         let spielerAnDerReihe : Spieler = this.aktuelleSpielrunde.getGewuenschterSpieler();
         // folgendes wird ausgeführt, falls innerhalb der aktuellen Spielrunde keine korrekte Aktion eingetroffen ist
         let zeitInMillis : number = new Date().valueOf();
-        console.log("Spieluhr gestartet, Zeit: " + zeitInMillis);
+        console.log("Neue Spielrunde, Spieluhr gestartet, Zeit: " + zeitInMillis);
         this.aktuelleSpielrunde.beginnInMilliSekunden = zeitInMillis;
         this.spielrundenUhr =  setInterval(() => this.handleSpielrundeAusgelaufen(spielerAnDerReihe), this.spielmodus.zeitFuerAktion * 1000);
     }
