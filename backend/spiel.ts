@@ -177,7 +177,7 @@ export class Spiel {
      */
     istAktionImAktuellenSpielstatusVerwertbar(aktion : IAktion) {
         let spielerIdx : number = this.spieler.findIndex((elem : Spieler) => this.aktuelleSpielrunde.getGewuenschterSpieler().name === elem.name);
-        return this.spielrundenUhr != null && spielerIdx > 0;
+        return this.spielrundenUhr != null && spielerIdx >= 0;
     }
 
 
