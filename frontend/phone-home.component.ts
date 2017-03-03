@@ -14,10 +14,6 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
 		.panel:nth-child(odd) {
 			background-color: chocolate;
 		}
-		.viewport{
-    height:80%;
-    width:100%;
-}
 		
 	`],
 	template: `
@@ -25,22 +21,35 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
 		<phone-header></phone-header>
 		&nbsp;
 		<div class="viewport">
-				<ul>
-					<li class="list-group-item" *ngFor="let keyval of auswahlVerfahrenSpielerMoeglichkeiten | keys"
-					 (click)="setAuswahlVerfahrenSpieler(keyval.value)">
-						<!-- Beschreibung des Auswahlverfahrens -->
-						{{keyval.key}}
-					</li>
-				</ul>
-				<ul>
-					<li class="list-group-item zeitFuerAktion" *ngFor="let zeitFuerAktion of zeitFuerAktionMoeglichkeiten"
-					    (click)="setZeitFuerAktion(zeitFuerAktion)">{{zeitFuerAktion}}</li>
-				</ul>
-				<ul>
-					<li class="list-group-item glyphicon glyphicon-heart-empty" *ngFor="let anzahlLeben of anzahlLebenMoeglichkeiten"
-					    (click)="setAnzahlLeben(anzahlLeben)"></li>
-				</ul>
-		<button class="btn btn-primary" (click)="starteSpiel()">Spiel starten</button>
+			<!-- Beschreibung des Auswählmodus -->
+			<h4>Auswählmodus</h4>
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-primary" *ngFor="let keyval of auswahlVerfahrenSpielerMoeglichkeiten | keys"
+				(click)="setAuswahlVerfahrenSpieler(keyval.value)">
+					<input type="radio" name="spielverfahren" id="{{keyval.value}}" autocomplete="off" checked>{{keyval.key}}
+				</label>
+			</div>
+
+			<!-- Aktions Zeit -->
+			<h4>Zeit für Aktion</h4>
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-default"  *ngFor="let zeitFuerAktion of zeitFuerAktionMoeglichkeiten"
+					(click)="setZeitFuerAktion(zeitFuerAktion)">
+					<input type="radio" name="aktionsmoeglichkeiten" id="{{zeitFuerAktion}}" autocomplete="off" checked>{{zeitFuerAktion}}
+				</label>
+			</div>
+			
+			<!-- Spielleben -->
+			<h4>Leben</h4>
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-default" *ngFor="let anzahlLeben of anzahlLebenMoeglichkeiten"
+					(click)="setAnzahlLeben(anzahlLeben)">
+					<input type="radio" name="aktionsmoeglichkeiten" id="{{zeitFuerAktion}}" autocomplete="off" checked>
+					<span class="glyphicon glyphicon-heart-empty"></span>
+				</label>
+			<div>
+			&nbsp;&nbsp;&nbsp;
+			<button class="btn btn-primary" (click)="starteSpiel()">Spiel starten</button>
 		</div>
     `
 })
