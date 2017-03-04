@@ -47,7 +47,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     private getSpielername(socket : Socket) : string {
-        return this.spielerSockets[socket.conn.id];
+        return this.spielerSockets[socket.conn.id].name;
     }
 
     private addSpieler(socket : Socket) : ISpielerInfo {
@@ -58,7 +58,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     private removeSpieler( socket : Socket ) {
-        console.log("Player disconnected in removeSpieler");
+        console.log("Player disconnected");
         let player = this.spielerSockets[socket.conn.id];
         this.gameserver.spiel.removeSpieler(player);
         this.spielerSockets[socket.conn.id] = null;
@@ -67,6 +67,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
 
     private setFernseher(socket : Socket) : void {
         this.fernseherSocket = socket;
+
         socket.on('disconnect', () => {
             console.log("TV disconnected");
             this.fernseherSocket = null;
