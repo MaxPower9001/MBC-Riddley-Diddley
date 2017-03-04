@@ -1,34 +1,77 @@
 import {FrontendConnectionServiceInterface} from "./frontend-connection.service.interface";
 import {
-    IAktion, ISpielmodus, ISpielGestartet, ISpielBeendet, ISpielerInfo,
-    ISpielVerloren, IUngueltigeAktionOderTimeout
+    IAktion,
+    ISpielmodus,
+    ISpielGestartet,
+    ISpielBeendet,
+    ISpielerInfo,
+    ISpielVerloren,
+    IUngueltigeAktionOderTimeout
 } from "../api/nachrichtentypen.interface";
-import {Spiel} from "./spiel";
 import {Spieler} from "./spieler";
 import {hostname} from "os";
-import {SpielVerloren, Spielmodus, SpielBeendet, Aktion, SpielerInfo} from "./nachrichtentypen";
+import {Spielmodus, Aktion, SpielerInfo} from "./nachrichtentypen";
 import {createServer} from "http";
 import * as express from "express";
 import * as bodyparser from "body-parser";
+import {Gameserver} from "./gameserver";
 
 
 export class GameserverRestFacade implements FrontendConnectionServiceInterface {
 
     private httpServer: any;
-    private spiel : Spiel;
+    private gameserver : Gameserver;
 
-    constructor(expressApp, config) {
+    private fernseherUpdates = [];
+    private spielerUpdates = {};
+
+    constructor(expressApp, config, gameserver) {
+        this.gameserver = gameserver;
         // parse application/json
         expressApp.use(bodyparser.json());
         this.setupRoutes(expressApp);
-        var httpserver = createServer(expressApp);
+        let httpserver = createServer(expressApp);
         httpserver.listen(config.server.port, config.server.ip);
         console.log(`Server is listening on ${config.server.ip}:${config.server.port}`);
         this.httpServer = httpserver;
-        this.spiel = new Spiel();
-        this.spiel.spielrundeAusgelaufen$.subscribe((spieler : Spieler) => this.onSpielrundeAusgelaufen(spieler));
         console.log("GameserverRestFacade started, We are: " + hostname());
     }
+
+    private getUpdatesBySpieler(spieler : Spieler) : any {
+        return this.spielerUpdates[spieler.name];
+    }
+
+    private getUpdatesBySpielername(spielername : string) : any {
+        return this.spielerUpdates[spielername];
+    }
+
+    private addSpieler() : ISpielerInfo {
+        let neuerSpieler : Spieler = this.gameserver.spiel.addSpieler();
+        this.spielerUpdates[neuerSpieler.name] = [];
+        return new SpielerInfo(neuerSpieler.name);
+    }
+
+    private blockiertBisAlleClientsUpdatesErhaltenHaben() {
+        for (let spielername in Object.keys(this.spielerUpdates)) {
+            this.blockiertBisSpielerUpdatesErhaltenHat(spielername);
+        }
+        this.blockiertBisFernseherUpdatesErhaltenHat();
+    }
+
+    private blockiertBisFernseherUpdatesErhaltenHat() {
+        let nochAnstehendeUpdates : boolean = true;
+        while(nochAnstehendeUpdates) {
+            nochAnstehendeUpdates = this.fernseherUpdates.length > 0;
+        }
+    }
+
+    private blockiertBisSpielerUpdatesErhaltenHat(spielername : string) {
+        let nochAnstehendeUpdates : boolean = true;
+        while(nochAnstehendeUpdates) {
+            nochAnstehendeUpdates = this.spielerUpdates[spielername].length > 0;
+        }
+    }
+
 
     // remember to Set Content-Type: application/json
     setupRoutes(expressApp) {
@@ -40,6 +83,13 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
             console.log("Hallo Spieler! ip: " + req.ip);
             this.onConnection();
             res.send("Willkommen anboard");
+        });
+        expressApp.get('/rest/spieler/:spielername/updates', (req : express.Request, res : express.Response) => {
+            console.log("sende Updates für Spieler " + req.params["spielername"]);
+            this.onConnection();
+            let spielerUpdateObj = this.spielerUpdates[req.params["spielername"]];
+            res.send(spielerUpdateObj);
+            spielerUpdateObj = [];
         });
         expressApp.post('/rest/spieler/:spielername/spielmodus', (req : express.Request, res : express.Response) => {
             let spielmodus : ISpielmodus = new Spielmodus(req.body.zeitFuerAktion,req.body.auswahlverfahrenSpieler,req.body.anzahlLeben);
@@ -54,32 +104,12 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         });
     }
 
-    private addSpieler() : ISpielerInfo {
-        let neuerSpieler : Spieler = this.spiel.addSpieler();
-        return new SpielerInfo(neuerSpieler.name);
-    }
-
-    /*
-     * Wird aufgerufen wenn die Spielrunde ausgelaufen ist und währenddessen keine gültige Aktion vom Spieler gesendet wurde
-     * @property {Spieler} spieler
-     *           Spieler der in der vergangenen Spielrunde eine Aktion hätte durchführen sollen
-     */
-    onSpielrundeAusgelaufen(spieler : Spieler ) {
-        let darfWeiterspielen : boolean = this.spiel.verringereLeben(spieler.name);
-        if(!darfWeiterspielen) {
-            this.spiel.removeSpieler(spieler);
-            this.sendSpielVerloren(new SpielVerloren(spieler.name));
-        }
-
-    }
-
     onConnection() {
         // Ein neuer Spieler möchte dem Spiel beitreten
         let spielerInfo : ISpielerInfo = this.addSpieler();
         console.log("Hallo Spieler! von nun an bist du bekannt unter dem Namen " + spielerInfo.username);
-
         // Sende Spieler seinen Spielernamen
-        //this.sendSpielerInfo(spielerInfo);
+        this.sendSpielerInfo(spielerInfo);
     }
 
     onAktion(aktion: IAktion): void {
@@ -88,22 +118,41 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
     onSpielmodus(spielmodus: ISpielmodus): void {
     }
 
+    onSpielBeendet(spielBeendet : ISpielBeendet) : void {
+    }
+
     sendAktion(aktion: IAktion): void {
+        this.fernseherUpdates.push(["aktion",aktion]);
+        this.blockiertBisFernseherUpdatesErhaltenHat();
     }
 
     sendSpielGestartet(spielGestartet: ISpielGestartet): void {
+        for(let spielername in Object.keys(this.spielerUpdates)) {
+            this.spielerUpdates[spielername].push(["spiel_gestartet",spielGestartet]);
+        }
+        this.fernseherUpdates.push(["spiel_gestartet",spielGestartet]);
+        this.blockiertBisAlleClientsUpdatesErhaltenHaben();
     }
 
     sendSpielBeendet(spielBeendet: ISpielBeendet): void {
+        for(let spielername in Object.keys(this.spielerUpdates)) {
+            this.spielerUpdates[spielername].push(["spiel_beendet",spielBeendet]);
+        }
+        this.fernseherUpdates.push(["spiel_beendet",spielBeendet]);
     }
 
     sendSpielerInfo(spielerInfo: ISpielerInfo): void {
+        this.spielerUpdates[spielerInfo.username].push(["spielerinfo",spielerInfo]);
     }
 
     sendSpielVerloren(spielVerloren: ISpielVerloren): void {
+        //this.spielerUpdates[spielVerloren.spieler].push(["spiel_verloren",spielVerloren]);
+        this.fernseherUpdates.push(["spiel_verloren",spielVerloren]);
     }
 
     sendUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout: IUngueltigeAktionOderTimeout): void {
+        //this.spielerUpdates[ungueltigeAktionOderTimeout.spieler].push(["ungueltige_aktion_oder_timeout",ungueltigeAktionOderTimeout]);
+        this.fernseherUpdates.push(["ungueltige_aktion_oder_timeout",ungueltigeAktionOderTimeout]);
     }
 
 }

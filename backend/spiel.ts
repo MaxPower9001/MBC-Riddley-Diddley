@@ -23,7 +23,7 @@ export class Spiel {
     spielmodus : Spielmodus;
 
     constructor() {
-        this.spieler = new Array<Spieler>();
+        this.spieler = [];
         this.spielrundeAusgelaufen = new Subject<Spieler>();
         this.spielrundeAusgelaufen$ = this.spielrundeAusgelaufen.asObservable();
         this.spielmodus = null;
@@ -123,6 +123,7 @@ export class Spiel {
         let spieler : Spieler = new Spieler();
         spieler.name = Spiel.spielername_prefix + (this.spieleranzahl() + 1);
         this.spieler.push(spieler);
+        console.log("aktuelle spieeler: " + this.spieler + " spieleranzahl:" + this.spieler.length);
         return spieler;
     }
 
