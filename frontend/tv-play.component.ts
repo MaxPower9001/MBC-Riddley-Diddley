@@ -23,8 +23,12 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 	`],
 	template: `
 		<tv-header></tv-header>	
-        <!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
-        <h1 id="infoSection">Das Spiel geht los!</h1>
+		<div class="viewport">
+	  <div class="alert alert-warning" role="alert">
+		<strong>Warning!</strong> Better check yourself, you're not looking too good.
+	  </div>
+		<!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
+		<h1 id="infoSection">Das Spiel geht los!</h1>
         <h1>Schnell {{username}}, <span id="aktion"></span>!</h1>
 		
 		<div id="myProgress">
@@ -101,5 +105,13 @@ export class TvPlayComponent implements OnInit, DoCheck {
     })
     console.log("Subscribed to Game ended Queue");
 
-  }
+	}
+
+	ngDoCheck() {
+		this.missionControlService.aktionFromGameServer$.subscribe(function (aktion: Aktion) {
+			console.log("hier");
+		})
+		console.log(this.username);
+		
+	}
 }
