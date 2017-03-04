@@ -8,37 +8,38 @@ var Shake = require('./lib/shake.js');
     selector: 'phone-play',
     styles: [`
 		
-.thin {
-    height:40%;
-}
+        .thin {
+            height:40%;
+        }
 
-.thick {
-    height:60%;
-    color: red;
-}
-.viewport{
-    height:80%;
-    width:100%;
-}
+        .thick {
+            height:60%;
+            color: red;
+        }
+        .viewport{
+            height:60%;
+            width:100%;
+        }
 		
 	`],
     template: `
-		<div class="viewport">
 		<phone-header></phone-header>
-		<div class="row thick">
-			<div class="col-md-6 col-sm-6 col-xs-6">
-				<button class="btn btn-primary" (click)="leftButton()">Left Button</button>
-			</div>
-			<div class="col-md-6 col-sm-6 col-xs-6">
-				<button class="btn btn-success" (click)="rightButton()">Right Button</button>
-			</div>
-		</div>
-		<div class="row thin">
-			<div class="col-md-12 col-sm-12 col-xs-12">
-				<button class="btn btn-primary" (click)="bottomButton()">Bottom Button</button>
-			</div>
-		</div>
-</div>
+		<div class="viewport">
+		
+            <div class="row thick">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <button class="btn btn-primary" (click)="leftButton()">Left Button</button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <button class="btn btn-success" (click)="rightButton()">Right Button</button>
+                </div>
+            </div>
+            <div class="row thin">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-primary" (click)="bottomButton()">Bottom Button</button>
+                </div>
+            </div>
+        </div>
 	`
 })
 

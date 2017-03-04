@@ -14,12 +14,15 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
 		.panel:nth-child(odd) {
 			background-color: chocolate;
 		}
+
+		.viewport .start {
+			margin-top: 15px;
+		}
 		
 	`],
 	template: `
 
 		<phone-header></phone-header>
-		&nbsp;
 		<div class="viewport">
 			<!-- Beschreibung des Auswählmodus -->
 			<h4>Auswählmodus</h4>
@@ -48,8 +51,7 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
 					<span class="glyphicon glyphicon-heart-empty"></span>
 				</label>
 			<div>
-			&nbsp;&nbsp;&nbsp;
-			<button class="btn btn-primary" (click)="starteSpiel()">Spiel starten</button>
+			<button class="btn btn-primary start" (click)="starteSpiel()">Spiel starten</button>
 		</div>
     `
 })
