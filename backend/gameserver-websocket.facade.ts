@@ -1,41 +1,40 @@
-// Ein Hoch auf Ecmascript 6 !!!!!!
-import { Spieler } from './spieler';
-import { Spiel } from './spiel';
+import {Spieler} from "./spieler";
+import {SpielBeendet, Aktion, SpielerInfo, Spielmodus} from "./nachrichtentypen";
+import {hostname} from "os";
+import * as sio from "socket.io";
+import {createServer} from "http";
 import {
-    SpielGestartet, SpielBeendet, Aktion, SpielerInfo, Spielmodus, SpielVerloren,
-    UngueltigeAktionOderTimeout
-} from './nachrichtentypen';
-import {hostname} from 'os';
-import Socket = SocketIO.Socket;
-import * as sio from 'socket.io';
-import Server = SocketIO.Server;
-import {createServer} from 'http';
-import {
-    AktionsTyp, ISpielmodus, IAktion, ISpielGestartet, ISpielBeendet,
-    ISpielerInfo, ISpielVerloren, IUngueltigeAktionOderTimeout
+    IAktion,
+    ISpielGestartet,
+    ISpielBeendet,
+    ISpielerInfo,
+    ISpielVerloren,
+    IUngueltigeAktionOderTimeout
 } from "../api/nachrichtentypen.interface";
 import {FrontendConnectionServiceInterface} from "./frontend-connection.service.interface";
+import {Gameserver} from "./gameserver";
+import Socket = SocketIO.Socket;
+import Server = SocketIO.Server;
 
-export class GameserverWebsocketFacade implements FrontendConnectionServiceInterface {
+export class GameserverWebsocketFacade implements FrontendConnectionServiceInterface{
 
+    private gameserver : Gameserver;
     private websocketServer : Server;
     private httpServer: any;
     private fernseherSocket: Socket;
     // Map für Spielername <=> Socket in Vor- und Rückrichtung
     // { SpielerName1 => Socket1, SpielerName2 => Socket2, Socket1 => SpielerName1, Socket2 => SpielerName2 }
     private spielerSockets;
-    private spiel : Spiel;
 
-    constructor(expressApp, config) {
+    constructor(expressApp, config, gameserver) {
+        this.gameserver = gameserver;
         var httpserver = createServer(expressApp);
         httpserver.listen(config.server.port, config.server.ip);
         console.log(`Server is listening on ${config.server.ip}:${config.server.port}`);
         this.httpServer = httpserver;
         this.websocketServer = sio(this.httpServer);
-        this.spiel = new Spiel();
         this.spielerSockets = {};
         this.websocketServer.on('connection', (socket : Socket) => this.onConnection(socket));
-        this.spiel.spielrundeAusgelaufen$.subscribe((spieler : Spieler) => this.onSpielrundeAusgelaufen(spieler));
         console.log("GameserverWebsocketFacade started, We are: " + hostname());
     }
 
@@ -52,7 +51,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     private addSpieler(socket : Socket) : ISpielerInfo {
-        let neuerSpieler : Spieler = this.spiel.addSpieler();
+        let neuerSpieler : Spieler = this.gameserver.spiel.addSpieler();
         this.spielerSockets[neuerSpieler.name] = socket;
         this.spielerSockets[socket.conn.id] = neuerSpieler.name;
         return new SpielerInfo(neuerSpieler.name);
@@ -63,47 +62,26 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     }
 
     private setupSpielerSocket(socket : Socket) {
-        socket.on('spielmodus', (spielmodus : Spielmodus) => this.onSpielmodus(spielmodus));
-        socket.on('spiel_beendet', (spielBeendet : SpielBeendet) => this.onSpielBeendet(spielBeendet));
-        socket.on('aktion', (aktion : Aktion) => {
-            this.onAktion(new Aktion(this.getSpielername(socket),aktion.typ));
-        });
+        socket.on('spielmodus', (spielmodus : Spielmodus) => this.gameserver.onSpielmodus(spielmodus));
+        socket.on('spiel_beendet', (spielBeendet : SpielBeendet) => this.gameserver.onSpielBeendet(spielBeendet));
+        socket.on('aktion', (aktion : Aktion) => this.gameserver.onAktion(new Aktion(this.getSpielername(socket),aktion.typ)));
         socket.on('disconnect',() => console.log("Player disconnected"));
         socket.on('reconnect', () => console.log("Player reconnected"));
     }
 
-    private starteNeueSpielrunde() : void {
-        let nextAktion : IAktion = this.spiel.erstelleSpielrunde();
-        if(nextAktion) {
-            this.sendAktion(nextAktion);
-            this.spiel.starteSpielrunde();
-        } else {
-            let spielBeendet : ISpielBeendet = this.spiel.beendeSpiel();
-            this.sendSpielBeendet(spielBeendet);
-        }
-    }
-
     /*
-     * Wird aufgerufen wenn die Spielrunde ausgelaufen ist und währenddessen keine gültige Aktion vom Spieler gesendet wurde
-     * @property {Spieler} spieler
-     *           Spieler der in der vergangenen Spielrunde eine Aktion hätte durchführen sollen
+     * Wird nach dem Verbindungsaufbau eines Clients aufgerufen und liefert eine ISpielerInfo zurück falls diese Funktion
+     * bereits einmal aufgerufen wurde. Das bedeutet, dass beim ersten Aufruf davon ausgegangen wird, dass sich der Fernseher
+     * (passiver Beobachter) verbunden hat und kein Smartphone (aktiver Spieler). In diesem Fall wird null zurückgegeben
+     * Intern sollte eine eine Spielerliste und der eine Referenz auf den Fernseher gespeichert werden
+     *  @return  {ISpielerInfo}
+     *           neu erstelle ISpielerInfo oder null wenn sich der Fernseher verbunden hat
      */
-    onSpielrundeAusgelaufen(spieler : Spieler ) {
-        console.log("Die aktuelle Spielrunde ist ausgelaufen, keine gültige Aktion erhalten, Spieler " + spieler.name + "hat es verbockt");
-        this.sendUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(spieler.name));
-        let darfWeiterspielen : boolean = this.spiel.verringereLeben(spieler.name);
-        if(!darfWeiterspielen) {
-            this.spiel.removeSpieler(spieler);
-            this.sendSpielVerloren(new SpielVerloren(spieler.name));
-        }
-        this.starteNeueSpielrunde();
-    }
-
     onConnection(socket : Socket) {
         // GameserverRestFacade und Fernseher View werden auf dem gleichen Host betrieben, daher haben diese die gleiche IP Adresse
         // Der erste Client der von localhost der einen Socket öffnet wird daher als Fernseher angesehen
-        if(this.spiel.spieleranzahl() == 0
-            && (socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost")
+        if(this.gameserver.spiel.spieleranzahl() == 0
+            && (socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost" || socket.conn.remoteAddress === "192.168.43.26")
             && !this.fernseherSocket) {
             // Der Fernseher hat sich verbunden
             console.log("Hallo Fernseher! ip: " + socket.conn.remoteAddress);
@@ -121,40 +99,6 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
         }
     }
 
-    onSpielBeendet(spielBeendet : ISpielBeendet) : void {
-        spielBeendet = this.spiel.beendeSpiel();
-        this.sendSpielBeendet(spielBeendet);
-    }
-
-    onAktion(aktion: IAktion): void {
-        console.log("Aktion erhalten: " + aktion);
-        if(!this.spiel.istAktionImAktuellenSpielstatusVerwertbar(aktion)) {
-            console.log("Aktion wird verworfen");
-            return;
-        }
-        let istGueltig =  this.spiel.pruefeErhalteneAktion(aktion);
-        if(istGueltig) {
-            this.starteNeueSpielrunde();
-        } else {
-            this.sendUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(aktion.spieler));
-            let darfWeiterspielen : boolean = this.spiel.verringereLeben(aktion.spieler);
-            if(!darfWeiterspielen) {
-                this.sendSpielVerloren(new SpielVerloren(aktion.spieler));
-            }
-        }
-    }
-
-    onSpielmodus(spielmodus : Spielmodus) : void {
-        // Spieler hat dem Server mitgeteilt, welcher Spielmodus gespielt werden soll
-        // Spiel kann erstellt und der Spielmodus entsprechend gesetzt werden
-        let spielGestartet : ISpielGestartet = this.spiel.erstelleSpiel(spielmodus);
-        this.sendSpielGestartet(spielGestartet);
-
-        // Sende erste Aktion des Spiels, nachfolgende Aktionen werden durch onAktion ausgelöst
-        let nextAktion : IAktion = this.spiel.erstelleSpielrunde();
-        this.sendAktion(nextAktion);
-        this.spiel.starteSpielrunde();
-    }
 
     sendAktion(aktion: IAktion): void {
         console.log(`WEBSOCKET: Aktion geht raus für Spieler ${aktion.spieler}, Aktionstyp: ${aktion.typ}`);

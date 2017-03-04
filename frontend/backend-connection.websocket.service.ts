@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 var io = require('./lib/socket.io.js');
-import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo, SpielVerloren} from './nachrichtentypen';
+import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo} from './nachrichtentypen';
 import {MissionControlService} from "./mission-control.service";
 import {BackendConnectionServiceInterface} from './backend-connection.service.interface';
 import {AktionsTyp} from "../api/nachrichtentypen.interface";
-import {UngueltigeAktionOderTimeout} from "../frontend/nachrichtentypen";
+import {UngueltigeAktionOderTimeout, SpielVerloren} from "../frontend/nachrichtentypen";
 
 @Injectable()
 export class BackendConnectionWebsocketService implements BackendConnectionServiceInterface {
@@ -42,33 +42,33 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
         });
 
         this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
-            that.missionControlService.announceSpielBeendet(new SpielBeendet());
             console.log("Spiel Beendet");
+            that.missionControlService.announceSpielBeendet(new SpielBeendet());
         });
 
         this.socket.on('ungueltige_aktion_oder_timeout', function (ungueltigeAktionOderTimeout : UngueltigeAktionOderTimeout) {
-            that.missionControlService.annouceUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout.spieler));
             console.log("Ungültige Aktion oder Timeout");
+            that.missionControlService.annouceUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout.spieler));
         });
 
         this.socket.on('spiel_verloren', function (spielVerloren : SpielVerloren) {
-            that.missionControlService.announceSpielVerloren(new SpielVerloren(spielVerloren.spieler));
             console.log("Spiel Verloren");
+            that.missionControlService.announceSpielVerloren(new SpielVerloren(spielVerloren.spieler));
         });
 
         this.socket.on('aktion', function (aktion : Aktion) {
-            that.missionControlService.announceAktion(new Aktion(aktion.spieler, aktion.typ));
             console.log("Aktion");
+            that.missionControlService.announceAktion(new Aktion(aktion.spieler, aktion.typ));
         });
 
         this.socket.on('spiel_gestartet', function (spielGestartet : SpielGestartet) {
-            that.missionControlService.announceSpielGestarted(new SpielGestartet(spielGestartet.spielmodus, spielGestartet.beteiligteSpieler));
             console.log("Spiel gestartet");
+            that.missionControlService.announceSpielGestarted(new SpielGestartet(spielGestartet.spielmodus, spielGestartet.beteiligteSpieler));
         });
 
         this.socket.on('spielerinfo', function (spielerinfo : SpielerInfo) {
-            that.missionControlService.announceSpielerinfo(new SpielerInfo(spielerinfo));
             console.log("Spieler Info");
+            that.missionControlService.announceSpielerinfo(new SpielerInfo(spielerinfo));
         });
     }
 

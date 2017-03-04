@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MissionControlService }     from './mission-control.service';
-import {SpielGestartet, Spielmodus, Aktion} from "./nachrichtentypen";
+import {SpielGestartet, Spielmodus, Aktion, UngueltigeAktionOderTimeout, SpielVerloren} from "./nachrichtentypen";
 import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 @Component({
@@ -29,7 +29,7 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 		<div class="viewport">
 		<tv-header></tv-header>	
         <!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
-        <h1>Timer Bar:</h1>
+        <h1 id="infoSection">Das Spiel geht los!</h1>
         <h1>Schnell {{username}}, {{aktion}}!</h1>
         
         <div id="myProgress">
@@ -76,10 +76,32 @@ export class TvPlayComponent implements OnInit {
       that.aktion = aktion.typ;
       that.move();
     });
+    console.log("Subscribed to Action Queue");
+
+
     this.missionControlService.spielGestartet$.subscribe(function(spielGestartet : SpielGestartet) {
       that.timerMax = spielGestartet.spielmodus.zeitFuerAktion;
       console.log("Spielmodus vom Server erhalten: " + spielGestartet);
     });
+    console.log("Subscribed to Game started Queue");
+
+    this.missionControlService.ungueltigeAktionOderTimeout$.subscribe(function (ungueltigeAktionOderTimeout : UngueltigeAktionOderTimeout) {
+      console.log("Ungueltige Aktion oder Timeout durch Spieler: " + ungueltigeAktionOderTimeout);
+      document.getElementById("infoSection").innerHTML = ungueltigeAktionOderTimeout.spieler + "hat Mist gebaut und ein Leben verloren!";
+    });
+    console.log("Subscribed to Wrong Action or Timeout Queue");
+
+    this.missionControlService.spielVerloren$.subscribe(function (spielVerloren : SpielVerloren) {
+      console.log( spielVerloren.spieler + "hat leider verloren" );
+      document.getElementById("infoSection").innerHTML = spielVerloren.spieler + "ist sowas von raus!";
+    });
+    console.log("Subscribed to Player lost the game Queue");
+
+    this.missionControlService.spielBeendet$.subscribe(function () {
+      console.log("Das Spiel ist vorbei, leite weiter auf TV-End");
+      that.router.navigateByUrl("/tv-end");
+    })
+    console.log("Subscribed to Game ended Queue");
 
   }
 }

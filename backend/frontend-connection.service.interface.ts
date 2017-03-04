@@ -8,30 +8,6 @@ import {
  */
 export interface FrontendConnectionServiceInterface {
 
-    // /*
-    //  * Wird nach dem Verbindungsaufbau eines Clients aufgerufen und liefert eine ISpielerInfo zurück falls diese Funktion
-    //  * bereits einmal aufgerufen wurde. Das bedeutet, dass beim ersten Aufruf davon ausgegangen wird, dass sich der Fernseher
-    //  * (passiver Beobachter) verbunden hat und kein Smartphone (aktiver Spieler). In diesem Fall wird null zurückgegeben
-    //  * Intern sollte eine eine Spielerliste und der eine Referenz auf den Fernseher gespeichert werden
-    //  *  @return  {ISpielerInfo}
-    //  *           neu erstelle ISpielerInfo oder null wenn sich der Fernseher verbunden hat
-    //  */
-    // onConnection(): ISpielerInfo;
-
-    /*
-     * Behandelt eine IAktion von einem Spieler
-     * @property {IAktion} aktion
-     *           von einem Spieler ausgeführte Aktion
-     */
-    onAktion(aktion: IAktion): void;
-
-    /*
-     * Behandelt ein ISpielmodus von einem Spieler. Erstellt ein Spiel und startet die erste Spielrunde
-     * @property {ISpielmodus} spielmodus
-     *           von einem beliebigen Spieler erstellter Spielmodus
-     */
-    onSpielmodus(spielmodus: ISpielmodus): void;
-
     /*
      * Sendet die IAktion an den darin genannten Spieler und zusätzlich an den Fernseher. Blockiert bis davon ausgegangen
      * werden kann, das die IAktion den Fernseher erreicht hat.
