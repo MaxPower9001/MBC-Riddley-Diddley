@@ -22,8 +22,8 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private websocketServer : Server;
     private httpServer: any;
     private fernseherSocket: Socket;
-    // Map für Spielername <=> Socket in Vor- und Rückrichtung
-    // { SpielerName1 => Socket1, SpielerName2 => Socket2, Socket1 => SpielerName1, Socket2 => SpielerName2 }
+    // Map für Spieler <=> Socket in Vor- und Rückrichtung
+    // { Spieler1.name => Socket1, Spieler2.name => Socket2, Socket1 => Spieler1, Socket2 => Spieler2 }
     private spielerSockets;
 
     constructor(expressApp, config, gameserver) {
@@ -53,19 +53,31 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private addSpieler(socket : Socket) : ISpielerInfo {
         let neuerSpieler : Spieler = this.gameserver.spiel.addSpieler();
         this.spielerSockets[neuerSpieler.name] = socket;
-        this.spielerSockets[socket.conn.id] = neuerSpieler.name;
+        this.spielerSockets[socket.conn.id] = neuerSpieler;
         return new SpielerInfo(neuerSpieler.name);
+    }
+
+    private removeSpieler( socket : Socket ) {
+        console.log("Player disconnected in removeSpieler");
+        let player = this.spielerSockets[socket.conn.id];
+        this.gameserver.spiel.removeSpieler(player);
+        this.spielerSockets[socket.conn.id] = null;
+        this.spielerSockets[player.name] = null;
     }
 
     private setFernseher(socket : Socket) : void {
         this.fernseherSocket = socket;
+        socket.on('disconnect', () => {
+            console.log("TV disconnected");
+            this.fernseherSocket = null;
+        });
     }
 
     private setupSpielerSocket(socket : Socket) {
         socket.on('spielmodus', (spielmodus : Spielmodus) => this.gameserver.onSpielmodus(spielmodus));
         socket.on('spiel_beendet', (spielBeendet : SpielBeendet) => this.gameserver.onSpielBeendet(spielBeendet));
         socket.on('aktion', (aktion : Aktion) => this.gameserver.onAktion(new Aktion(this.getSpielername(socket),aktion.typ)));
-        socket.on('disconnect',() => console.log("Player disconnected"));
+        socket.on('disconnect',() => this.removeSpieler(socket));
         socket.on('reconnect', () => console.log("Player reconnected"));
     }
 

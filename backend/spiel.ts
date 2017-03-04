@@ -123,7 +123,7 @@ export class Spiel {
         let spieler : Spieler = new Spieler();
         spieler.name = Spiel.spielername_prefix + (this.spieleranzahl() + 1);
         this.spieler.push(spieler);
-        console.log("aktuelle spieeler: " + this.spieler + " spieleranzahl:" + this.spieler.length);
+        console.log("aktuelle spieler: " + this.spieler + " spieleranzahl:" + this.spieler.length);
         return spieler;
     }
 
@@ -132,6 +132,7 @@ export class Spiel {
         if (idx > -1) {
             this.spieler.splice(idx, 1);
         }
+        console.log("aktuelle spieler: " + this.spieler + " spieleranzahl:" + this.spieler.length);
     }
 
     spieleranzahl() : number {

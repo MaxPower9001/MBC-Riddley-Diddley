@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
-import { ReplaySubject }    from 'rxjs/ReplaySubject';
 import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo, SpielVerloren} from './nachrichtentypen';
 import {Observable} from "rxjs";
 import {BackendConnectionWebsocketService} from "./backend-connection.websocket.service";
-import {AktionsTyp} from "../api/nachrichtentypen.interface";
+import {AktionsTyp, ISpielmodus} from "../api/nachrichtentypen.interface";
 import {UngueltigeAktionOderTimeout} from "../frontend/nachrichtentypen";
 
 @Injectable()
 export class MissionControlService {
 
     private spielerInfoFromGameserver = new Subject<SpielerInfo>();
-    private spielmodusToGameserver = new ReplaySubject<Spielmodus>();
-    private spielGestartet = new ReplaySubject<SpielGestartet>();
+    private spielmodusToGameserver = new Subject<Spielmodus>();
+    private spielGestartet = new Subject<SpielGestartet>();
     private spielBeendet = new Subject<SpielBeendet>();
     private aktionFromGameserver = new Subject<Aktion>();
     private ungueltigeAktionOderTimeout = new Subject<UngueltigeAktionOderTimeout>();
     private spielVerloren = new Subject<SpielVerloren>();
 
     username: string = '';
+    spielmodus: ISpielmodus;
 
     spielerInfoFromGameserver$ : Observable<SpielerInfo>;
     spielmodustoGameserver$ : Observable<Spielmodus>;
@@ -43,6 +43,10 @@ export class MissionControlService {
 
         this.spielerInfoFromGameserver.subscribe(function ( spielerInfo : SpielerInfo ) {
            that.username = spielerInfo.username;
+        });
+
+        this.spielGestartet.subscribe( function( spielGestartet : SpielGestartet ) {
+            that.spielmodus = spielGestartet.spielmodus;
         });
     }
 

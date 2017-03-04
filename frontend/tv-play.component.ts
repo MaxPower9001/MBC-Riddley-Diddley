@@ -30,7 +30,7 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 		<tv-header></tv-header>	
         <!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
         <h1 id="infoSection">Das Spiel geht los!</h1>
-        <h1>Schnell {{username}}, {{aktion}}!</h1>
+        <h1>Schnell {{username}}, <span id="aktion"></span>!</h1>
         
         <div id="myProgress">
          <div id="myBar">{{timerMax}}</div>
@@ -47,6 +47,13 @@ export class TvPlayComponent implements OnInit {
   timerMax : number;
   username : string;
   aktion : AktionsTyp;
+
+  aktionen = {
+    1 : "linker Button",
+    2 : "rechter Button",
+    3 : "Schütteln",
+    4 : "unterer Button"
+  }
 
   move() {
   let timerMax = this.timerMax * 1000;
@@ -70,20 +77,16 @@ export class TvPlayComponent implements OnInit {
   ngOnInit() {
     let that = this;
     console.log("TvPlayComponent loaded...");
+
+    this.timerMax = this.missionControlService.spielmodus.zeitFuerAktion;
+
     this.missionControlService.aktionFromGameServer$.subscribe(function(aktion : Aktion){
       console.log("Aktion vom Server erhalten: " + aktion);
       that.username = aktion.spieler;
-      that.aktion = aktion.typ;
+      document.getElementById("aktion").innerHTML = that.aktionen[aktion.typ];
       that.move();
     });
     console.log("Subscribed to Action Queue");
-
-
-    this.missionControlService.spielGestartet$.subscribe(function(spielGestartet : SpielGestartet) {
-      that.timerMax = spielGestartet.spielmodus.zeitFuerAktion;
-      console.log("Spielmodus vom Server erhalten: " + spielGestartet);
-    });
-    console.log("Subscribed to Game started Queue");
 
     this.missionControlService.ungueltigeAktionOderTimeout$.subscribe(function (ungueltigeAktionOderTimeout : UngueltigeAktionOderTimeout) {
       console.log("Ungueltige Aktion oder Timeout durch Spieler: " + ungueltigeAktionOderTimeout);
