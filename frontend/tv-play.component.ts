@@ -42,10 +42,11 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
   `
 })
 
-export class TvPlayComponent implements OnInit, DoCheck {
-	timerMax: number;
-	username: string;
-	aktion: AktionsTyp;
+export class TvPlayComponent implements OnInit {
+  timerMax : number;
+  username : string;
+  aktion : AktionsTyp;
+  id : any;
 
   aktionen = {
     1 : "linker Button",
@@ -56,13 +57,14 @@ export class TvPlayComponent implements OnInit, DoCheck {
 
   move() {
   let timerMax = this.timerMax * 1000;
+  let that = this;
 
 		var elem = document.getElementById("myBar");
 		var width = timerMax;
 		var id = setInterval(frame, 10);
 		function frame() {
 			if (timerMax == 0) {
-				clearInterval(id);
+				clearInterval(that.id);
 			} else {
 				timerMax = timerMax - 10;
 				elem.style.width = (timerMax / width) * 100 + '%';
@@ -88,6 +90,8 @@ export class TvPlayComponent implements OnInit, DoCheck {
     console.log("Subscribed to Action Queue");
 
     this.missionControlService.ungueltigeAktionOderTimeout$.subscribe(function (ungueltigeAktionOderTimeout : UngueltigeAktionOderTimeout) {
+      clearInterval(that.id);
+      document.getElementById("myBar").style.width = 100 + "%";
       console.log("Ungueltige Aktion oder Timeout durch Spieler: " + ungueltigeAktionOderTimeout);
       document.getElementById("infoSection").innerHTML = ungueltigeAktionOderTimeout.spieler + "hat Mist gebaut und ein Leben verloren!";
     });
@@ -112,6 +116,6 @@ export class TvPlayComponent implements OnInit, DoCheck {
 			console.log("hier");
 		})
 		console.log(this.username);
-		
+
 	}
 }

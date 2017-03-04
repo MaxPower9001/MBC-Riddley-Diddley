@@ -69,6 +69,7 @@ export class Gameserver {
      *           von einem Spieler ausgeführte Aktion
      */
     onAktion(aktion: IAktion): void {
+        this.spiel.stoppeSpielrunde();
         console.log("Aktion erhalten: " + aktion);
         if(!this.spiel.istAktionImAktuellenSpielstatusVerwertbar(aktion)) {
             console.log("Aktion wird verworfen");

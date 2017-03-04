@@ -68,7 +68,7 @@ export class PhonePlayComponent implements OnInit {
     }
 
     bottomButton() {
-        this.missionControlService.aktionDone(AktionsTyp.RECHTSKNOPF);
+        this.missionControlService.aktionDone(AktionsTyp.KNOPFUNTEN);
     }
 
 }
