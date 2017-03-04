@@ -7,7 +7,7 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
   selector: 'phone-header',
   template: `
   <div class="col-md-12 col-sm-12 col-xs-12 well">
-			<h1>Hi, {{username}}</h1> 
+			<h1>Hi, <span id="username">{{username}}</span></h1> 
 		</div>
   `
 })
@@ -21,5 +21,6 @@ export class PhoneHeaderComponent implements OnInit {
 
   ngOnInit() {
     this.username = this.missionControlService.username;
+    document.getElementById("username").innerHTML = this.missionControlService.username;
   }
 }

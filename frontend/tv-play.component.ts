@@ -30,7 +30,7 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 		<tv-header></tv-header>	
         <!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
         <h1 id="infoSection">Das Spiel geht los!</h1>
-        <h1>Schnell {{username}}, {{aktion}}!</h1>
+        <h1>Schnell {{username}}, <span id="aktion"></span>!</h1>
         
         <div id="myProgress">
          <div id="myBar">{{timerMax}}</div>
@@ -47,6 +47,13 @@ export class TvPlayComponent implements OnInit {
   timerMax : number;
   username : string;
   aktion : AktionsTyp;
+
+  aktionen = {
+    1 : "linker Button",
+    2 : "rechter Button",
+    3 : "Schütteln",
+    4 : "unterer Button"
+  }
 
   move() {
   let timerMax = this.timerMax * 1000;
@@ -76,7 +83,7 @@ export class TvPlayComponent implements OnInit {
     this.missionControlService.aktionFromGameServer$.subscribe(function(aktion : Aktion){
       console.log("Aktion vom Server erhalten: " + aktion);
       that.username = aktion.spieler;
-      that.aktion = aktion.typ;
+      document.getElementById("aktion").innerHTML = that.aktionen[aktion.typ];
       that.move();
     });
     console.log("Subscribed to Action Queue");

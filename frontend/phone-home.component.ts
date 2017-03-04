@@ -21,8 +21,8 @@ import {SpielerAuswahlVerfahren} from '../api/nachrichtentypen.interface.js';
 		<phone-header></phone-header>
 		&nbsp;
 		<div class="viewport">
-			<!-- Beschreibung des Auswählmodus -->
-			<h4>Auswählmodus</h4>
+			<!-- Beschreibung des Auswahlmodus -->
+			<h4>Auswahlmodus</h4>
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-primary" *ngFor="let keyval of auswahlVerfahrenSpielerMoeglichkeiten | keys"
 				(click)="setAuswahlVerfahrenSpieler(keyval.value)">
