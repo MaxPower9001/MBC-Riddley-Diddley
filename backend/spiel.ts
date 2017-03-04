@@ -132,6 +132,7 @@ export class Spiel {
         if (idx > -1) {
             this.spieler.splice(idx, 1);
         }
+        this.spieleranzahl() - 1;
         console.log("aktuelle spieler: " + this.spieler + " spieleranzahl:" + this.spieler.length);
     }
 
