@@ -7,7 +7,7 @@ import setInterval = core.setInterval;
   selector: 'tv-end',
   template: `
     <h1>Spiel zuende</h1>
-    <h3>Ein neues Spiel startet in <span id="countdown">5</span></h3>
+    <h3>Ein neues Spiel startet in <span id="countdown">5</span> Sekunden</h3>
 `
 })
 

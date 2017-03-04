@@ -70,6 +70,9 @@ export class TvPlayComponent implements OnInit {
   ngOnInit() {
     let that = this;
     console.log("TvPlayComponent loaded...");
+
+    this.timerMax = this.missionControlService.spielmodus.zeitFuerAktion;
+
     this.missionControlService.aktionFromGameServer$.subscribe(function(aktion : Aktion){
       console.log("Aktion vom Server erhalten: " + aktion);
       that.username = aktion.spieler;
@@ -77,13 +80,6 @@ export class TvPlayComponent implements OnInit {
       that.move();
     });
     console.log("Subscribed to Action Queue");
-
-
-    this.missionControlService.spielGestartet$.subscribe(function(spielGestartet : SpielGestartet) {
-      that.timerMax = spielGestartet.spielmodus.zeitFuerAktion;
-      console.log("Spielmodus vom Server erhalten: " + spielGestartet);
-    });
-    console.log("Subscribed to Game started Queue");
 
     this.missionControlService.ungueltigeAktionOderTimeout$.subscribe(function (ungueltigeAktionOderTimeout : UngueltigeAktionOderTimeout) {
       console.log("Ungueltige Aktion oder Timeout durch Spieler: " + ungueltigeAktionOderTimeout);
