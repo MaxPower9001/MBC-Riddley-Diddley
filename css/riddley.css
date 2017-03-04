@@ -42,12 +42,32 @@ phone-play .btn {
     height: 100%;
 }
 
-phone-play > .row {
+phone-play .viewport {
     height: 80%;
+}
+
+phone-play .row.thin {
+    height:40%;
+}
+
+phone-play .row.thick {
+    height:60%;
+    color: red;
 }
 
 phone-play .row > div {
     padding-left: 0;
     padding-right: 0;
     height: 100%;
+}
+phone-play .well {
+    margin-bottom: 0;
+}
+
+.well h1 {
+    margin: 0;
+}
+
+.viewport {
+    margin: 0 20px;
 }
