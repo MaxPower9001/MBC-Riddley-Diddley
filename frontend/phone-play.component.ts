@@ -1,6 +1,7 @@
 import {Component, OnInit, HostListener} from '@angular/core';
+import { Router } from '@angular/router';
 import {MissionControlService} from './mission-control.service';
-import {Aktion} from "./nachrichtentypen";
+import {Aktion, SpielVerloren} from "./nachrichtentypen";
 import {AktionsTyp} from '../api/nachrichtentypen.interface.js';
 var Shake = require('./lib/shake.js');
 
@@ -44,10 +45,13 @@ var Shake = require('./lib/shake.js');
 
 export class PhonePlayComponent implements OnInit {
 
-    constructor(private missionControlService: MissionControlService) {
+    spieler : string;
+
+    constructor(private missionControlService: MissionControlService, private router: Router) {
     }
 
     ngOnInit() {
+        let that = this;
         var myShakeEvent = new Shake({
             threshold: 1, // optional shake strength threshold
             timeout: 1000 // optional, determines the frequency of event generation
@@ -56,6 +60,12 @@ export class PhonePlayComponent implements OnInit {
 
         this.missionControlService.aktionFromGameServer$.subscribe(function (aktion: Aktion) {
             console.log("Aktion vom Server erhalten: " + aktion + " Jetzt aber schnell!");
+        });
+
+        this.missionControlService.spielVerloren$.subscribe(function ( spielVerloren : SpielVerloren ) {
+            if(spielVerloren.spieler == that.missionControlService.username){
+                that.router.navigateByUrl("phone-end");
+            }
         });
     }
 

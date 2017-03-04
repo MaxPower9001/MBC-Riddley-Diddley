@@ -29,6 +29,8 @@ export class MissionControlService {
     spielVerloren$ : Observable<SpielVerloren>;
 
     constructor(private websocketService : BackendConnectionWebsocketService ) {
+        let that = this;
+
         this.spielerInfoFromGameserver$ = this.spielerInfoFromGameserver.asObservable();
         this.spielmodustoGameserver$ = this.spielmodusToGameserver.asObservable();
         this.spielGestartet$ = this.spielGestartet.asObservable();
@@ -38,6 +40,10 @@ export class MissionControlService {
         this.spielerInfoFromGameserver$.subscribe((spielerInfo : SpielerInfo) => this.username = spielerInfo.username);
         this.ungueltigeAktionOderTimeout$ = this.ungueltigeAktionOderTimeout.asObservable();
         this.spielVerloren$ = this.spielVerloren.asObservable();
+
+        this.spielerInfoFromGameserver.subscribe(function ( spielerInfo : SpielerInfo ) {
+           that.username = spielerInfo.username;
+        });
     }
 
     announceSpielVerloren(spielVerloren : SpielVerloren) {
