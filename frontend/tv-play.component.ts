@@ -1,52 +1,47 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, DoCheck, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MissionControlService }     from './mission-control.service';
 import {SpielGestartet, Spielmodus, Aktion, UngueltigeAktionOderTimeout, SpielVerloren} from "./nachrichtentypen";
 import {AktionsTyp} from "../api/nachrichtentypen.interface";
 
 @Component({
-  selector: 'tv-play',
-  styles: [`
-.viewport{
-    height:80%;
-    width:100%;
-}
+	selector: 'tv-play',
+	styles: [`
 #myProgress {
-    width: 100%;
-    background-color: grey;
+	width: 100%;
+	background-color: grey;
 }
 #myBar {
-    width: 100%;
-    height: 30px;
-    background-color: #4CAF50;
-    text-align: center; /* To center it horizontally (if you want) */
-    line-height: 30px; /* To center it vertically */
-    color: white; 
+	width: 100%;
+	height: 30px;
+	background-color: #4CAF50;
+	text-align: center; /* To center it horizontally (if you want) */
+	line-height: 30px; /* To center it vertically */
+	color: white; 
 }
 		
 	`],
-  template: `
-		<div class="viewport">
+	template: `
 		<tv-header></tv-header>	
         <!--Dont know why but we need text here or otherwise all elements are behind the tv-header, yay bootstrap-->
         <h1 id="infoSection">Das Spiel geht los!</h1>
         <h1>Schnell {{username}}, <span id="aktion"></span>!</h1>
-        
-        <div id="myProgress">
-         <div id="myBar">{{timerMax}}</div>
-        </div>
-        
-        <!--TODO: This button is just there to trigger the Loading bar, just remove it after the bar is triggered by the proper event-->
-        <button (click)="move()">Click Me</button>
-         
+		
+		<div id="myProgress">
+		 <div id="myBar">{{timerMax}}</div>
+		</div>
+		
+		<!--TODO: This button is just there to trigger the Loading bar, just remove it after the bar is triggered by the proper event-->
+		<button (click)="move()">Click Me</button>
+		 
 		</div>
   `
 })
 
-export class TvPlayComponent implements OnInit {
-  timerMax : number;
-  username : string;
-  aktion : AktionsTyp;
+export class TvPlayComponent implements OnInit, DoCheck {
+	timerMax: number;
+	username: string;
+	aktion: AktionsTyp;
 
   aktionen = {
     1 : "linker Button",
@@ -58,21 +53,21 @@ export class TvPlayComponent implements OnInit {
   move() {
   let timerMax = this.timerMax * 1000;
 
-  var elem = document.getElementById("myBar");
-  var width = timerMax;
-  var id = setInterval(frame, 10);
-  function frame() {
-    if (timerMax == 0) {
-      clearInterval(id);
-    } else {
-      timerMax = timerMax - 10;
-      elem.style.width = ( timerMax / width ) * 100 + '%';
-      elem.innerHTML = ( timerMax / 1000 ) + 's';
-    }
-  }
-}
+		var elem = document.getElementById("myBar");
+		var width = timerMax;
+		var id = setInterval(frame, 10);
+		function frame() {
+			if (timerMax == 0) {
+				clearInterval(id);
+			} else {
+				timerMax = timerMax - 10;
+				elem.style.width = (timerMax / width) * 100 + '%';
+				elem.innerHTML = (timerMax / 1000) + 's';
+			}
+		}
+	}
 
-  constructor(private missionControlService: MissionControlService, private router: Router) {}
+	constructor(private missionControlService: MissionControlService, private router: Router) { }
 
   ngOnInit() {
     let that = this;
