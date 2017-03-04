@@ -3,6 +3,16 @@ import {Spieler} from "./spieler";
 
 export class AktuelleSpielrunde {
 
+    //------------------JUST FOR DEBUGGING-----------------------
+    private aktionen = {
+        1 : "LINKSKNOPF",
+        2 : "RECHTSKNOPF",
+        3 : "SCHÜTTELN",
+        4 : "KNOPFUNTEN"
+    }
+    //-----------------------------------------------------------
+
+
     private _beginnInMilliSekunden : number;
     private _endeInMillisekunden : number;
     private gewuenschterAktionsTyp : AktionsTyp;
@@ -36,8 +46,8 @@ export class AktuelleSpielrunde {
     istAktionsTypGueltig(aktionsTyp : AktionsTyp, spieler : Spieler ) : boolean {
         // doppelte korrekte Aktionen sind gültig
         console.log("---------------------Gültigkeitsprüfung---------------------");
-        console.log("Gesendete Aktion: " + aktionsTyp);
-        console.log("Gewünschte Aktion: " + this.gewuenschterAktionsTyp);
+        console.log("Gesendete Aktion: " + this.aktionen[aktionsTyp]);
+        console.log("Gewünschte Aktion: " + this.aktionen[this.gewuenschterAktionsTyp]);
         console.log("");
         console.log("Spieler: " + spieler.name);
         console.log("Gewünschter Spieler: " + this.getGewuenschterSpieler().name);

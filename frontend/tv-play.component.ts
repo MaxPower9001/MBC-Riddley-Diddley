@@ -34,11 +34,7 @@ import {AktionsTyp} from "../api/nachrichtentypen.interface";
 		<div id="myProgress">
 		 <div id="myBar">{{timerMax}}</div>
 		</div>
-		
-		<!--TODO: This button is just there to trigger the Loading bar, just remove it after the bar is triggered by the proper event-->
-		<button (click)="move()">Click Me</button>
-		 
-		</div>
+	</div>
   `
 })
 
@@ -61,7 +57,7 @@ export class TvPlayComponent implements OnInit {
 
 		var elem = document.getElementById("myBar");
 		var width = timerMax;
-		var id = setInterval(frame, 10);
+		this.id = setInterval(frame, 10);
 		function frame() {
 			if (timerMax == 0) {
 				clearInterval(that.id);
@@ -82,6 +78,8 @@ export class TvPlayComponent implements OnInit {
     this.timerMax = this.missionControlService.spielmodus.zeitFuerAktion;
 
     this.missionControlService.aktionFromGameServer$.subscribe(function(aktion : Aktion){
+        clearInterval(that.id);
+        document.getElementById("myBar").style.width = 100 + "%";
       console.log("Aktion vom Server erhalten: " + aktion);
       that.username = aktion.spieler;
       document.getElementById("aktion").innerHTML = that.aktionen[aktion.typ];
@@ -93,12 +91,12 @@ export class TvPlayComponent implements OnInit {
       clearInterval(that.id);
       document.getElementById("myBar").style.width = 100 + "%";
       console.log("Ungueltige Aktion oder Timeout durch Spieler: " + ungueltigeAktionOderTimeout);
-      document.getElementById("infoSection").innerHTML = ungueltigeAktionOderTimeout.spieler + "hat Mist gebaut und ein Leben verloren!";
+      document.getElementById("infoSection").innerHTML = ungueltigeAktionOderTimeout.spieler + " hat Mist gebaut und ein Leben verloren!";
     });
     console.log("Subscribed to Wrong Action or Timeout Queue");
 
     this.missionControlService.spielVerloren$.subscribe(function (spielVerloren : SpielVerloren) {
-      console.log( spielVerloren.spieler + "hat leider verloren" );
+      console.log( spielVerloren.spieler + " hat leider verloren" );
       document.getElementById("infoSection").innerHTML = spielVerloren.spieler + "ist sowas von raus!";
     });
     console.log("Subscribed to Player lost the game Queue");
@@ -111,11 +109,11 @@ export class TvPlayComponent implements OnInit {
 
 	}
 
-	ngDoCheck() {
-		this.missionControlService.aktionFromGameServer$.subscribe(function (aktion: Aktion) {
-			console.log("hier");
-		})
-		console.log(this.username);
-
-	}
+	// ngDoCheck() {
+	// 	this.missionControlService.aktionFromGameServer$.subscribe(function (aktion: Aktion) {
+	// 		console.log("hier");
+	// 	})
+	// 	console.log(this.username);
+    //
+	// }
 }
