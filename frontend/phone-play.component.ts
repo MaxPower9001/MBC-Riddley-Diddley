@@ -7,22 +7,6 @@ var Shake = require('./lib/shake.js');
 
 @Component({
     selector: 'phone-play',
-    styles: [`
-		
-        .thin {
-            height:40%;
-        }
-
-        .thick {
-            height:60%;
-            color: red;
-        }
-        .viewport{
-            height:60%;
-            width:100%;
-        }
-		
-	`],
     template: `
 		<phone-header></phone-header>
 		<div class="viewport">
