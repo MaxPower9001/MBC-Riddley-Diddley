@@ -20,7 +20,11 @@ export class PhoneHeaderComponent implements OnInit {
   constructor(private missionControlService: MissionControlService) {	}
 
   ngOnInit() {
-    this.username = this.missionControlService.username;
-    document.getElementById("username").innerHTML = this.missionControlService.username;
+    let that = this;
+    this.missionControlService.spielerInfoFromGameserver$.subscribe( function( spielerInfo : SpielerInfo ) {
+      if(spielerInfo){
+        that.username = spielerInfo.username;
+      }
+    });
   }
 }

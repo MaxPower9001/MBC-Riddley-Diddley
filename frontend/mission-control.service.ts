@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo, SpielVerloren} from './nachrichtentypen';
 import {Observable} from "rxjs";
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import {BackendConnectionWebsocketService} from "./backend-connection.websocket.service";
 import {AktionsTyp, ISpielmodus} from "../api/nachrichtentypen.interface";
 import {UngueltigeAktionOderTimeout} from "../frontend/nachrichtentypen";
@@ -9,7 +10,7 @@ import {UngueltigeAktionOderTimeout} from "../frontend/nachrichtentypen";
 @Injectable()
 export class MissionControlService {
 
-    private spielerInfoFromGameserver = new Subject<SpielerInfo>();
+    private spielerInfoFromGameserver = new ReplaySubject<SpielerInfo>();
     private spielmodusToGameserver = new Subject<Spielmodus>();
     private spielGestartet = new Subject<SpielGestartet>();
     private spielBeendet = new Subject<SpielBeendet>();
