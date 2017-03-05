@@ -21,6 +21,10 @@ import {Spielmodus, SpielGestartet, Aktion} from "./nachrichtentypen";
           <p>{{ getUrl() }}</p>
       <h1>Oder öffne folgenden QRCode um am Spiel teilzunehmen</h1>
           <qr-code [data]="getUrl()" [size]="300"></qr-code>
+          <br />
+          <br />
+          <br />
+      <h1><span id="adText"></span></h1>
     </div>
   `,
 })
@@ -29,6 +33,15 @@ export class TvHomeComponent implements OnInit{
   port : number;
   hostname : string;
   spielmodus : Spielmodus;
+  items = [
+      "Zeig's deinen Freunden",
+      "Probiert es doch mal mit nur einem Leben",
+      "Du willst der Allerbeste sein",
+      "Riddley-Diddley ist heißer Scheiß",
+      "Chuck Norris approves",
+      "Darth Vader ist Lukes Vater",
+      "Go Team"
+  ];
 
   constructor(private missionControlService: MissionControlService, private router: Router) {
     this.hostname = window.location.hostname;
@@ -37,14 +50,20 @@ export class TvHomeComponent implements OnInit{
 
   ngOnInit() {
     let that = this;
+    let randomizer;
     this.missionControlService.spielGestartet$.subscribe(function(spielGestartet: SpielGestartet) {
       console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
       that.router.navigateByUrl("/tv-play");
     });
+    document.getElementById("adText").innerHTML = this.items[Math.floor(Math.random()*this.items.length)];
+
+    setInterval(() => {
+      document.getElementById("adText").innerHTML = this.items[Math.floor(Math.random()*this.items.length)];
+    },10000);
   }
 
   getUrl(): string {
     return "http://" + this.hostname + ":" + this.port + "/#/smartphone";
-  }
+}
 
 }
