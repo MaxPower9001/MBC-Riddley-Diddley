@@ -74,7 +74,7 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
 
 
     // remember to Set Content-Type: application/json
-    setupRoutes(expressApp) {
+    private setupRoutes(expressApp) {
         expressApp.get('/rest/fernseher/connection', (req : express.Request, res : express.Response) => {
             console.log("Hallo Fernseher! ip: " + req.ip);
             res.send("Willkommen anboard");
@@ -82,7 +82,7 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         expressApp.get('/rest/spieler/connection', (req : express.Request, res : express.Response) => {
             console.log("Hallo Spieler! ip: " + req.ip);
             this.onConnection();
-            res.send("Willkommen anboard");
+            res.send("Willkommen anoard");
         });
         expressApp.get('/rest/spieler/:spielername/updates', (req : express.Request, res : express.Response) => {
             console.log("sende Updates für Spieler " + req.params["spielername"]);
@@ -104,7 +104,7 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         });
     }
 
-    onConnection() {
+    private onConnection() {
         // Ein neuer Spieler möchte dem Spiel beitreten
         let spielerInfo : ISpielerInfo = this.addSpieler();
         console.log("Hallo Spieler! von nun an bist du bekannt unter dem Namen " + spielerInfo.username);
@@ -112,13 +112,16 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         this.sendSpielerInfo(spielerInfo);
     }
 
-    onAktion(aktion: IAktion): void {
+    private onAktion(aktion: IAktion): void {
+        //TODO
     }
 
-    onSpielmodus(spielmodus: ISpielmodus): void {
+    private onSpielmodus(spielmodus: ISpielmodus): void {
+        //TODO
     }
 
-    onSpielBeendet(spielBeendet : ISpielBeendet) : void {
+    private onSpielBeendet(spielBeendet : ISpielBeendet) : void {
+        //TODO
     }
 
     sendAktion(aktion: IAktion): void {

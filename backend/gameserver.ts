@@ -43,7 +43,7 @@ export class Gameserver {
      * @property {Spieler} spieler
      *           Spieler der in der vergangenen Spielrunde eine Aktion hätte durchführen sollen
      */
-    onSpielrundeAusgelaufen(spieler : Spieler ) {
+    onSpielrundeAusgelaufen(spieler : Spieler ) : void {
         console.log("Die aktuelle Spielrunde ist ausgelaufen, keine gültige Aktion erhalten, Spieler " + spieler.name + "hat es verbockt");
         this.facade.sendUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(spieler.name));
         let darfWeiterspielen : boolean = this.spiel.verringereLeben(spieler.name);

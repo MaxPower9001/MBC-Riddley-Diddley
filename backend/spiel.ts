@@ -19,8 +19,8 @@ export class Spiel {
 
     spielrundeAusgelaufen$ : Observable<Spieler>;
 
-    spieler : Spieler[];
-    spielmodus : Spielmodus;
+    private spieler : Spieler[];
+    private spielmodus : Spielmodus;
 
     constructor() {
         this.spieler = [];
@@ -69,7 +69,7 @@ export class Spiel {
     }
 
     starteSpielrunde() : void {
-        let spielerAnDerReihe : Spieler = this.aktuelleSpielrunde.getGewuenschterSpieler();
+        let spielerAnDerReihe : Spieler = this.aktuelleSpielrunde.gewuenschterSpieler;
         // folgendes wird ausgeführt, falls innerhalb der aktuellen Spielrunde keine korrekte Aktion eingetroffen ist
         let zeitInMillis : number = new Date().valueOf();
         console.log("Neue Spielrunde, Spieluhr gestartet, Zeit: " + zeitInMillis);
@@ -86,7 +86,7 @@ export class Spiel {
             " Dauer in ms: " + (this.aktuelleSpielrunde.endeInMillisekunden-this.aktuelleSpielrunde.beginnInMilliSekunden));
     }
 
-    handleSpielrundeAusgelaufen(spieler : Spieler) : void{
+    private handleSpielrundeAusgelaufen(spieler : Spieler) : void{
         this.stoppeSpielrunde();
         this.spielrundeAusgelaufen.next(spieler);
     }
@@ -152,7 +152,7 @@ export class Spiel {
         if(!this.aktuelleSpielrunde) return this.spieler[0]; // Fuer denn Fall: erste Spielrunde im Spiel
         let lastSpielerIndex : number;
         let nextSpielerIndex : number;
-        lastSpielerIndex = this.spieler.findIndex((elem : Spieler) => this.aktuelleSpielrunde.getGewuenschterSpieler().name === elem.name);
+        lastSpielerIndex = this.spieler.findIndex((elem : Spieler) => this.aktuelleSpielrunde.gewuenschterSpieler.name === elem.name);
         if(this.spielmodus.auswahlverfahrenSpieler == SpielerAuswahlVerfahren.ZUFALL) {
             nextSpielerIndex = Math.floor(Math.random() * this.spieler.length);
             lastSpielerIndex = nextSpielerIndex;
@@ -178,8 +178,8 @@ export class Spiel {
      * @return {boolean}
      *         False, wenn Spielrunde nicht gestartet oder wenn der in der Aktion genannte Spieler nicht (mehr) im Spiel ist
      */
-    istAktionImAktuellenSpielstatusVerwertbar(aktion : IAktion) {
-        let spielerIdx : number = this.spieler.findIndex((elem : Spieler) => this.aktuelleSpielrunde.getGewuenschterSpieler().name === elem.name);
+    istAktionImAktuellenSpielstatusVerwertbar(aktion : IAktion) : boolean {
+        let spielerIdx : number = this.spieler.findIndex((elem : Spieler) => this.aktuelleSpielrunde.gewuenschterSpieler.name === elem.name);
         return spielerIdx >= 0;
     }
 
