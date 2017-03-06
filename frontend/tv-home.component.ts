@@ -40,7 +40,8 @@ export class TvHomeComponent implements OnInit{
       "Riddley-Diddley ist heißer Scheiß",
       "Chuck Norris approves",
       "Darth Vader ist Lukes Vater",
-      "Go Team"
+      "Go Team",
+      "Uuuuund die näääächste Runde geht rückwärts"
   ];
 
   constructor(private missionControlService: MissionControlService, private router: Router) {
@@ -50,7 +51,6 @@ export class TvHomeComponent implements OnInit{
 
   ngOnInit() {
     let that = this;
-    let randomizer;
     this.missionControlService.spielGestartet$.subscribe(function(spielGestartet: SpielGestartet) {
       console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
       that.router.navigateByUrl("/tv-play");

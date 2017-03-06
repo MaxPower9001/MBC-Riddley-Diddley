@@ -84,6 +84,7 @@ export class Gameserver {
             if(!darfWeiterspielen) {
                 this.facade.sendSpielVerloren(new SpielVerloren(aktion.spieler));
             }
+            this.starteNeueSpielrunde();
         }
     }
 
