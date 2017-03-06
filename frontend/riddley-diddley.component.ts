@@ -9,5 +9,5 @@ import { Component } from '@angular/core';
     </div>
     `
 })
-export class AppComponent  {
+export class RiddleyDiddleyComponent  {
 }

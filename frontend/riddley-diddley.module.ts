@@ -3,7 +3,7 @@ import { NgModule }                       from '@angular/core';
 import { FormsModule }                    from '@angular/forms';
 import { RouterModule }                   from '@angular/router';
 
-import { AppComponent }  from './app.component';
+import { RiddleyDiddleyComponent }  from './riddley-diddley.component';
 import { QRCodeModule } from 'angular2-qrcode';
 
 import { TvHeaderComponent } from './tv-header.component';
@@ -37,12 +37,12 @@ import {KeysPipe} from "./keys.pipe";
       { path: 'phone-end',             component: PhoneEndComponent }
     ],{ useHash: true })
     ],
-  declarations: [ AppComponent, PhoneHeaderComponent, TvHeaderComponent, TvHomeComponent, TvPlayComponent, TvEndComponent, PhoneHomeComponent, PhonePlayComponent, PhoneEndComponent, KeysPipe],
+  declarations: [ RiddleyDiddleyComponent, PhoneHeaderComponent, TvHeaderComponent, TvHomeComponent, TvPlayComponent, TvEndComponent, PhoneHomeComponent, PhonePlayComponent, PhoneEndComponent, KeysPipe],
   providers:   [MissionControlService, BackendConnectionWebsocketService],
-  bootstrap:    [ AppComponent ]
+  bootstrap:    [ RiddleyDiddleyComponent ]
 })
 
-export class AppModule {
+export class RiddleyDiddleyModule {
   constructor() {
     console.log("Angular starting...");
   };
