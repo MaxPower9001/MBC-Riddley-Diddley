@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>14</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>182</x>
+      <y>196</y>
+      <w>1624</w>
+      <h>798</h>
+    </coordinates>
+    <panel_attributes>RiddleyDiddleyModule
+--
+layer=-2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1330</x>
+      <y>280</y>
+      <w>434</w>
+      <h>462</h>
+    </coordinates>
+    <panel_attributes>Phone
+--
+bg=light_gray
+layer=-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>224</x>
+      <y>280</y>
+      <w>434</w>
+      <h>448</h>
+    </coordinates>
+    <panel_attributes>TV
+--
+bg=light_gray
+layer=-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>294</x>
+      <y>448</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>TVHomeComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>294</x>
+      <y>532</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>TVPlayComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>294</x>
+      <y>616</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>TVEndComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>294</x>
+      <y>364</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>TVHeaderComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1414</x>
+      <y>364</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>PhoneHeaderComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1414</x>
+      <y>448</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>PhoneHomeComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1414</x>
+      <y>532</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>PhonePlayComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1414</x>
+      <y>616</y>
+      <w>280</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>PhoneEndComponent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>882</x>
+      <y>336</y>
+      <w>238</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>Mission-Control-Service</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1106</x>
+      <y>336</y>
+      <w>252</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>subscribe
+lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>644</x>
+      <y>336</y>
+      <w>266</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>subscribe
+lt=&lt;-</panel_attributes>
+    <additional_attributes>170.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>826</x>
+      <y>560</y>
+      <w>364</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>backend-connection-service</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>994</x>
+      <y>588</y>
+      <w>140</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>implements
+lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>994</x>
+      <y>378</y>
+      <w>168</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>message push
+lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>896</y>
+      <w>182</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>@angular/router</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1092</x>
+      <y>728</y>
+      <w>560</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>routes
+lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>340.0;10.0;340.0;130.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>406</x>
+      <y>714</y>
+      <w>546</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>routes
+lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0;370.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>560</x>
+      <y>1050</y>
+      <w>308</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>Backend Websocket-Connection</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>770</x>
+      <y>686</y>
+      <w>476</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+backend-connection-service-interface
+-
+setMissionControlService(MissionControlService)
+connectToGameserver()
+starteSpiel(Spielmodus)
+aktionDone(AktionsTyp)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>686</x>
+      <y>560</y>
+      <w>168</w>
+      <h>532</h>
+    </coordinates>
+    <panel_attributes>lt=)-
+m1=require
+</panel_attributes>
+    <additional_attributes>20.0;350.0;20.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+</diagram>
