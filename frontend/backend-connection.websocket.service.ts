@@ -1,10 +1,19 @@
-import {Injectable} from '@angular/core';
-var io = require('./lib/socket.io.js');
-import {Spielmodus, SpielGestartet, SpielBeendet, Aktion, SpielerInfo} from './nachrichtentypen';
+import {Injectable} from "@angular/core";
+import {SpielGestartet, SpielBeendet, Aktion, SpielerInfo} from "./nachrichtentypen";
 import {MissionControlService} from "./mission-control.service";
-import {BackendConnectionServiceInterface} from './backend-connection.service.interface';
-import {AktionsTyp} from "../api/nachrichtentypen.interface";
+import {BackendConnectionServiceInterface} from "./backend-connection.service.interface";
+import {
+    AktionsTyp,
+    ISpielBeendet,
+    ISpielVerloren,
+    IUngueltigeAktionOderTimeout,
+    ISpielGestartet,
+    IAktion,
+    ISpielmodus,
+    ISpielerInfo
+} from "../api/nachrichtentypen.interface";
 import {UngueltigeAktionOderTimeout, SpielVerloren} from "../frontend/nachrichtentypen";
+let io = require('./lib/socket.io.js');
 
 @Injectable()
 export class BackendConnectionWebsocketService implements BackendConnectionServiceInterface {
@@ -17,67 +26,63 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
     private username: string = '';
 
     constructor() {
-        this.connectToGameserver();
+        this.setupSocket();
     }
 
     setMissionControlService(missionControlService : MissionControlService) : void {
         this.missionControlService = missionControlService;
     }
 
-    connectToGameserver() : void {
-        var that = this;
-
+    private setupSocket() : void {
         this.socket = io(this.url);
-
-        this.socket.on('connect', function () {
-            console.log("Verbindung zum Backend hergestellt");
-        });
-
-        this.socket.on('disconnect', function () {
-            console.log("Verbindung unterbrochen")
-        });
-
-        this.socket.on('reconnect', function () {
-            console.log("Jemand versucht zu reconnecten");
-        });
-
-        this.socket.on('spiel_beendet', function (spielbeendet: SpielBeendet) {
-            console.log("Spiel Beendet");
-            that.missionControlService.announceSpielBeendet(new SpielBeendet());
-        });
-
-        this.socket.on('ungueltige_aktion_oder_timeout', function (ungueltigeAktionOderTimeout : UngueltigeAktionOderTimeout) {
-            console.log("Ungültige Aktion oder Timeout");
-            that.missionControlService.annouceUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout.spieler));
-        });
-
-        this.socket.on('spiel_verloren', function (spielVerloren : SpielVerloren) {
-            console.log("Spiel Verloren");
-            that.missionControlService.announceSpielVerloren(new SpielVerloren(spielVerloren.spieler));
-        });
-
-        this.socket.on('aktion', function (aktion : Aktion) {
-            console.log("Aktion");
-            that.missionControlService.announceAktion(new Aktion(aktion.spieler, aktion.typ));
-        });
-
-        this.socket.on('spiel_gestartet', function (spielGestartet : SpielGestartet) {
-            console.log("Spiel gestartet");
-            that.missionControlService.announceSpielGestarted(new SpielGestartet(spielGestartet.spielmodus, spielGestartet.beteiligteSpieler));
-        });
-
-        this.socket.on('spielerinfo', function (spielerinfo : SpielerInfo) {
-            console.log("Spieler Info");
-            that.missionControlService.announceSpielerinfo(new SpielerInfo(spielerinfo));
-        });
+        this.socket.on('spiel_gestartet', (spielGestartet : ISpielGestartet) => this.onSpielGestartet(spielGestartet));
+        this.socket.on('spiel_beendet', (spielBeendet : ISpielBeendet) => this.onSpielBeendet(spielBeendet));
+        this.socket.on('spielerinfo', (spielerinfo : ISpielerInfo) => this.onSpielerinfo(spielerinfo));
+        this.socket.on('aktion', (aktion : IAktion) => this.onAktion(aktion));
+        this.socket.on('ungueltige_aktion_oder_timeout', (ungueltigeAktionOderTimeout : IUngueltigeAktionOderTimeout) => this.onUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout));
+        this.socket.on('spiel_verloren', (spielVerloren : ISpielVerloren) => this.onSpielVerloren(spielVerloren));
+        this.socket.on('connect',() => console.log("Verbindung zum Backend hergestellt"));
+        this.socket.on('disconnect',() => console.log("Verbindung unterbrochen"));
+        this.socket.on('reconnect', () => console.log("Jemand versucht zu reconnecten"));
     }
 
-    starteSpiel(spielmodus : Spielmodus) : void {
+    onSpielBeendet(spielbeendet : ISpielBeendet) : void {
+        console.log("Spiel Beendet");
+        this.missionControlService.announceSpielBeendet(new SpielBeendet());
+    }
+
+    onAktion(aktion : IAktion) : void {
+        console.log("Aktion");
+        this.missionControlService.announceAktion(new Aktion(aktion.spieler, aktion.typ));
+    }
+
+    onSpielVerloren(spielVerloren : ISpielVerloren) : void {
+        console.log("Spiel Verloren");
+        this.missionControlService.announceSpielVerloren(new SpielVerloren(spielVerloren.spieler));
+    }
+
+    onSpielGestartet(spielGestartet : ISpielGestartet) : void {
+        console.log("Spiel gestartet");
+        this.missionControlService.announceSpielGestarted(new SpielGestartet(spielGestartet.spielmodus, spielGestartet.beteiligteSpieler));
+    }
+
+    onUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout : IUngueltigeAktionOderTimeout) : void {
+        console.log("Ungültige Aktion oder Timeout");
+        this.missionControlService.annouceUngueltigeAktionOderTimeout(new UngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout.spieler));
+    }
+
+    onSpielerinfo(spielerinfo : ISpielerInfo) : void {
+        console.log("Spieler Info");
+        this.username = spielerinfo.username;
+        this.missionControlService.announceSpielerinfo(new SpielerInfo(spielerinfo));
+    }
+
+    sendSpielmodus(spielmodus : ISpielmodus) : void {
         this.socket.emit('spielmodus', spielmodus);
     }
 
-    aktionDone(aktion: AktionsTyp) : void {
-        this.socket.emit('aktion', new Aktion(this.username, aktion)); //TODO AKtionszeit
+    sendAktion(aktion: AktionsTyp) : void {
+        this.socket.emit('aktion', new Aktion(this.username, aktion));
     }
 
 }

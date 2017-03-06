@@ -30,25 +30,19 @@ export class MissionControlService {
     spielVerloren$ : Observable<SpielVerloren>;
 
     constructor(private websocketService : BackendConnectionWebsocketService ) {
-        let that = this;
+
+        this.websocketService.setMissionControlService(this);
 
         this.spielerInfoFromGameserver$ = this.spielerInfoFromGameserver.asObservable();
         this.spielmodustoGameserver$ = this.spielmodusToGameserver.asObservable();
         this.spielGestartet$ = this.spielGestartet.asObservable();
         this.spielBeendet$ = this.spielBeendet.asObservable();
         this.aktionFromGameServer$ = this.aktionFromGameserver.asObservable();
-        this.websocketService.setMissionControlService(this);
-        this.spielerInfoFromGameserver$.subscribe((spielerInfo : SpielerInfo) => this.username = spielerInfo.username);
-        this.ungueltigeAktionOderTimeout$ = this.ungueltigeAktionOderTimeout.asObservable();
         this.spielVerloren$ = this.spielVerloren.asObservable();
+        this.ungueltigeAktionOderTimeout$ = this.ungueltigeAktionOderTimeout.asObservable();
 
-        this.spielerInfoFromGameserver.subscribe(function ( spielerInfo : SpielerInfo ) {
-           that.username = spielerInfo.username;
-        });
-
-        this.spielGestartet.subscribe( function( spielGestartet : SpielGestartet ) {
-            that.spielmodus = spielGestartet.spielmodus;
-        });
+        this.spielerInfoFromGameserver$.subscribe((spielerInfo : SpielerInfo) => this.username = spielerInfo.username);
+        this.spielGestartet.subscribe((spielGestartet : SpielGestartet) => this.spielmodus = spielGestartet.spielmodus);
     }
 
     announceSpielVerloren(spielVerloren : SpielVerloren) {
@@ -76,11 +70,11 @@ export class MissionControlService {
     }
 
     starteSpiel(spielmodus : Spielmodus) {
-        this.websocketService.starteSpiel(spielmodus);
+        this.websocketService.sendSpielmodus(spielmodus);
     }
 
     aktionDone(aktion: AktionsTyp) {
-        this.websocketService.aktionDone(aktion);
+        this.websocketService.sendAktion(aktion);
     }
 
 }
