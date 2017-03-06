@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>14</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>896</x>
+      <y>896</y>
+      <w>1078</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+FrontendConnectionServiceInterface
+--
+sendAktion(aktion: IAktion): void
+sendSpielGestartet(spielGestartet: ISpielGestartet): void
+sendSpielBeendet(spielBeendet: ISpielBeendet): void
+sendSpielerInfo(spielerInfo: ISpielerInfo): void
+sendSpielVerloren(spielVerloren: ISpielVerloren) : void
+sendUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout: IUngueltigeAktionOderTimeout) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>896</y>
+      <w>616</w>
+      <h>504</h>
+    </coordinates>
+    <panel_attributes>Spiel
+--
+-aktuelleSpielrunde : AktuelleSpielrunde
+-spielrundenUhr : Timer
+-spielrundeAusgelaufen : Subject&lt;Spieler&gt;
++spielrundeAusgelaufen$ : Observable&lt;Spieler&gt;
+-spieler : Spieler[]
+-spielmodus : Spielmodus
+--
++erstelleSpiel(spielmodus : Spielmodus) : ISpielGestartet
++beendeSpiel() : ISpielBeendet
++erstelleSpielrunde() : IAktion
++starteSpielrunde() : void
++stoppeSpielrunde() : void
++verringereLeben(spielername : string) : boolean
++addSpieler() : Spieler
++removeSpieler(spieler : Spieler ) : void
++getNextSpieler() : Spieler
++getNextAktionsTyp() : AktionsTyp
++pruefeErhalteneAktion(aktion : IAktion) : boolean
++istAktionImAktuellenSpielstatusVerwertbar(aktion : IAktion)
+-handleSpielrundeAusgelaufen(spieler : Spieler) : void
+...
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>1498</y>
+      <w>336</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Spieler
+--
++name : string
++pielzuege : Spielzug[]
++verbleibendeLeben : number
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>1722</y>
+      <w>350</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Spielzug
+--
++aktionAusgefuehrt : AktionsTyp
++aktionGewuenscht : AktionsTyp
++verstricheneZeit : number
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>476</x>
+      <y>560</y>
+      <w>560</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Gameserver
+--
+-facade : FrontendConnectionServiceInterface
+-spiel : Spiel
+--
+-starteNeueSpielrunde() : void
+-onSpielrundeAusgelaufen(spieler : Spieler ) : void
+-onSpielBeendet(spielBeendet : ISpielBeendet) : void
+-onAktion(aktion: IAktion): void
+-onSpielmodus(spielmodus : Spielmodus) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>896</x>
+      <y>1204</y>
+      <w>1092</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>GameserverWebsocketFacade
+--
+-gameserver : Gameserver
+-websocketServer : Server
+-httpServer: any
+-fernseherSocket: Socket
+-spielerSockets: any
+--
+-addSpieler() : ISpielerInfo
+-removeSpieler( socket : Socket ) : void
+-setFernseher(socket : Socket) : void
+-setupSpielerSocket(socket : Socket) : void
+-onConnection(socket : Socket)
++sendAktion(aktion: IAktion): void
++sendSpielGestartet(spielGestartet: ISpielGestartet): void
++sendSpielBeendet(spielBeendet: ISpielBeendet): void
++sendSpielerInfo(spielerInfo: ISpielerInfo): void
++sendSpielVerloren(spielVerloren: ISpielVerloren) : void
++sendUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout: IUngueltigeAktionOderTimeout) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1666</x>
+      <y>1106</y>
+      <w>154</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+implements</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>1386</y>
+      <w>70</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>1610</y>
+      <w>70</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>756</y>
+      <w>42</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>966</x>
+      <y>756</y>
+      <w>84</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1
+uses</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>602</x>
+      <y>1652</y>
+      <w>770</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>AktuelleSpielrunde
+--
+-beginnInMilliSekunden : number   
+-endeInMillisekunden : number
+-gewuenschterAktionsTyp : AktionsTyp
+-gewuenschterSpieler : Spieler
+-spielrundenDauerInSekunden :number
+--
++istAktionsTypGueltig(aktionsTyp : AktionsTyp, spieler : Spieler ) : boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>714</x>
+      <y>1386</y>
+      <w>70</w>
+      <h>294</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1624</x>
+      <y>714</y>
+      <w>350</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>GameserverRestFacade
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1680</x>
+      <y>770</y>
+      <w>154</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+implements</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1358</x>
+      <y>378</y>
+      <w>616</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interfaces&gt;&gt;
+Nachrichtentypen
+--
+ISpielerInfo
+ISpielmodus
+ISpielGestartet
+ISpielBeendet
+IAktion
+IUngueltigeAktionOderTimeout
+ISpielVerloren
+AktionsTyp
+SpielerAuswahlVerfahren
+bg=#D3D3D3
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
