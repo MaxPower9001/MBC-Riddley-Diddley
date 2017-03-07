@@ -36,12 +36,7 @@ export class PhonePlayComponent implements OnInit {
     }
 
     ngOnInit() {
-        let that = this;
-        var myShakeEvent = new Shake({
-            threshold: 1, // optional shake strength threshold
-            timeout: 1000 // optional, determines the frequency of event generation
-        });
-        myShakeEvent.start();
+
 
         this.missionControlService.aktionFromGameServer$.subscribe(function (aktion: Aktion) {
             console.log("Aktion vom Server erhalten: " + aktion + " Jetzt aber schnell!");
@@ -52,6 +47,12 @@ export class PhonePlayComponent implements OnInit {
                 that.router.navigateByUrl("phone-end");
             }
         });
+        let that = this;
+        var myShakeEvent = new Shake({
+            threshold: 15, // optional shake strength threshold
+            timeout: 1000 // optional, determines the frequency of event generation
+        });
+        myShakeEvent.start();
     }
 
     @HostListener('window:shake')

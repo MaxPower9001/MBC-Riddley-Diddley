@@ -45,7 +45,7 @@ export class TvHomeComponent implements OnInit{
   ];
 
   constructor(private missionControlService: MissionControlService, private router: Router) {
-    this.hostname = window.location.hostname;
+    this.hostname = "192.168.178.36";
     this.port = 13337;
   }
 

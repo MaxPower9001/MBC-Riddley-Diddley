@@ -94,7 +94,8 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
         // GameserverRestFacade und Fernseher View werden auf dem gleichen Host betrieben, daher haben diese die gleiche IP Adresse
         // Der erste Client der von localhost der einen Socket öffnet wird daher als Fernseher angesehen
         if(this.gameserver.spiel.spieleranzahl() == 0
-            && (socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost" || socket.conn.remoteAddress === "192.168.43.26")
+                //192.168.43.26
+            && (socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "192.168.178.36" || socket.conn.remoteAddress === "192.168.43.26")
             && !this.fernseherSocket) {
             // Der Fernseher hat sich verbunden
             console.log("Hallo Fernseher! ip: " + socket.conn.remoteAddress);
