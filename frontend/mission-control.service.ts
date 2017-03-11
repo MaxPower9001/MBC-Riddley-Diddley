@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import {BackendConnectionWebsocketService} from "./backend-connection.websocket.service";
 import {AktionsTyp, ISpielmodus} from "../api/nachrichtentypen.interface";
 import {UngueltigeAktionOderTimeout} from "../frontend/nachrichtentypen";
+import {BackendConnectionRestService} from "./backend-connection-rest.service";
 
 @Injectable()
 export class MissionControlService {

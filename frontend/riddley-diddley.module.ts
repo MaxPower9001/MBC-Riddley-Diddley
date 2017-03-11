@@ -18,8 +18,11 @@ import {  PhoneEndComponent }              from './phone-end.component';
 
 import { MissionControlService } from './mission-control.service';
 import { BackendConnectionWebsocketService } from './backend-connection.websocket.service';
+import {BackendConnectionRestService} from "./backend-connection-rest.service";
+
 
 import {KeysPipe} from "./keys.pipe";
+import {HttpModule} from "@angular/http";
 
 // Declare NgModule
 @NgModule({
@@ -27,6 +30,7 @@ import {KeysPipe} from "./keys.pipe";
     QRCodeModule,
     BrowserModule,
     FormsModule,
+    HttpModule,
     RouterModule.forRoot([
       { path: '',                 component: TvHomeComponent },
       { path: 'fernseher',             component: TvHomeComponent },
@@ -38,7 +42,7 @@ import {KeysPipe} from "./keys.pipe";
     ],{ useHash: true })
     ],
   declarations: [ RiddleyDiddleyComponent, PhoneHeaderComponent, TvHeaderComponent, TvHomeComponent, TvPlayComponent, TvEndComponent, PhoneHomeComponent, PhonePlayComponent, PhoneEndComponent, KeysPipe],
-  providers:   [MissionControlService, BackendConnectionWebsocketService],
+  providers:   [MissionControlService, BackendConnectionRestService, BackendConnectionWebsocketService],
   bootstrap:    [ RiddleyDiddleyComponent ]
 })
 
