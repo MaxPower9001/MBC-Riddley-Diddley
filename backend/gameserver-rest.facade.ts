@@ -19,6 +19,19 @@ import {Gameserver} from "./gameserver";
 
 export class GameserverRestFacade implements FrontendConnectionServiceInterface {
 
+    /*
+    Fernseher und Clients erhalten die Nachrichtentypen über die Endpunkte
+    /rest/spieler/:spielername/updates und /rest/fernseher/updates
+    Diese Endpunkte sind als Long-Polling Variante implementiert, d.h. die GET-Requests
+    werden erst beantwortet, wenn Daten für den Fernseher bzw. Spieler zur Verfügung stehen
+    Um die Updates (Nachrichtentypen) zwischen zu lagern werden die beiden Objekte
+    fernseherUpdates und spielerUpdates eingeführt.
+    Die Clients erhalten über die /updates Endpunkte eine Liste von Nachrichtentypen nach
+    folgendem Aufbau: [[<Bezeichner>, <Nachricht>],[<Bezeichner>,<Nachricht>],...]
+    Dabei entspricht der Bezeichner dem Namen, welcher bereits in der Websocket-Implementierung
+    verwendet wird. Nachricht ist das zugehörige Objekt im JSON Format
+    */
+
     private httpServer: any;
     private gameserver : Gameserver;
 
@@ -51,42 +64,48 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         return new SpielerInfo(neuerSpieler.name);
     }
 
-    private blockiertBisAlleClientsUpdatesErhaltenHaben() {
-        for (let spielername in Object.keys(this.spielerUpdates)) {
-            this.blockiertBisSpielerUpdatesErhaltenHat(spielername);
+    private blockiertBisAlleClientsUpdatesErhaltenHaben(functionToRun) {
+        for (let spielername in this.spielerUpdates) {
+            if (this.spielerUpdates.hasOwnProperty(spielername)) {
+                this.blockiertBisSpielerUpdatesErhaltenHat(spielername,functionToRun);
+            }
         }
-        this.blockiertBisFernseherUpdatesErhaltenHat();
+        this.blockiertBisFernseherUpdatesErhaltenHat(functionToRun);
     }
 
-    private async blockiertBisFernseherUpdatesErhaltenHat() {
+    private async blockiertBisFernseherUpdatesErhaltenHat(functionToRun) {
         let nochAnstehendeUpdates : boolean = this.fernseherUpdates.length > 0;
-        while(nochAnstehendeUpdates) {
-            await this.sleep(100);
-            nochAnstehendeUpdates = this.fernseherUpdates.length > 0;
-        }
+        if(nochAnstehendeUpdates) setTimeout(() => this.blockiertBisFernseherUpdatesErhaltenHat(functionToRun));
+        else functionToRun();
     }
 
-    private async blockiertBisSpielerUpdatesErhaltenHat(spielername : string) {
-        let nochAnstehendeUpdates : boolean = this.spielerUpdates[spielername].length > 0;
-        while(nochAnstehendeUpdates) {
-            await this.sleep(100);
-            nochAnstehendeUpdates = this.spielerUpdates[spielername].length > 0;
-        }
+    private blockiertBisFernseherUpdatesVorhandenSind(functionToRun) {
+        let nochAnstehendeUpdates : boolean = this.fernseherUpdates.length > 0;
+        // Blockiere bis es Updates für den Fernseher gibt
+        if(nochAnstehendeUpdates) functionToRun();
+        else setTimeout(() => this.blockiertBisFernseherUpdatesVorhandenSind(functionToRun));
     }
 
-    private async blockiertBisSpielerUpdatesVorhandenSind(spielername : string) {
+    private async blockiertBisSpielerUpdatesErhaltenHat(spielername : string, functionToRun) {
         let nochAnstehendeUpdates : boolean = this.spielerUpdates[spielername].length > 0;
-        console.log("gibt es updates für spieler " + spielername + ":" + nochAnstehendeUpdates);
+        if(nochAnstehendeUpdates) setTimeout(() => this.blockiertBisSpielerUpdatesErhaltenHat(spielername,functionToRun));
+        else functionToRun();
+    }
+
+    private blockiertBisSpielerUpdatesVorhandenSind(spielername : string, functionToRun) {
+        let nochAnstehendeUpdates : boolean = this.spielerUpdates[spielername].length > 0;
+        //console.log("gibt es updates für spieler " + spielername + ":" + nochAnstehendeUpdates);
         // Blockiere bis es Updates für den gewünschten Spieler gibt
-        while(!nochAnstehendeUpdates) {
-            await this.sleep(100);
-            console.log("gibt es updates für spieler " + spielername + ":" + nochAnstehendeUpdates);
-            nochAnstehendeUpdates = this.spielerUpdates[spielername].length > 0;
-        }
+        if(nochAnstehendeUpdates) functionToRun();
+        else setTimeout(() => this.blockiertBisSpielerUpdatesVorhandenSind(spielername,functionToRun));
     }
 
-    private sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    private sleep(delay) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve()
+            }, delay)
+        })
     }
 
 
@@ -103,15 +122,18 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         });
         expressApp.get('/rest/spieler/:spielername/updates', (req : express.Request, res : express.Response) => {
             let spielername = req.params["spielername"];
-            this.blockiertBisSpielerUpdatesVorhandenSind(spielername);
-            console.log("sende Updates für Spieler " + spielername + ": " + this.spielerUpdates[spielername]);
-            res.send(this.spielerUpdates[spielername]);
-            this.spielerUpdates[spielername] = [];
+            this.blockiertBisSpielerUpdatesVorhandenSind(spielername, () => {
+                console.log("sende Updates für Spieler " + spielername + ": " + this.spielerUpdates[spielername]);
+                res.send(this.spielerUpdates[spielername]);
+                this.spielerUpdates[spielername] = [];
+            });
         });
         expressApp.get('/rest/fernseher/updates', (req : express.Request, res : express.Response) => {
-            console.log("sende Updates für Fernseher");
-            res.send(this.fernseherUpdates);
-            this.fernseherUpdates = [];
+            this.blockiertBisFernseherUpdatesVorhandenSind(() => {
+                console.log("sende Updates für Fernseher");
+                res.send(this.fernseherUpdates);
+                this.fernseherUpdates = [];
+            });
         });
         expressApp.post('/rest/spieler/:spielername/spielmodus', (req : express.Request, res : express.Response) => {
             let spielmodus : ISpielmodus = new Spielmodus(req.body.zeitFuerAktion,req.body.auswahlverfahrenSpieler,req.body.anzahlLeben);
@@ -144,37 +166,41 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
 
     sendAktion(aktion: IAktion): void {
         this.fernseherUpdates.push(["aktion",aktion]);
-        this.blockiertBisFernseherUpdatesErhaltenHat();
+        this.blockiertBisFernseherUpdatesErhaltenHat(function(){});
     }
 
     sendSpielGestartet(spielGestartet: ISpielGestartet): void {
-        for(let spielername in Object.keys(this.spielerUpdates)) {
-            this.spielerUpdates[spielername].push(["spiel_gestartet",spielGestartet]);
+        for (let spielername in this.spielerUpdates) {
+            if (this.spielerUpdates.hasOwnProperty(spielername)) {
+                this.spielerUpdates[spielername].push(["spiel_gestartet",spielGestartet]);
+            }
         }
         this.fernseherUpdates.push(["spiel_gestartet",spielGestartet]);
-        this.blockiertBisAlleClientsUpdatesErhaltenHaben();
+        this.blockiertBisAlleClientsUpdatesErhaltenHaben(function(){});
     }
 
     sendSpielBeendet(spielBeendet: ISpielBeendet): void {
-        for(let spielername in Object.keys(this.spielerUpdates)) {
-            this.spielerUpdates[spielername].push(["spiel_beendet",spielBeendet]);
+        for (let spielername in this.spielerUpdates) {
+            if (this.spielerUpdates.hasOwnProperty(spielername)) {
+                this.spielerUpdates[spielername].push(["spiel_beendet",spielBeendet]);
+            }
         }
         this.fernseherUpdates.push(["spiel_beendet",spielBeendet]);
     }
 
     sendSpielerInfo(spielerInfo: ISpielerInfo): void {
         this.spielerUpdates[spielerInfo.username].push(["spielerinfo",spielerInfo]);
-        this.blockiertBisSpielerUpdatesErhaltenHat(spielerInfo.username);
+        this.blockiertBisSpielerUpdatesErhaltenHat(spielerInfo.username,function(){});
     }
 
     sendSpielVerloren(spielVerloren: ISpielVerloren): void {
         this.fernseherUpdates.push(["spiel_verloren",spielVerloren]);
-        this.blockiertBisFernseherUpdatesErhaltenHat();
+        this.blockiertBisFernseherUpdatesErhaltenHat(function(){});
     }
 
     sendUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout: IUngueltigeAktionOderTimeout): void {
         this.fernseherUpdates.push(["ungueltige_aktion_oder_timeout",ungueltigeAktionOderTimeout]);
-        this.blockiertBisFernseherUpdatesErhaltenHat();
+        this.blockiertBisFernseherUpdatesErhaltenHat(function(){});
     }
 
 }

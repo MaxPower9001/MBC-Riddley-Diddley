@@ -24,7 +24,8 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
 
     private missionControlService : MissionControlService;
 
-    private url = 'http://localhost:13337/rest';
+    private gameServer = '192.168.178.136';
+    private url = `http://${this.gameServer}:13337/rest`;
 
     private username: string = '';
 
@@ -33,12 +34,23 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
     }
 
     private connect() {
-        this.http.get(this.url + "/spieler/connection")
-            .map(this.extractData)
-            .subscribe((spielerinfo : ISpielerInfo) => {
-                this.username = spielerinfo.username;
-                this.fetchUpdates();
-        })
+        if(window.location.href === `http://${this.gameServer}:13337/#/`) {
+            this.http.get(this.url + "/fernseher/connection")
+                .catch(this.handleError)
+                .subscribe((data) => {
+                    console.log("Wir sind ein Fernseher");
+                    this.fetchUpdatesFernseher();
+                });
+        } else {
+            this.http.get(this.url + "/spieler/connection")
+                .map(this.extractData)
+                .subscribe((spielerinfo : ISpielerInfo) => {
+                    console.log("Wir sind ein Spieler");
+                    this.username = spielerinfo.username;
+                    this.onSpielerinfo(spielerinfo);
+                    this.fetchUpdatesSpieler();
+                })
+        }
     }
 
     private extractData(res: Response) {
@@ -60,7 +72,9 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
     }
 
     private onUpdates(updates : any[]) {
-        for(let update in updates) {
+        console.log("onUpdates hat updates erhalten: " + updates);
+        for(let updateIdx in updates) {
+            let update = updates[updateIdx];
             let nachrichtentypBezeichner : string = update[0];
             let nachrichtentyp : any = update[1];
             switch(nachrichtentypBezeichner) {
@@ -74,13 +88,23 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
         }
     }
 
-    private fetchUpdates() {
+    private fetchUpdatesSpieler() {
         this.http.get(this.url + `/spieler/${this.username}/updates`)
             .map(this.extractData)
             .subscribe(updates => {
                 console.log("Es gibt Updates für Spieler"+this.username);
                 this.onUpdates(updates);
-                this.fetchUpdates();
+                this.fetchUpdatesSpieler();
+            })
+    }
+
+    private fetchUpdatesFernseher() {
+        this.http.get(this.url + `/fernseher/updates`)
+            .map(this.extractData)
+            .subscribe(updates => {
+                console.log("Es gibt Updates für den Fernseher");
+                this.onUpdates(updates);
+                this.fetchUpdatesFernseher();
             })
     }
 
@@ -122,16 +146,19 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
     sendSpielmodus(spielmodus : ISpielmodus) : void {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-
-        this.http.post(`${this.url}/${this.username}/spielmodus`, spielmodus, options).catch(this.handleError);
+        console.log(`send spielmodus to ${this.url}/spieler/${this.username}/spielmodus`);
+        this.http.post(`${this.url}/spieler/${this.username}/spielmodus`, spielmodus, options)
+            .catch(this.handleError)
+            .subscribe(() => console.log("Spielmodus erfolgreich versendet"));
     }
 
     sendAktion(aktion: AktionsTyp) : void {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        this.http.post(`${this.url}/${this.username}/aktion`, new Aktion(this.username, aktion), options)
-            .catch(this.handleError);
+        this.http.post(`${this.url}/spieler/${this.username}/aktion`, new Aktion(this.username, aktion), options)
+            .catch(this.handleError)
+            .subscribe(() => console.log("Aktion erfolgreich versendet"));
     }
 
 }
