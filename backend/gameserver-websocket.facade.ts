@@ -113,7 +113,6 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
         }
     }
 
-
     sendAktion(aktion: IAktion): void {
         console.log(`WEBSOCKET: Aktion geht raus für Spieler ${aktion.spieler}, Aktionstyp: ${aktion.typ}`);
         this.fernseherSocket.emit('aktion', aktion);

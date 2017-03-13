@@ -73,7 +73,7 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         this.blockiertBisFernseherUpdatesErhaltenHat(functionToRun);
     }
 
-    private async blockiertBisFernseherUpdatesErhaltenHat(functionToRun) {
+    private blockiertBisFernseherUpdatesErhaltenHat(functionToRun) {
         let nochAnstehendeUpdates : boolean = this.fernseherUpdates.length > 0;
         if(nochAnstehendeUpdates) setTimeout(() => this.blockiertBisFernseherUpdatesErhaltenHat(functionToRun));
         else functionToRun();
@@ -86,7 +86,7 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         else setTimeout(() => this.blockiertBisFernseherUpdatesVorhandenSind(functionToRun));
     }
 
-    private async blockiertBisSpielerUpdatesErhaltenHat(spielername : string, functionToRun) {
+    private blockiertBisSpielerUpdatesErhaltenHat(spielername : string, functionToRun) {
         let nochAnstehendeUpdates : boolean = this.spielerUpdates[spielername].length > 0;
         if(nochAnstehendeUpdates) setTimeout(() => this.blockiertBisSpielerUpdatesErhaltenHat(spielername,functionToRun));
         else functionToRun();
@@ -99,15 +99,6 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
         if(nochAnstehendeUpdates) functionToRun();
         else setTimeout(() => this.blockiertBisSpielerUpdatesVorhandenSind(spielername,functionToRun));
     }
-
-    private sleep(delay) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve()
-            }, delay)
-        })
-    }
-
 
     // remember to Set Content-Type: application/json
     private setupRoutes(expressApp) {
