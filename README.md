@@ -11,6 +11,8 @@ Wenn sich alle Spieler so mit dem Spiel verbunden haben, kann einer der Spieler 
 Hinweis: Nach einem beendetem Spiel müssen alle Spieler den Browser/Tab schließend und sich erneut via QR-Code verbinden.
 Der Fernseher wechselt selbstständig wieder in einen Zustand indem ein neues Spiel begonnen werden kann.
 
+Hinweis: Backend (Gameserver) und Fernseher (Browser welcher die Fernseher-View geöffnet hat) müssen auf der selben Maschine laufen
+
 ##  Konfiguration des Backends
 Die IP-Adresse des Gameservers wird über die Config-Datei server_config.json eingestellt.
 Hier kann zusätzlich konfiguriert werden, ob das Websocket oder die REST Implementation verwendet werden soll.
