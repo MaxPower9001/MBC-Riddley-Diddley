@@ -24,7 +24,7 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
 
     private missionControlService : MissionControlService;
 
-    private gameServer = '192.168.178.136';
+    private gameServer = 'localhost';
     private url = `http://${this.gameServer}:13337/rest`;
 
     private username: string = '';

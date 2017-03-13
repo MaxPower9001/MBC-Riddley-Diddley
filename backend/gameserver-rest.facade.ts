@@ -186,6 +186,7 @@ export class GameserverRestFacade implements FrontendConnectionServiceInterface 
 
     sendSpielVerloren(spielVerloren: ISpielVerloren): void {
         this.fernseherUpdates.push(["spiel_verloren",spielVerloren]);
+        this.spielerUpdates[spielVerloren.spieler].push(["spiel_verloren",spielVerloren]);
         this.blockiertBisFernseherUpdatesErhaltenHat(function(){});
     }
 
