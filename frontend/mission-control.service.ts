@@ -30,9 +30,9 @@ export class MissionControlService {
     ungueltigeAktionOderTimeout$ : Observable<UngueltigeAktionOderTimeout>;
     spielVerloren$ : Observable<SpielVerloren>;
 
-    constructor(private websocketService : BackendConnectionWebsocketService ) {
+    constructor(private backendConnectionService : BackendConnectionWebsocketService ) {
 
-        this.websocketService.setMissionControlService(this);
+        this.backendConnectionService.setMissionControlService(this);
 
         this.spielerInfoFromGameserver$ = this.spielerInfoFromGameserver.asObservable();
         this.spielmodustoGameserver$ = this.spielmodusToGameserver.asObservable();
@@ -71,11 +71,11 @@ export class MissionControlService {
     }
 
     starteSpiel(spielmodus : Spielmodus) {
-        this.websocketService.sendSpielmodus(spielmodus);
+        this.backendConnectionService.sendSpielmodus(spielmodus);
     }
 
     aktionDone(aktion: AktionsTyp) {
-        this.websocketService.sendAktion(aktion);
+        this.backendConnectionService.sendAktion(aktion);
     }
 
 }

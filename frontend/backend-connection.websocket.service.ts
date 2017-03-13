@@ -20,7 +20,8 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
 
     private missionControlService : MissionControlService;
 
-    private url = 'http://localhost:13337';
+    private gameServer = 'localhost';
+    private url = `http://${this.gameServer}:13337`;
     private socket;
 
     private username: string = '';
