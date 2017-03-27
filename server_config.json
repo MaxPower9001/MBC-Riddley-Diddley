@@ -1,6 +1,6 @@
 {
   "server": {
-    "ip":   "192.168.178.136",
+    "ip":   "127.0.0.1",
     "port": 13337
   },
   "useWebsockets" : true
