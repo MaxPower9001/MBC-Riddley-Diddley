@@ -78,6 +78,18 @@ export class MissionControlService {
         this.backendConnectionService.sendAktion(aktion);
     }
 
+    connect() {
+        if(this.backendConnectionService instanceof BackendConnectionWebsocketService) {
+            this.backendConnectionService.connect();
+        }
+    }
+
+    disconnect() {
+        if(this.backendConnectionService instanceof BackendConnectionWebsocketService) {
+            this.backendConnectionService.disconnect();
+        }
+    }
+
 }
 
 

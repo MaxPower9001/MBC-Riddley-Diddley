@@ -93,9 +93,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private onConnection(socket : Socket) {
         // GameserverRestFacade und Fernseher View werden auf dem gleichen Host betrieben, daher haben diese die gleiche IP Adresse
         // Der erste Client der von localhost der einen Socket öffnet wird daher als Fernseher angesehen
-        if(this.gameserver.spiel.spieleranzahl() == 0
-                //192.168.43.26
-            && (socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost" || socket.conn.remoteAddress === "192.168.43.26")
+        if((socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost" || socket.conn.remoteAddress === "192.168.43.26")
             && !this.fernseherSocket) {
             // Der Fernseher hat sich verbunden
             console.log("Hallo Fernseher! ip: " + socket.conn.remoteAddress);
@@ -131,14 +129,14 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     sendSpielerInfo(spielerInfo: ISpielerInfo): void {
         console.log("WEBSOCKET: SpielerInfo geht raus für " + spielerInfo.username);
         let socket : Socket = this.getSocketBySpielername(spielerInfo.username);
-        socket.emit('spielerinfo', spielerInfo);
+        if(socket != null) socket.emit('spielerinfo', spielerInfo);
     }
 
     sendSpielVerloren(spielVerloren: ISpielVerloren): void {
         console.log("WEBSOCKET: SpielVerloren geht raus für " + spielVerloren.spieler);
         let socket : Socket = this.getSocketBySpielername(spielVerloren.spieler);
         this.fernseherSocket.emit('spiel_verloren', spielVerloren);
-        socket.emit('spiel_verloren', spielVerloren);
+        if(socket != null) socket.emit('spiel_verloren', spielVerloren);
     }
 
     sendUngueltigeAktionOderTimeout(ungueltigeAktionOderTimeout: IUngueltigeAktionOderTimeout): void {

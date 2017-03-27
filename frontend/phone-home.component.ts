@@ -71,10 +71,10 @@ export class PhoneHomeComponent implements OnInit {
 	constructor(private missionControlService: MissionControlService, private router: Router) {	}
 
 	ngOnInit() {
-		let that = this;
-		this.missionControlService.spielGestartet$.subscribe(function (spielGestartet: SpielGestartet) {
+		this.missionControlService.connect();
+		this.missionControlService.spielGestartet$.subscribe((spielGestartet: SpielGestartet) => {
 			console.log("SpielGestartet vom Server erhalten: " + spielGestartet);
-			that.router.navigateByUrl("/phone-play");
+			this.router.navigateByUrl("/phone-play");
 		});
 		// set default values
 		this.spielmodus = new Spielmodus(1, SpielerAuswahlVerfahren.ZUFALL, 5);

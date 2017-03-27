@@ -35,7 +35,12 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
     }
 
     private setupSocket() : void {
-        this.socket = io(this.url);
+        this.socket = io(this.url, {
+            reconnection: true,
+            reconnectionAttempts: 1,
+            timeout: 2000,
+            autoConnect: false
+        });
         this.socket.on('spiel_gestartet', (spielGestartet : ISpielGestartet) => this.onSpielGestartet(spielGestartet));
         this.socket.on('spiel_beendet', (spielBeendet : ISpielBeendet) => this.onSpielBeendet(spielBeendet));
         this.socket.on('spielerinfo', (spielerinfo : ISpielerInfo) => this.onSpielerinfo(spielerinfo));
@@ -84,6 +89,14 @@ export class BackendConnectionWebsocketService implements BackendConnectionServi
 
     sendAktion(aktion: AktionsTyp) : void {
         this.socket.emit('aktion', new Aktion(this.username, aktion));
+    }
+
+    disconnect() : void {
+        this.socket.disconnect();
+    }
+
+    connect() : void {
+        this.socket.connect();
     }
 
 }
