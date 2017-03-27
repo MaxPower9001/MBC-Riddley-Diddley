@@ -25,8 +25,10 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     // Map für Spieler <=> Socket in Vor- und Rückrichtung
     // { Spieler1.name => Socket1, Spieler2.name => Socket2, Socket1 => Spieler1, Socket2 => Spieler2 }
     private spielerSockets;
+    private gameServerIp;
 
     constructor(expressApp, config, gameserver) {
+        this.gameServerIp = config.server.ip;
         this.gameserver = gameserver;
         let httpserver = createServer(expressApp);
         httpserver.listen(config.server.port, config.server.ip);
@@ -93,7 +95,7 @@ export class GameserverWebsocketFacade implements FrontendConnectionServiceInter
     private onConnection(socket : Socket) {
         // GameserverRestFacade und Fernseher View werden auf dem gleichen Host betrieben, daher haben diese die gleiche IP Adresse
         // Der erste Client der von localhost der einen Socket öffnet wird daher als Fernseher angesehen
-        if((socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost" || socket.conn.remoteAddress === "192.168.43.26")
+        if((socket.conn.remoteAddress === "127.0.0.1" || socket.conn.remoteAddress === "localhost" || socket.conn.remoteAddress === this.gameServerIp)
             && !this.fernseherSocket) {
             // Der Fernseher hat sich verbunden
             console.log("Hallo Fernseher! ip: " + socket.conn.remoteAddress);

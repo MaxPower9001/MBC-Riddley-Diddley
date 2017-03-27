@@ -18,6 +18,6 @@ Die IP-Adresse des Gameservers wird über die Config-Datei server_config.json ei
 Hier kann zusätzlich konfiguriert werden, ob das Websocket oder die REST Implementation verwendet werden soll.
 
 ## Konfiguration des Frontends
-Die IP-Adresse des Gameservers wird (je nach Anbindung) in der Variablen gameServer in der Datei backend-connection-websocket.service.ts bzw. backend-connection-rest.service angegeben. Welche der beiden Implementierungen genutzt werden soll ist über den Typ der  Konstruktor-Variable backendConnectionService in der Datei mission-control.service.ts anzugeben. Möglich sind: BackendConnectionWebsocketService bzw. BackendConnectionRestService. Der entsprechende Service wird beim Start anschließend via Dependency Injection übergeben.
+Die IP-Adresse des Gameservers wird über die Config-Datei server_config.json eingestellt. Welche der beiden Implementierungen genutzt werden soll ist über den Typ der  Konstruktor-Variable backendConnectionService in der Datei mission-control.service.ts anzugeben. Möglich sind: BackendConnectionWebsocketService bzw. BackendConnectionRestService. Der entsprechende Service wird beim Start anschließend via Dependency Injection übergeben.
 
 

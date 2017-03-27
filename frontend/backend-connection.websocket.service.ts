@@ -12,16 +12,17 @@ import {
     ISpielmodus,
     ISpielerInfo
 } from "../api/nachrichtentypen.interface";
-import {UngueltigeAktionOderTimeout, SpielVerloren} from "../frontend/nachrichtentypen";
-let io = require('./lib/socket.io.js');
+import {UngueltigeAktionOderTimeout, SpielVerloren} from "./nachrichtentypen";
+var server_config = require("../server_config.json");
+let io = require("./lib/socket.io.js");
 
 @Injectable()
 export class BackendConnectionWebsocketService implements BackendConnectionServiceInterface {
 
+
     private missionControlService : MissionControlService;
 
-    private gameServer = 'localhost';
-    private url = `http://${this.gameServer}:13337`;
+    private url = `http://${server_config.server.ip}:${server_config.server.port}`;
     private socket;
 
     private username: string = '';

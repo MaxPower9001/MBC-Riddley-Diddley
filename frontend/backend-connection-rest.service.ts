@@ -18,14 +18,15 @@ import {
     SpielerInfo, UngueltigeAktionOderTimeout, SpielGestartet, SpielVerloren, Aktion,
     SpielBeendet
 } from "./nachrichtentypen";
+let server_config = require('../server_config.json');
+
 
 @Injectable()
 export class BackendConnectionRestService implements BackendConnectionServiceInterface {
 
     private missionControlService : MissionControlService;
 
-    private gameServer = 'localhost';
-    private url = `http://${this.gameServer}:13337/rest`;
+    private url = `http://${server_config.server.ip}:${server_config.server.port}/rest`;
 
     private username: string = '';
 
@@ -34,7 +35,7 @@ export class BackendConnectionRestService implements BackendConnectionServiceInt
     }
 
     private connect() {
-        if(window.location.href === `http://${this.gameServer}:13337/#/`) {
+        if(window.location.href === `http://${server_config.server.ip}:${server_config.server.port}/#/`) {
             this.http.get(this.url + "/fernseher/connection")
                 .catch(this.handleError)
                 .subscribe((data) => {

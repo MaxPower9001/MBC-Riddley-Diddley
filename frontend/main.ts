@@ -8,6 +8,6 @@ import { RiddleyDiddleyModule } from './riddley-diddley.module';
 
 const platform = platformBrowserDynamic();
 // We shoud enable the production mode
-// enableProdMode();
+enableProdMode();
 // Start the Web application
 platform.bootstrapModule(RiddleyDiddleyModule);

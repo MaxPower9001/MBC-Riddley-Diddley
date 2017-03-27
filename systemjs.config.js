@@ -9,6 +9,7 @@
     map: {
       // our app is within the frontend folder
       app: 'frontend',
+      json: 'frontend/lib/json.js',
 
       // angular bundles
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
@@ -36,6 +37,9 @@
       rxjs: {
         defaultExtension: 'js'
       }
+    },
+    meta: {
+        "*.json": { "loader": "json" }
     }
   });
 })(this);
